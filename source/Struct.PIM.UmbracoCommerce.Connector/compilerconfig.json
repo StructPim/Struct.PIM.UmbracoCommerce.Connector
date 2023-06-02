@@ -1,14 +1,10 @@
 ﻿[
   {
-    "outputFile": "App_Plugins/Struct.PIM.UmbracoCommerce.Connector/fonts/style.css",
-    "inputFile": "App_Plugins/Struct.PIM.UmbracoCommerce.Connector/fonts/style.scss"
+    "outputFile": "App_Plugins/StructPIMUmbracoCommerceConnector/fonts/style.css",
+    "inputFile": "App_Plugins/StructPIMUmbracoCommerceConnector/fonts/style.scss"
   },
   {
-    "outputFile": "App_Plugins/Struct.PIM.UmbracoCommerce.Connector/css/struct.pim.css",
-    "inputFile": "App_Plugins/Struct.PIM.UmbracoCommerce.Connector/css/struct.pim.scss"
-  },
-  {
-    "outputFile": "App_Plugins/StructPIMVendr/css/struct.pim.css",
-    "inputFile": "App_Plugins/StructPIMVendr/css/struct.pim.scss"
+    "outputFile": "App_Plugins/StructPIMUmbracoCommerceConnector/css/struct.pim.css",
+    "inputFile": "App_Plugins/StructPIMUmbracoCommerceConnector/css/struct.pim.scss"
   }
 ]

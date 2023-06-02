@@ -12,7 +12,7 @@
   </area>
   <area alias="structPimUmbracoCommerce">
     <key alias="setupHeadline">Setup</key>
-    <key alias="setupDescription">Manage general setup for Struct PIM Vendr.</key>
+    <key alias="setupDescription">Manage general setup for Struct PIM Connector for Umbraco Commerce.</key>
     <key alias="setupLocalization">Localization</key>
     <key alias="setupDefaultLanguage">Default language</key>
     <key alias="setupDefaultLanguageDescription">Select the default language if other not available</key>

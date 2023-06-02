@@ -22,10 +22,10 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
         {
             var integrationSettings = _settingsFacade.GetIntegrationSettings();
             if (string.IsNullOrEmpty(integrationSettings.Setup.PimApiUrl))
-                throw new InvalidOperationException("StructPIM.ApiUrl must be set in settings to use Struct PIM Vendr");
+                throw new InvalidOperationException("StructPIM.ApiUrl must be set in settings to use Struct PIM Umbraco Commerce");
 
             if (string.IsNullOrEmpty(integrationSettings.Setup.PimApiKey))
-                throw new InvalidOperationException("StructPIM.ApiKey must be set in settings to use Struct PIM Vendr");
+                throw new InvalidOperationException("StructPIM.ApiKey must be set in settings to use Struct PIM Umbraco Commerce");
             
             return new PIM.Api.Client.StructPIMApiClient(integrationSettings.Setup.PimApiUrl, integrationSettings.Setup.PimApiKey);
         }

@@ -11,18 +11,18 @@ using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
 
 namespace Struct.PIM.UmbracoCommerce.Connector.Core.Migrations
 {
-    public class VendrIntegrationSettingsComposer : ComponentComposer<VendrIntegrationSetting>
+    public class StructPimIntegrationSettingsComposer : ComponentComposer<StructPimIntegrationSetting>
     {
     }
 
-    public class VendrIntegrationSetting : IComponent
+    public class StructPimIntegrationSetting : IComponent
     {
         private readonly ICoreScopeProvider _coreScopeProvider;
         private readonly IMigrationPlanExecutor _migrationPlanExecutor;
         private readonly IKeyValueService _keyValueService;
         private readonly IRuntimeState _runtimeState;
 
-        public VendrIntegrationSetting(
+        public StructPimIntegrationSetting(
             ICoreScopeProvider coreScopeProvider,
             IMigrationPlanExecutor migrationPlanExecutor,
             IKeyValueService keyValueService,
@@ -48,7 +48,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Migrations
             // This is the steps we need to take
             // Each step in the migration adds a unique value
             migrationPlan.From(string.Empty)
-                .To<AddVendrIntegrationSettingsTable>("structPIMintegrationsettings-db");
+                .To<AddStructPimIntegrationSettingsTable>("structPIMintegrationsettings-db");
 
             // Go and upgrade our site (Will check if it needs to do the work or not)
             // Based on the current/latest step
@@ -61,9 +61,9 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Migrations
         }
     }
 
-    public class AddVendrIntegrationSettingsTable : MigrationBase
+    public class AddStructPimIntegrationSettingsTable : MigrationBase
     {
-        public AddVendrIntegrationSettingsTable(IMigrationContext context) : base(context)
+        public AddStructPimIntegrationSettingsTable(IMigrationContext context) : base(context)
         {
         }
         protected override void Migrate()
@@ -73,7 +73,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Migrations
             // Lots of methods available in the MigrationBase class - discover with this.
             if (TableExists("StructPIMIntegrationSettings") == false)
             {
-                Create.Table<VendrIntegrationSettingsSchema>().Do();
+                Create.Table<StructPimIntegrationSettingsSchema>().Do();
             }
             else
             {
@@ -84,7 +84,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Migrations
         [TableName("StructPIMIntegrationSettings")]
         [PrimaryKey("Key")]
         [ExplicitColumns]
-        public class VendrIntegrationSettingsSchema
+        public class StructPimIntegrationSettingsSchema
         {
             [Column("Key")]
             [SpecialDbType(SpecialDbTypes.NVARCHARMAX)]

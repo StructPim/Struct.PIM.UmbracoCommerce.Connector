@@ -7,8 +7,8 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
 
 @font-face {
   font-family: "pim-icon";
-  src: url("/app_plugins/StructPIMVendr/fonts/fonts/pim-icon.eot?ybgrk3");
-  src: url("/app_plugins/StructPIMVendr/fonts/fonts/pim-icon.eot?ybgrk3#iefix") format("embedded-opentype"), url("/app_plugins/StructPIMVendr/fonts/fonts/pim-icon.ttf?ybgrk3") format("truetype"), url("/app_plugins/StructPIMVendr/fonts/fonts/pim-icon.woff?ybgrk3") format("woff"), url("/app_plugins/StructPIMVendr/fonts/fonts/pim-icon.svg?ybgrk3#pim-icon") format("svg");
+  src: url("/app_plugins/StructPIMUmbracoCommerceConnector/fonts/fonts/pim-icon.eot?ybgrk3");
+  src: url("/app_plugins/StructPIMUmbracoCommerceConnector/fonts/fonts/pim-icon.eot?ybgrk3#iefix") format("embedded-opentype"), url("/app_plugins/StructPIMUmbracoCommerceConnector/fonts/fonts/pim-icon.ttf?ybgrk3") format("truetype"), url("/app_plugins/StructPIMUmbracoCommerceConnector/fonts/fonts/pim-icon.woff?ybgrk3") format("woff"), url("/app_plugins/StructPIMUmbracoCommerceConnector/fonts/fonts/pim-icon.svg?ybgrk3#pim-icon") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block;

@@ -1,21 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Struct.PIM.UmbracoCommerce.Connector.App_Plugins.StructPIMVendr.Models;
-using Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers;
-using Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services;
+using Struct.PIM.UmbracoCommerce.Connector.App_Plugins.Models;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Settings;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Settings.Entity;
 using Umbraco.Cms.Web.BackOffice.Controllers;
-using Vendr.Core.Services;
+using Umbraco.Commerce.Core.Services;
 
-namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins.StructPIMShopifyConnector.ApiControllers
+namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins.ApiControllers
 {
-    [Route("umbraco/backoffice/vendr")]
-    public class VendrApiController : UmbracoAuthorizedJsonController
+    [Route("umbraco/backoffice/structpimumbracocommerce")]
+    public class StructPIMUmbracoCommerceApiController : UmbracoAuthorizedJsonController
     {
         private readonly SettingsFacade _settingsFacade;
         private readonly Core.Products.Services.ProductService _productService;
 
-        public VendrApiController(SettingsFacade settingsFacade, Core.Products.Services.ProductService productService)
+        public StructPIMUmbracoCommerceApiController(SettingsFacade settingsFacade, Core.Products.Services.ProductService productService)
         {
             _settingsFacade = settingsFacade;
             _productService = productService;

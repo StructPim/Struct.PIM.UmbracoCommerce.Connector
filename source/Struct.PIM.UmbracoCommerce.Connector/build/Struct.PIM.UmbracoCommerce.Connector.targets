@@ -1,30 +1,30 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
-    <StructPIMVendrFilesPath>
-      $([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..'))\App_Plugins\StructPIMVendr\**\*.*
+    <StructPIMUmbracoCommerceFilesPath>
+      $([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..'))\App_Plugins\StructPIMUmbracoCommerceConnector\**\*.*
 
-    </StructPIMVendrFilesPath>
+    </StructPIMUmbracoCommerceFilesPath>
 	</PropertyGroup>
-	<Target Name="CopyStructPIMVendrAssets" BeforeTargets="Build">
+	<Target Name="CopyStructPIMUmbracoCommerceAssets" BeforeTargets="Build">
 		<ItemGroup>
-      <StructPIMVendrFiles Include="$(StructPIMVendrFilesPath)" />
+      <StructPIMUmbracoCommerceFiles Include="$(StructPIMUmbracoCommerceFilesPath)" />
 		</ItemGroup>
 		<Message
-			Text="Copying StructPIM Vendr files: $(StructPIMVendrFilesPath) - #@(StructPIMVendrFiles->Count()) files"
+			Text="Copying StructPIM Umbraco Commerce files: $(StructPIMUmbracoCommerceFilesPath) - #@(StructPIMUmbracoCommerceFiles->Count()) files"
 			Importance="high" />
-		<Copy SourceFiles="@(StructPIMVendrFiles)"
-		      DestinationFiles="@(StructPIMVendrFiles->'$(MSBuildProjectDirectory)\App_Plugins\StructPIMVendr\%(RecursiveDir)%(Filename)%(Extension)')"
+		<Copy SourceFiles="@(StructPIMUmbracoCommerceFiles)"
+		      DestinationFiles="@(StructPIMUmbracoCommerceFiles->'$(MSBuildProjectDirectory)\App_Plugins\StructPIMUmbracoCommerceConnector\%(RecursiveDir)%(Filename)%(Extension)')"
 		      SkipUnchangedFiles="true" />
 
 	</Target>
 
-	<Target Name="ClearStructPIMVendrAssets" BeforeTargets="Clean">
+	<Target Name="ClearStructPIMUmbracoCommerceAssets" BeforeTargets="Clean">
 		<ItemGroup>
-      <StructPIMVendrDir
-				Include="$(MSBuildProjectDirectory)\App_Plugins\StructPIMVendr" />
+      <StructPIMUmbracoCommerceDir
+				Include="$(MSBuildProjectDirectory)\App_Plugins\StructPIMUmbracoCommerceConnector" />
 		</ItemGroup>
-		<Message Text="Clear old Struct PIM Vendr data"  Importance="high" />
-		<RemoveDir Directories="@(StructPIMVendrDir)"  />
+		<Message Text="Clear old Struct PIM Umbraco Commerce data"  Importance="high" />
+		<RemoveDir Directories="@(StructPIMUmbracoCommerceDir)"  />
 	</Target>
 
 </Project>

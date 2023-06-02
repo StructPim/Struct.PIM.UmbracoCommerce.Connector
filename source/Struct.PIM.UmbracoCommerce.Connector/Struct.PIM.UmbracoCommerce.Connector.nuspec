@@ -9,7 +9,7 @@
     <projectUrl>https://github.com/StructPim/Struct.PIM.UmbracoCommerce.Connector</projectUrl>
     <icon>PIM-logo.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>An extension for Umbraco CMS providing a Struct PIM ProductAdapter for Vendr.</description>
+    <description>An extension for Umbraco CMS providing a Struct PIM ProductAdapter for Umbraco Commerce.</description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright © 2023</copyright>
     <summary></summary>
@@ -18,20 +18,20 @@
       <group targetFramework="net7.0">
         <dependency id="Newtonsoft.Json" version="[13.0.0, 14.0.0)" exclude="Build,Analyzers" />
         <dependency id="Struct.PIM.Api.Client" version="[3.12.3, 4.0.0)" exclude="Build,Analyzers" />
-        <dependency id="Vendr.Core" version="[3.0.11, 3.1.0)" exclude="Build,Analyzers" />
+        <dependency id="Umbraco.Commerce.Core" version="[3.0.11, 3.1.0)" exclude="Build,Analyzers" />
         <dependency id="Umbraco.Cms" version="[10.3.0, 12.0.0)" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>
   <files>
-    <file src="App_Plugins\StructPIMVendr\backoffice\**" target="App_Plugins\StructPIMVendr\backoffice" />
-    <file src="App_Plugins\StructPIMVendr\css\struct.pim.min.css" target="App_Plugins\StructPIMVendr\css" />
-    <file src="App_Plugins\StructPIMVendr\fonts\**" target="App_Plugins\StructPIMVendr\fonts" />
-    <file src="App_Plugins\StructPIMVendr\Graphics\**" target="App_Plugins\StructPIMVendr\Graphics" />
-    <file src="App_Plugins\StructPIMVendr\lang\en-GB.xml" target="App_Plugins\StructPIMVendr\lang\en-GB.xml" />
-    <file src="App_Plugins\StructPIMVendr\lang\en-GB.xml" target="App_Plugins\StructPIMVendr\lang\en-US.xml" />
-    <file src="App_Plugins\StructPIMVendr\scripts\**" target="App_Plugins\StructPIMVendr\scripts" />
-    <file src="App_Plugins\StructPIMVendr\package.manifest" target="App_Plugins\StructPIMVendr\" />
+    <file src="App_Plugins\StructPIMUmbracoCommerceConnector\backoffice\**" target="App_Plugins\StructPIMUmbracoCommerceConnector\backoffice" />
+    <file src="App_Plugins\StructPIMUmbracoCommerceConnector\css\struct.pim.min.css" target="App_Plugins\StructPIMUmbracoCommerceConnector\css" />
+    <file src="App_Plugins\StructPIMUmbracoCommerceConnector\fonts\**" target="App_Plugins\StructPIMUmbracoCommerceConnector\fonts" />
+    <file src="App_Plugins\StructPIMUmbracoCommerceConnector\Graphics\**" target="App_Plugins\StructPIMUmbracoCommerceConnector\Graphics" />
+    <file src="App_Plugins\StructPIMUmbracoCommerceConnector\lang\en-GB.xml" target="App_Plugins\StructPIMUmbracoCommerceConnector\lang\en-GB.xml" />
+    <file src="App_Plugins\StructPIMUmbracoCommerceConnector\lang\en-GB.xml" target="App_Plugins\StructPIMUmbracoCommerceConnector\lang\en-US.xml" />
+    <file src="App_Plugins\StructPIMUmbracoCommerceConnector\scripts\**" target="App_Plugins\StructPIMUmbracoCommerceConnector\scripts" />
+    <file src="App_Plugins\StructPIMUmbracoCommerceConnector\package.manifest" target="App_Plugins\StructPIMUmbracoCommerceConnector\" />
     <file src="build\**\*.*" target="buildTransitive" />
     <file src="PIM-logo.png" target="" />
     <file src="bin\release\net7.0\Struct.PIM.UmbracoCommerce.Connector.dll" target="lib\net7.0" />

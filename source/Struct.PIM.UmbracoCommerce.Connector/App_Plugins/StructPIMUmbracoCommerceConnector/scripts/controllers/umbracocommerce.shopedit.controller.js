@@ -10,6 +10,7 @@ app.controller("umbracocommerce.shopedit.controller",
         $scope.pimVariantAttributes = [];
         $scope.pimProductAttributes = [];
         $scope.settings = null;
+        $scope.commerceSettings = null;
 
         $scope.languageSelectizeConfig = structPimUmbracoHelper.getDefaultSelectizeConfig();
         $scope.languageSelectizeConfig.labelField = "Name";
@@ -35,8 +36,8 @@ app.controller("umbracocommerce.shopedit.controller",
         $scope.init = function () {
             umbracoCommerceService.getIntegrationSettings()
                 .then(function (response) {
-                    $scope.vendrSettings = response.data;
-                    $scope.settings = _.where($scope.vendrSettings.GeneralSettings.ShopSettings, { Uid: $routeParams.id })[0];
+                    $scope.commerceSettings = response.data;
+                    $scope.settings = _.where($scope.commerceSettings.GeneralSettings.ShopSettings, { Uid: $routeParams.id })[0];
                     umbracoCommerceService.getLanguages()
                         .then(function (response) {
                             $scope.languages = response.data;
@@ -84,7 +85,7 @@ app.controller("umbracocommerce.shopedit.controller",
         }
 
         $scope.saveGeneralSettings = function (shopSettingUid) {
-            umbracoCommerceService.saveGeneralSettings($scope.vendrSettings.GeneralSettings, shopSettingUid)
+            umbracoCommerceService.saveGeneralSettings($scope.commerceSettings.GeneralSettings, shopSettingUid)
                 .then(
                     function (response) {
                         structPimUmbracoHelper.setSuccessNotification("General settings has been updated");

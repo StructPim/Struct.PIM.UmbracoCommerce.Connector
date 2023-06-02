@@ -2,7 +2,7 @@
 using Struct.PIM.ShopifyConnector.Settings.Entity;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Settings.Entity;
 using Umbraco.Cms.Infrastructure.Scoping;
-using Vendr.Core.Services;
+using Umbraco.Commerce.Core.Services;
 
 namespace Struct.PIM.UmbracoCommerce.Connector.Core.Settings
 {
@@ -21,14 +21,14 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Settings
         private readonly IStoreService _storeService;
         private readonly ICurrencyService _currencyService;
 
-        public IntegrationSettings GetIntegrationSettings(bool syncVendr = false)
+        public IntegrationSettings GetIntegrationSettings(bool syncUmbracoCommerce = false)
         {
-            if (_integrationSettings != null && !syncVendr)
+            if (_integrationSettings != null && !syncUmbracoCommerce)
                 return _integrationSettings;
 
             lock(_settingsLock)
             {
-                if (_integrationSettings != null && !syncVendr)
+                if (_integrationSettings != null && !syncUmbracoCommerce)
                     return _integrationSettings;
 
                 var integrationSettings = new IntegrationSettings();
@@ -37,13 +37,13 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Settings
 
                 using (var scope = _scopeProvider.CreateScope())
                 {
-                    var result = scope.Database.Fetch<VendrIntegrationSettingsDbModel>("select * from StructPIMIntegrationSettings").ToDictionary(x => (string)x.Key, x => (string)x.Value);
+                    var result = scope.Database.Fetch<StructPimIntegrationSettingsDbModel>("select * from StructPIMIntegrationSettings").ToDictionary(x => (string)x.Key, x => (string)x.Value);
 
                     if (result.TryGetValue("GeneralSettings", out string generalsettings))
                     {
                         integrationSettings.GeneralSettings = JsonConvert.DeserializeObject<GeneralSettings>(generalsettings);
 
-                        if (syncVendr)
+                        if (syncUmbracoCommerce)
                         {
                             var stores = _storeService.GetStores().ToDictionary(x => x.Id);
 
@@ -121,7 +121,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Settings
                     {
                         integrationSettings.GeneralSettings = new GeneralSettings();
 
-                        if (syncVendr)
+                        if (syncUmbracoCommerce)
                         {
                             var stores = _storeService.GetStores();
                             integrationSettings.GeneralSettings.ShopSettings = stores.Select(x => new StoreSettings
@@ -190,7 +190,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Settings
 
         private void SaveSetting(string key, dynamic value)
         {
-            var model = new VendrIntegrationSettingsDbModel()
+            var model = new StructPimIntegrationSettingsDbModel()
             {
                 Key = key,
                 Value = JsonConvert.SerializeObject(value)

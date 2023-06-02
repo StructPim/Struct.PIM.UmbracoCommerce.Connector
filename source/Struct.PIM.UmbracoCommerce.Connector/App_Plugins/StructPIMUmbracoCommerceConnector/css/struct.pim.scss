@@ -7,7 +7,7 @@
 @import "mixins";
 
 //Icon font Icon moon
-$icomoon-font-path: "/app_plugins/StructPIMVendr/fonts/fonts" !default;
+$icomoon-font-path: "/app_plugins/StructPIMUmbracoCommerceConnector/fonts/fonts" !default;
 @import "../fonts/style.scss";
 [class^="pim-icon-"], [class*=" pim-icon-"] {
     font-size: 1em;

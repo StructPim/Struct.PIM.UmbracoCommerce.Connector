@@ -12,14 +12,14 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Settings.Entity
         public VariantMapping VariantMapping { get; set; }
         public Setup Setup { get; set; }
 
-        public string CurrentVendrVersion { get; set; }
+        public string CurrentUmbracoCommerceVersion { get; set; }
     }
 
     public class ProductMapping
     {
         public string TitleAttributeUid { get; set; } = string.Empty;
 
-        //Attribute that must be filled out to publish to Vendr
+        //Attribute that must be filled out to publish to Umbraco Commerce
         public string PublishingAttributeUid { get; set; } = string.Empty;
 
         public string IsGiftcardAttributeUid { get; set; } = string.Empty;
@@ -38,7 +38,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Settings.Entity
     {
         public string TitleAttributeUid { get; set; } = string.Empty;
 
-        //Attribute that must be filled out to publish to Vendr
+        //Attribute that must be filled out to publish to Umbraco Commerce
         public string PublishingAttributeUid { get; set; } = string.Empty;
 
         public string SkuAttributeUid { get; set; } = string.Empty;

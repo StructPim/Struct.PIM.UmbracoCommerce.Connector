@@ -4,7 +4,7 @@ app.controller("umbracocommerce.setup.controller",
     function ($scope, umbracoCommerceService, structPimUmbracoHelper, $location) {
         $scope.loaded = false;
         
-        $scope.vendrSettings;
+        $scope.commerceSettings;
         $scope.languages = [];
         
         $scope.setup = {
@@ -24,7 +24,7 @@ app.controller("umbracocommerce.setup.controller",
 
             umbracoCommerceService.getIntegrationSettings()
                 .then(function (response) {
-                    $scope.vendrSettings = response.data;
+                    $scope.commerceSettings = response.data;
                     $scope.loaded = true;
                 },
                 function (response) {
@@ -42,7 +42,7 @@ app.controller("umbracocommerce.setup.controller",
         };
 
         $scope.saveSetup = function () {
-            umbracoCommerceService.saveSetup($scope.vendrSettings.Setup)
+            umbracoCommerceService.saveSetup($scope.commerceSettings.Setup)
                 .then(function (response) {
                     structPimUmbracoHelper.setSuccessNotification("Setup has been updated");
 

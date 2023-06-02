@@ -16,13 +16,13 @@ app.controller("umbracocommerce.shops.controller",
 
             umbracoCommerceService.getIntegrationSettings()
                 .then(function (response) {
-                    $scope.vendrSettings = response.data;
+                    $scope.commerceSettings = response.data;
 
                     umbracoCommerceService.getLanguages()
                         .then(function (response) {
                             $scope.languages = response.data;
 
-                            _.each($scope.vendrSettings.GeneralSettings.ShopSettings, function (d) {
+                            _.each($scope.commerceSettings.GeneralSettings.ShopSettings, function (d) {
                                 d.LanguageName = _.where($scope.languages, { Id: d.LanguageId })[0].Name;
                             });
                         },
@@ -34,7 +34,7 @@ app.controller("umbracocommerce.shops.controller",
                         .then(function (response) {
                             $scope.dimensions = response.data;
 
-                            _.each($scope.vendrSettings.GeneralSettings.ShopSettings, function (d) {
+                            _.each($scope.commerceSettings.GeneralSettings.ShopSettings, function (d) {
                                 var dimensionText = "";
 
                                 if ($scope.dimensions) {

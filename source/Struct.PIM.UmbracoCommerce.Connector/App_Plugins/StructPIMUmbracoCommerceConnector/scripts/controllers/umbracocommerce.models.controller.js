@@ -4,7 +4,7 @@ app.controller("umbracocommerce.models.controller",
     function ($scope, umbracoCommerceService, structPimUmbracoHelper, $location) {
         $scope.loaded = false;
         
-        $scope.vendrSettings;
+        $scope.commerceSettings;
         $scope.pimVariantAttributes = [];
         $scope.pimProductAttributes = [];
         $scope.pimScopes = [];
@@ -47,7 +47,7 @@ app.controller("umbracocommerce.models.controller",
 
                             umbracoCommerceService.getIntegrationSettings()
                                 .then(function (response) {
-                                    $scope.vendrSettings = response.data;
+                                    $scope.commerceSettings = response.data;
                                     $scope.loaded = true;
                                 },
                                 function (response) {
@@ -75,7 +75,7 @@ app.controller("umbracocommerce.models.controller",
         };
 
         $scope.saveProductMapping = function () {
-            umbracoCommerceService.saveProductMapping($scope.vendrSettings.ProductMapping)
+            umbracoCommerceService.saveProductMapping($scope.commerceSettings.ProductMapping)
                 .then(function (response) {
                     structPimUmbracoHelper.setSuccessNotification("Product mapping has been updated");
                 },
@@ -84,7 +84,7 @@ app.controller("umbracocommerce.models.controller",
                 });
         }
         $scope.saveVariantMapping = function () {
-            umbracoCommerceService.saveVariantMapping($scope.vendrSettings.VariantMapping)
+            umbracoCommerceService.saveVariantMapping($scope.commerceSettings.VariantMapping)
                 .then(function (response) {
                     structPimUmbracoHelper.setSuccessNotification("Variant mapping has been updated");
                 },

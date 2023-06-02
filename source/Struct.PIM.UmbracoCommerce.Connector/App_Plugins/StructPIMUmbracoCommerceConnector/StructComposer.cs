@@ -3,10 +3,10 @@ using Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Settings;
 using Umbraco.Cms.Core.Composing;
-using Vendr.Core.Adapters;
-using Vendr.Core.Services;
+using Umbraco.Commerce.Core.Adapters;
+using Umbraco.Commerce.Core.Services;
 
-namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins.StructPIMVendr
+namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins
 {
     public class StructComposer : IComposer
     {

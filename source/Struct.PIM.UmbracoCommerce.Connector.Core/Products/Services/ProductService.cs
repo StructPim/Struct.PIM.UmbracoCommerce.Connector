@@ -4,9 +4,9 @@ using Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Settings;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Settings.Entity;
-using Vendr.Common.Models;
-using Vendr.Core.Models;
-using Vendr.Core.Services;
+using Umbraco.Commerce.Common.Models;
+using Umbraco.Commerce.Core.Models;
+using Umbraco.Commerce.Core.Services;
 
 namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
 {
@@ -26,10 +26,10 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
         protected Struct.PIM.Api.Client.StructPIMApiClient PIMClient(IntegrationSettings integrationSettings)
         {
             if (string.IsNullOrEmpty(integrationSettings.Setup.PimApiUrl))
-                throw new InvalidOperationException("StructPIM.ApiUrl must be set in settings to use Struct PIM Vendr");
+                throw new InvalidOperationException("StructPIM.ApiUrl must be set in settings to use Struct PIM Umbraco Commerce");
 
             if (string.IsNullOrEmpty(integrationSettings.Setup.PimApiKey))
-                throw new InvalidOperationException("StructPIM.ApiKey must be set in settings to use Struct PIM Vendr");
+                throw new InvalidOperationException("StructPIM.ApiKey must be set in settings to use Struct PIM Umbraco Commerce");
 
             return new Struct.PIM.Api.Client.StructPIMApiClient(integrationSettings.Setup.PimApiUrl, integrationSettings.Setup.PimApiKey);
         }
@@ -114,9 +114,9 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
             throw new Exception("productReference or productVariantReference must have a value.");
         }
 
-        public IEnumerable<global::Vendr.Core.Models.Attribute> GetProductVariantAttributes(Guid storeId, string productReference, string languageIsoCode)
+        public IEnumerable<global::Umbraco.Commerce.Core.Models.Attribute> GetProductVariantAttributes(Guid storeId, string productReference, string languageIsoCode)
         {
-            var result = new List<global::Vendr.Core.Models.Attribute>();
+            var result = new List<global::Umbraco.Commerce.Core.Models.Attribute>();
             if (!int.TryParse(productReference, out var productId))
                 throw new InvalidCastException("productReference must be integer");
 
@@ -152,7 +152,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                                 values[renderValue.Trim()].Alias += ";" + variantValue.VariantId;
                             }
                         }
-                        result.Add(new global::Vendr.Core.Models.Attribute(definingAttribute.Alias, definingAttribute.BackofficeName, values.Values));
+                        result.Add(new global::Umbraco.Commerce.Core.Models.Attribute(definingAttribute.Alias, definingAttribute.BackofficeName, values.Values));
                     }
                 }
             }

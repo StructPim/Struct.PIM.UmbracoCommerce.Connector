@@ -1,6 +1,6 @@
 ﻿using Struct.PIM.UmbracoCommerce.Connector.Core.Settings.Entity;
 
-namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins.StructPIMVendr.Models
+namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins.Models
 {
     public class GeneralSettingsSaveModel
     {

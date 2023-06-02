@@ -2,7 +2,7 @@
 using Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Settings;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Settings.Entity;
-using Vendr.Core.Services;
+using Umbraco.Commerce.Core.Services;
 
 namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
 {

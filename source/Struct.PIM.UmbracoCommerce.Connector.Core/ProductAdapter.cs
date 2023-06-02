@@ -1,6 +1,6 @@
-﻿using Vendr.Common.Models;
-using Vendr.Core.Adapters;
-using Vendr.Core.Models;
+﻿using Umbraco.Commerce.Common.Models;
+using Umbraco.Commerce.Core.Adapters;
+using Umbraco.Commerce.Core.Models;
 
 namespace Struct.PIM.UmbracoCommerce.Connector.Base
 {
@@ -23,7 +23,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Base
             return _productService.GetProductSnapshot(storeId, productReference, productVariantReference, languageIsoCode);
         }
 
-        public IEnumerable<global::Vendr.Core.Models.Attribute> GetProductVariantAttributes(Guid storeId, string productReference, string languageIsoCode)
+        public IEnumerable<global::Umbraco.Commerce.Core.Models.Attribute> GetProductVariantAttributes(Guid storeId, string productReference, string languageIsoCode)
         {
             return _productService.GetProductVariantAttributes(storeId, productReference, languageIsoCode);
         }

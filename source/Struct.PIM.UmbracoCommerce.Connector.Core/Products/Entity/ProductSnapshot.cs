@@ -1,4 +1,4 @@
-﻿using Vendr.Core.Models;
+﻿using Umbraco.Commerce.Core.Models;
 
 namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
 {
