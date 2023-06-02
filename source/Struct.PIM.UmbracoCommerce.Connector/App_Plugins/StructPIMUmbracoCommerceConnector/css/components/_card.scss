@@ -1,0 +1,817 @@
+/*
+	Library of card related compoents, like the right-hand icon list on the grid "cards"
+*/
+
+.pim-card {
+	position: relative;
+	padding: 5px 10px 5px 10px;
+    background: white;
+
+    .title{padding: 12px; color: $gray-3; border-bottom: 1px solid $gray-8; font-weight: 400; font-size: 16px; text-transform: none; margin: 0 -10px 10px -10px;}
+
+}
+
+.pim-card-thumb{
+    text-align: center;
+
+    i{
+        text-align: center;
+        font-size: 20px;
+        line-height: 40px;
+        color: $blue;
+        display: block;
+        padding-top: 5px
+    }
+}
+
+.pim-card-content{
+    .item-title{color: $blackLight; font-weight: 400; border: none; font-size: 16px; text-transform: none; margin-bottom: 3px;}
+    p{color: $gray-3; margin-bottom: 1px;}
+}
+
+.pim-card-actions{
+    padding-top: 10px;
+    border-top: $gray-10 1px solid;
+    clear: both;
+}
+
+.pim-card-icons{
+	text-align: center;
+	vertical-align: middle;
+	display: block;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.pim-card-icons.vertical{
+	position: absolute;
+	top: 7px;
+	right: 7px;
+	text-align: right;
+	width: 1px;
+}
+
+.pim-card-icons li{
+	display: inline-block;
+	margin: 0 2px 0 2px;
+}
+
+.pim-card-icons.vertical li{
+	float: right;
+	display: block;
+	margin-bottom: 3px;
+}
+
+//card iocn list
+.pim-card-list{
+     display: block;
+     padding: 0;
+     margin: 0;
+ }
+
+.pim-card-list li{
+    border-bottom: $gray-10 1px solid;
+    padding-bottom: 3px;
+    display: block;
+}
+
+
+
+
+//Card icon grid for picking items off a card
+.pim-card-grid {
+	padding: 0;
+	margin: 0 auto;
+	list-style: none;
+
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: flex-start;
+}
+
+.pim-card-grid li {
+	padding: 5px;
+	overflow: hidden;
+	font-size: 12px;
+	text-align: center;
+
+	width: 100px;
+
+	box-sizing: border-box;
+}
+
+.pim-card-grid li.-four-in-row {
+    flex: 0 0 25%;
+    max-width: 25%;
+}
+
+.pim-card-grid li.-three-in-row {
+	flex: 0 0 33.33%;
+    max-width:33.33%;
+}
+
+.pim-card-grid .pim-card-grid-item {
+	display: block;
+	width: 100%;
+	height: 100%;
+	border-radius: 3px;
+    padding-bottom: 5px;
+}
+
+
+ .pim-card-grid .pim-card-grid-item:hover,
+ .pim-card-grid .pim-card-grid-item:focus,
+ .pim-card-grid .pim-card-grid-item:hover > *,
+ .pim-card-grid .pim-card-grid-item:focus > *  {
+	background: $gray-10;
+	//color: white;
+	cursor: pointer;
+	outline: none;
+	border-radius: 3px;
+}
+
+.pim-card-grid a {
+     color: $gray-2;
+     text-decoration: none;
+ }
+
+.pim-card-grid i {
+     font-size: 30px;
+     line-height: 50px;
+     display: block;
+	  color: $gray-3;
+ }
+
+
+
+
+
+//Round icon-like button - this should be somewhere else
+.pim-btn-round{
+	padding: 4px 6px 4px 6px;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 200px;
+    background: $gray-10;
+    border:1px solid $gray-6;
+    margin: 2px;
+}
+
+.pim-btn-round:hover, .pim-btn-round:hover *{
+  background: $turquoise !important;
+  color: $white !important;
+  border-color: $turquoise !important;
+  text-decoration:none;
+ }
+
+ .pim-btn-round a:hover {
+     text-decoration:none;
+     color: $white !important;
+ }
+
+ .pim-btn-round i {
+     font-size:16px !important;
+     color: $gray-8;
+     display:block;
+ }
+
+ .pim-btn-round.alert:hover, .pim-btn-round.alert:hover *{
+ 	background: $red !important;
+  	color: $white !important;
+  	border-color: $red !important;
+  	text-decoration:none;
+ }
+
+.pim-btn-round.no-border{
+    border: none !important;
+    background: none !important;
+}
+
+
+
+
+
+
+/*------------------------------------------------------------------
+[4. Cards]
+*/
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background-color: $white;
+    background-clip: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    //min-height: 100%;
+    word-wrap: break-word;
+    align-items: stretch;
+    align-self: flex-start;
+    border: 0px solid rgba($borderColor,0.5);
+    //box-shadow: 0 1px 6px 0px rgba($black,0.05);
+    transition: all 0.5s cubic-bezier(.23,.61,.47,.96);
+    //border-radius: $baseBorderRadius;
+    > hr {
+        margin-right: 0;
+        margin-left: 0;
+    }
+
+    > .list-group:first-child {
+        .list-group-item:first-child {
+            //@include border-top-radius($card-border-radius);
+        }
+    }
+
+    > .list-group:last-child {
+        .list-group-item:last-child {
+            //@include border-bottom-radius($card-border-radius);
+        }
+    }
+    //@include box-shadow(none);
+    //@include transition(all .2s ease);
+    &:hover {
+        //box-shadow: 0 6px 12px 0px rgba($black,0.15);
+
+        .card-header {
+            &:after {
+                width: 40px;
+            }
+        }
+    }
+
+    .card-header {
+        background: transparent;
+        border-radius: 0px;
+        border-bottom: 0px solid rgba($black,0.05);
+        padding: 12px 16px;
+        position: relative;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+
+        .drag-handle {
+            //color: rgba($black,0.75) !important;
+            margin-right: $spacing-extra-small;
+            cursor: move;
+            opacity: 0.4;
+        }
+
+        &.separator:after {
+            content: "";
+            height: 1px;
+            background: rgba(0,0,0,0.08);
+            left: 16px;
+            right: 16px;
+            position: absolute;
+            bottom: 0;
+        }
+
+        & + .card-body {
+            //padding-top: 0;
+        }
+
+        .card-title {
+            //text-transform: uppercase;
+            display: inline-block;
+            //letter-spacing: 0.06em;
+            //font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+            padding: 0;
+            line-height: normal;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -webkit-text-stroke: 0px;
+            position: relative;
+            //color: rgba($black,0.75) !important;
+            //@include transition(opacity .3s ease);
+            & + .card-body {
+            }
+        }
+
+        .card-controls {
+            margin-left: auto;
+            margin-top: 0px;
+
+
+            ul {
+                margin: 0;
+                padding: 0;
+                display: flex;
+                align-items: center;
+
+                li {
+                    display: inline-block;
+                    list-style: none;
+                    line-height: 0;
+                    margin: 0 $spacing-small;
+
+                    &.card-controls-seperator {
+                        width: 1px;
+                        height: 24px;
+                        background-color: $borderColor;
+                        margin: 0 $spacing-medium;
+                    }
+
+                    a {
+                        //color: rgba($black,0.75) !important;
+                        //opacity: 0.5;
+
+                        &:hover {
+                            //opacity: 1;
+                        }
+                    }
+
+                    &:last-child {
+                        margin-right: 0px;
+                    }
+                }
+            }
+
+            &:after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+        }
+
+        &.card-header-hover {
+            .card-title {
+                opacity: .4;
+            }
+
+            &:hover {
+                .card-title {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+    &.is-collapsed {
+        .card-collapse i {
+            transform: rotate(180deg);
+        }
+    }
+
+    &.card-default {
+        border: 1px solid $grayLight;
+        //Used for colored panels
+        & > .card-header {
+            color: $grayDark;
+        }
+    }
+
+    &.card-no-shadow {
+        box-shadow: none;
+    }
+
+    &.card-bordered {
+        border: 1px solid $gray-9;
+
+    }
+
+    &.card-borderless {
+        border: none;
+        box-shadow: none !important;
+    }
+
+    &.card-condensed {
+        .card-header {
+            padding: 5px 10px;
+            min-height: 30px;
+
+            .card-title {
+                //opacity: .4;
+               
+            }
+        }
+
+        .card-body {
+            padding: 10px;
+        }
+    }
+
+    &.card-hover {
+        .card-header .card-title {
+            opacity: .6;
+        }
+
+        &:hover {
+            .card-header .card-title {
+                opacity: 1;
+            }
+        }
+    }
+
+    &.card-transparent {
+        background: transparent !important;
+        border: none;
+        @include box-shadow(none);
+
+        .card-body {
+            background: transparent;
+        }
+    }
+
+    &.full-height {
+        height: 100%;
+
+        .card-body {
+            height: auto;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    &.card-featured {
+        background-color: rgba($grayLighter, 1);
+        @include box-shadow(0px 0px 0px 0px rgba($gray, 0));
+        @include transition(box-shadow 0.2s ease 0s);
+
+        &:hover {
+            background-color: $white;
+            @include box-shadow(0px 0px 0px 5px rgba($grayLight, 0.5));
+        }
+        //width: calc(100% - 50px);
+        //float: right;
+        .card-header {
+        }
+
+        .card-title {
+            font-size: 18px !important;
+            color: $gray;
+            font-weight: bold;
+        }
+
+        .card-body {
+        }
+
+        .ribbon {
+            width: 38px;
+            height: 38px;
+            margin-left: -39px;
+            float: left;
+            @include box-shadow( inset -3px 0px 3px 0px rgba(0,0,0,0.14) );
+
+            &.green {
+                background: $green;
+            }
+
+            &.blue {
+                background: $blue;
+            }
+        }
+    }
+
+    &.hover-fill:hover {
+        background: $grayLight;
+    }
+
+    &.hover-stroke {
+        &:hover {
+            border: 1px solid $grayLight;
+        }
+    }
+
+    .card-body {
+        flex-grow: 1;
+        flex-shrink: 0;
+        padding: 16px;
+        //overflow-y: auto;
+        box-sizing: border-box;
+
+        &.no-padding {
+            .row {
+                margin-left: 0;
+                margin-right: 0;
+            }
+        }
+
+        &.no-bottom-padding {
+            padding-bottom: 0;
+        }
+
+        &.no-top-padding {
+            padding-top: 0;
+        }
+
+        .title {
+            margin-top: 0px;
+        }
+
+        &.scrollable {
+            margin-bottom: 12px;
+        }
+
+        &.align-bottom {
+        }
+    }
+
+    .card-footer {
+        flex-shrink: 0;
+        padding: 12px;
+        border-top: 1px solid rgba($gray, .1);
+    }
+
+    &.is-collapsed {
+        min-height: auto;
+
+        .card-footer, .card-body {
+            display: none;
+        }
+    }
+
+    &.is-maximized {
+        position: absolute !important;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        z-index: 10;
+        margin: 0;
+        width: auto;
+        height: 100%;
+
+        .card-footer, .card-body {
+            display: block !important;
+        }
+    }
+}
+
+
+/* Portlets
+------------------------------------
+*/
+.card-progress {
+    background: rgba($white,0);
+    //background: rgba(0,0,0,0);
+    bottom: 0;
+    left: 0;
+    position: absolute !important;
+    right: 0;
+    top: 0;
+    visibility: hidden;
+    z-index: 99;
+}
+
+.is-refreshing {
+    .card-progress {
+        visibility: visible;
+        background: rgba($white,.7);
+        @include transition(all .5s easeInOut);
+    }
+
+    .card-progress .progress-circle-indeterminate {
+        opacity: 1;
+    }
+}
+
+.card-progress .progress,
+.card-progress .progress.progress-small {
+    height: 3px;
+}
+
+.card-progress .progress-circle-indeterminate,
+.card-progress .card-bar-indeterminate {
+    display: block;
+    left: 50%;
+    margin-left: -17px;
+    margin-top: -17px;
+    position: absolute;
+    top: 50%;
+}
+
+.card-progress .progress-circle-indeterminate {
+    width: 35px;
+    height: 35px;
+    opacity: 0;
+    @include transition(opacity .4s ease);
+    @include transition-delay(.2s);
+}
+
+
+
+.card-header a:not(.btn) {
+    //color: $color-master !important;
+    //opacity: .75;
+    //padding-top: 10px;
+    //padding-bottom: 10px;
+    //@include transition(opacity .3s ease);
+
+    &:hover {
+        //opacity: .8;
+    }
+
+    &.card-refresh {
+        @include transition(opacity .3s ease);
+
+        &.is-refreshing {
+            opacity: 1;
+        }
+
+        &.minimal {
+            position: relative;
+            display: block;
+            padding: 0;
+        }
+    }
+}
+
+.card-header {
+    .dropdown-menu {
+        .dropdown-item {
+            padding: 0 20px !important;
+
+            &:hover {
+                opacity: 1;
+                background-color: transparent;
+            }
+        }
+    }
+
+    a[data-toggle]:hover {
+        opacity: 1;
+    }
+}
+
+
+.card-icon {
+    -moz-osx-font-smoothing: grayscale;
+    font-family: "pim-icon";
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+    text-transform: none;
+}
+
+.card-icon-close:before {
+    content: "\e60a";
+}
+
+.card-icon-maximize:before {
+    content: "\e634";
+}
+
+.card-icon-refresh:before {
+    content: "\e600";
+}
+
+.card-icon-collapse:before {
+    content: "\e62c";
+}
+
+.card-icon-settings:before {
+    content: "\e655";
+}
+
+.card-icon-refresh-lg-master,
+.card-icon-refresh-lg-white {
+    width: 15px;
+    height: 15px;
+    display: block;
+    background-size: cover;
+    @include transition(opacity .3s ease);
+
+    &.fade {
+        opacity: 0.1;
+    }
+}
+
+.card-icon-refresh-lg-master {
+    background-image: url('#{$base-img-url}/progress/progress-circle-lg-master-static.svg');
+}
+
+.card-icon-refresh-lg-white {
+    background-image: url('#{$base-img-url}/progress/progress-circle-lg-white-static.svg');
+}
+
+.card-icon-refresh-lg-master-animated,
+.card-icon-refresh-lg-white-animated {
+    width: 15px;
+    height: 15px;
+    display: block;
+    background-size: cover;
+    opacity: 0;
+    @include transition(opacity .3s ease);
+
+    &.active {
+        opacity: 1
+    }
+}
+
+.card-icon-refresh-lg-master-animated {
+    background-image: url('#{$base-img-url}/progress/progress-circle-lg-master.svg');
+}
+
+.card-icon-refresh-lg-white-animated {
+    background-image: url('#{$base-img-url}/progress/progress-circle-lg-white.svg');
+}
+
+.card-body-split {
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+    padding: 0px !important;
+}
+
+.card-body-split__left-right {
+    display: flex;
+    flex-flow: column;
+    flex: 1;
+    padding: 16px;
+}
+
+.card-body-split__left-right--readonly {
+    background-color: $grayLighter;
+}
+
+
+
+
+.pim-form-layout {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+
+    &__wrapper {
+    }
+
+    &__row {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+
+
+        @supports (display: grid) {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+            grid-column-gap: 0px;
+            grid-row-gap: 0px;
+        }
+
+        -webkit-transition: all 1s;
+        -o-transition: all 1s;
+        transition: all 1s;
+
+
+        &--1-col {
+            @supports (display: grid) {
+                grid-template-columns: minmax(480px, 1fr);
+            }
+        }
+
+        &--2-col {
+            @supports (display: grid) {
+                grid-template-columns: repeat(auto-fit, minmax(550px, 1fr));
+            }
+        }
+
+        &--3-col {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        &--4-col {
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+        }
+    }
+
+
+
+    &__column {
+        -ms-flex-preferred-size: 0;
+        flex-basis: 0;
+        -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        max-width: 100%;
+        padding: 16px 16px 16px 16px;
+        //overflow: hidden;
+        &.is-empty {
+            padding: 0;
+        }
+
+        &--readonly {
+            background-color: $grayLighter;
+        }
+
+        &--hilight {
+            background-color: $yellow-washed;
+        }
+
+        .pim-el-wrap {
+            height: 100%;
+
+            .controls {
+                height: 100%;
+            }
+        }
+    }
+}

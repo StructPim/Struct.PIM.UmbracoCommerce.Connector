@@ -1,0 +1,161 @@
+/*
+	contains styling for all main editor directives
+*/
+
+.pim-editor-wrapper {
+	background: $white;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	flex-direction: column;
+
+    > form {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+}
+
+.pim-editor-header {
+    background: $white;
+    border-bottom: 1px solid $borderColor-l2;
+    flex: 0 0 70px;
+    position: relative;
+}
+
+.pim-editor-header__actions-menu {
+	margin-left: auto;
+}
+
+.pim-editor-container {
+	position: relative;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	overflow: auto;
+	flex: 1 1 100%;
+}
+
+.pim-editor-container--no-flex {
+    flex: none;
+}
+
+.pim-editor-wrapper.-no-footer .pim-editor-container {
+	bottom: 0;
+}
+
+.pim-editor-container.-stop-scrolling {
+	overflow: hidden;
+}
+
+.pim-editor-drawer {
+    margin: 0;
+    padding: 10px 20px;
+    background: $white;
+    border-top: 1px solid $borderColor-l2;
+    flex: 1 0 31px;
+}
+
+
+.pim-editor-actions{
+	list-style: none;
+	margin: 0; padding: 0;
+}
+
+.pim-editor-actions li{
+	display: inline-block;
+}
+
+
+.pim-editor-footer-nav {
+    margin-bottom: 0;
+    height: 30px;
+    overflow: hidden;
+
+    li {
+
+
+        a {
+            border-radius: 0;
+            display: block;
+            float: left;
+            height: 30px;
+            background: $white;
+            text-align: center;
+            padding: 8px 0px 8px 0px;
+            position: relative;
+            margin: 0;
+            text-decoration: none;
+            color: #515054;
+            font-size: 12px;
+
+            &:before {
+            }
+
+            &:after {
+                content: "/";
+                padding: 0 6px;
+                color: $gray-7;
+            }
+
+            &:hover {
+                background-color: $white;
+                color: $ui-active;
+            }
+        }
+
+        &:first-child {
+            a {
+                padding-left: 0px;
+
+                &:before {
+                    display: none;
+                }
+            }
+        }
+
+        &.pim-editor-footer-nav-item--no-seperator {
+            a {
+                &:after {
+                    display: none !important;
+                }
+            }
+        }
+    }
+}
+
+.pim-editor-footer {
+    position: absolute;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    height: 50px;
+    padding: 10px 20px;
+    background: $white;
+    border-top: 1px solid $gray-9;
+    z-index: 30;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+}
+
+.pim-editor-footer-content {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+}
+
+.pim-editor-footer-content__right-side {
+    margin-left: auto;
+    flex: 0 0 auto;
+    padding-left: 10px;
+}
+
+.pim-editor-footer-content__left-side {
+    margin-right: auto;
+    padding-right: 10px;
+}

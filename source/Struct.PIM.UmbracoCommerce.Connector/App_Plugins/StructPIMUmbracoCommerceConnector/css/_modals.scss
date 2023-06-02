@@ -1,0 +1,197 @@
+/* Modals
+// -------------------------*/
+
+/* Modalcolumn is used for menu panels */
+.pim-modalcolumn {
+	background: $white;
+}
+
+.pim-modalcolumn-header {
+  background: $gray-10;
+  border-bottom: 1px solid $purple-l3;
+  height: 94px;
+  padding: 5px 20px 0px 20px;
+  white-space: nowrap
+}
+
+.pim-modalcolumn-header h1{
+  margin: 0;
+  white-space: nowrap;
+  font-size: $fontSizeLarge;
+  font-weight: 400;
+  padding-top: 10px !important;
+}
+
+.pim-modalcolumn-body {
+	padding: 0px;
+	background: $white;
+	top: 100px;
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	overflow: auto;
+}
+
+.no-padding .pim-modalcolumn-body {
+	padding: 0px
+}
+
+.pim-modalcolumn .pim-modalcolumn-header .btn {
+	position: absolute;
+	top: 13px;
+	right: 15px
+}
+
+.pim-modalcolumn iframe.auto-expand, .pim-modal iframe.auto-expand {
+	border: none;
+	padding: 0px;
+	margin: 0px;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	position: absolute;;	
+}
+
+/* re-align loader */
+.pim-modal .pim-loader-wrapper, .pim-modalcolumn .pim-loader-wrapper, .pim-dialog .pim-loader-wrapper{
+    position:relative; 
+    margin: 20px -20px;
+}
+
+.pim-modal-left .pim-panel-header .pim-headline, .pim-modal-left .pim-panel-header h1 {
+  width: auto;
+  padding-left: 0;
+}
+
+/* umb.dialog is used for the dialogs on the conent tree*/
+.pim-dialog {
+	outline: none;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	position: absolute;
+	padding: 0px;
+}
+
+.pim-dialog .pim-btn-toolbar .pim-control-group{
+	border: none;
+	padding: none;
+}
+
+.pim-dialog-body{
+	position: absolute;
+    overflow:auto;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 52px;
+}
+.pim-dialog-body .pim-pane{margin-top: 15px;}
+
+.pim-dialog-footer{
+	position: absolute;
+	overflow:auto;
+	text-align: right; 
+	height: 32px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+    padding: 10px 20px;
+    margin: 0;
+    background: $white;
+    border-top: 1px solid $borderColor-l2;
+}
+
+/*we will always make sure to wrap iframe dialogs in proper padding*/
+.umbracoDialog{
+	width: auto !important;
+	height: auto !important;
+    padding: 20px;
+}
+.umbracoDialog .pim-pane{margin-left: 0px; margin-right: 0px; margin-top: 0px;}
+.umbracoDialog .pim-dialog-body .pim-pane{margin-left: 20px; margin-right: 20px; margin-top: 20px;}
+.umbracoDialog form{height: 100%;}
+
+/*ensures dialogs doesnt have side-by-side labels*/
+.umbracoDialog .controls-row, 
+.pim-modal .controls-row{margin-left: 0px !important;}
+
+/* modal and pim-modal are used for right.hand dialogs */
+.modal {
+    border-radius: 0 !important;
+
+    &.fade.in{border: none !important;}
+}
+.pim-modal.fade {
+	outline: none;
+	top: 0 !important;
+	left: -100% !important;
+	width: 0px !important;
+	-webkit-transition: left 0.3s linear, left 0.3s ease-out;
+	-moz-transition: opacity 0.3s linear, top 0.3s ease-out;
+	-o-transition: opacity 0.3s linear, top 0.3s ease-out;
+	transition: opacity 0.3s linear, top 0.3s ease-out;
+	height: 100% !important;
+}
+
+.pim-modal.fade.in {
+	top: 0 !important;
+	left: 100% !important;
+	margin-left: -440px;
+	width: 440px !important;
+	height: 100% !important;
+	display: block;
+}
+
+.pim-modal-left.fade {
+	top: 0 !important;
+	left: -100% !important;
+	width: 0px !important;
+	-webkit-transition: left 0.3s linear, left 0.3s ease-out;
+	-moz-transition: opacity 0.3s linear, top 0.3s ease-out;
+	-o-transition: opacity 0.3s linear, top 0.3s ease-out;
+	transition: opacity 0.3s linear, top 0.3s ease-out;
+	height: 100% !important;
+}
+.pim-modal-left.fade.in {
+	top: 0 !important;
+	left: 0 !important;
+	margin-left: 80px;
+	width: 440px !important;
+	height: 100% !important;
+	display: block;
+}
+
+/*Modal default panel styles*/
+.pim-modal .pim-panel-header {
+  padding: 20px;
+  background: $white;
+  border: none;
+  height: auto; 
+}
+.pim-modal .pim-panel-body{
+	padding: 0px 20px 0px 20px;
+}
+
+.pim-modal.fade.in.wide {
+    margin-left: -640px;
+	width: 640px !important;
+}
+.pim-modal i {
+  font-size: 20px;
+} 
+.pim-modal .breadcrumb {
+	background: none;
+	padding: 0
+}
+
+.pim-modal .breadcrumb input {
+	height: 12px
+}
+
+.pim-modal.ysod {
+    z-index: 10000;
+}

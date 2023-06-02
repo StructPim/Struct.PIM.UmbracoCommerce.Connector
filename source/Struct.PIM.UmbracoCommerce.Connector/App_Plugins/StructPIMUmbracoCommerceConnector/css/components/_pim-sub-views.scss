@@ -1,0 +1,55 @@
+.pim-sub-views {
+
+  .pim-sub-views-action-bar {
+    margin-bottom: 40px;
+  }
+
+  .pim-sub-views-action-bar .btn-link {
+    padding-left: 0;
+    padding-right: 0;
+    &:focus {
+      outline: none;
+      text-decoration: none;
+    }
+  }
+
+  .pim-sub-views-nav {
+    float: right;
+    margin: 0;
+    .pim-sub-views-nav-item {
+      display: inline-block;
+      margin-left: 15px;
+      &.is-active {
+        .btn-link {
+          color: $ui-active !important;
+        }
+      }
+    }
+  }
+
+  .pim-sub-views-tools {
+    float: left;
+    margin: 0;
+    .pim-sub-views-tool {
+      display: inline-block;
+      margin-right: 15px;
+    }
+  }
+
+}
+
+.pim-panel-header {
+    .umb-sub-views-nav {
+        margin-right: $spacing-large;
+        padding-right: $spacing-large;
+        border-right: 1px solid $gray-9;
+
+        .umb-sub-views-nav-item {
+            font-weight: 600;
+            &.is-active {
+                color: $ui-active !important;
+            }
+        }
+    }
+}
+

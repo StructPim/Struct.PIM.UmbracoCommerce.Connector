@@ -1,0 +1,47 @@
+﻿<div class="StructPIM">
+    <div class="pim-panel pim-editor-wrapper" ng-controller="umbracocommerce.overview.controller">
+        <!--header-->
+        <div class="pim-editor-header pim-panel-header">
+
+            <div class="pim-panel-header-content-wrapper">
+
+                <div class="pim-panel-header-content">
+                    <div class="pim-panel-header-left-side">
+                        <div class="pim-panel-header-icon">
+                            <i class="pim-icon pim-icon-struct-logo-icon pim-icon-32"></i>
+                        </div>
+                        <div class="pim-panel-header-title-wrapper">
+                            <div class="pim-panel-header-name">
+                                Struct PIM
+                            </div>
+                            <div class="pim-panel-header-locked-description">
+                                Connect Struct PIM to Umbraco Vendr
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="pim-editor-container pim-panel-body pim-scrollable row-fluid" auto-scale="1" ng-show="loaded">
+            <div class="pim-pane">
+                <div class="card" style="margin-bottom:20px;">
+                    <div class="card-header">
+                        <h4 class="card-title">
+                            StructPIM Settings
+                        </h4>
+                    </div>
+                    <div class="card-body ">
+                        <p>Welcome to the StructPIM settings area. From this section you can setup and manage your StructPIM connection to Umbraco Vendr.</p>
+                        <h5>Setup</h5>
+                        <p>Start by going through below links to setup StructPIM:</p>
+                        <ul>
+                            <li>Setup connection to StructPIM through <a class="underline" href="#/settings/structpimsettings/setup">Setup</a></li>
+                            <li>Configure how PIM data should map to Vendr entities in <a class="underline" href="#/settings/structpimsettings/data-models">Data models</a></li>
+                            <li>Localize each individual <a class="underline" href="#/settings/structpimsettings/stores-index">Stores</a> and make prices and inventory available</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

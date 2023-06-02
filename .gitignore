@@ -396,3 +396,8 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/BuildNugetPackages.ps1
+/InternalPublishNugetPackages.ps1
+/PublishNugetPackages.ps1
+/source/Struct.PIM.UmbracoCommerce.Connector/umbraco/Data
+/InternalPublishNugetPackages.ps1

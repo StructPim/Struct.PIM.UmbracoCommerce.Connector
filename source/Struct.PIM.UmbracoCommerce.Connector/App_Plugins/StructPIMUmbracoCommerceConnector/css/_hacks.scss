@@ -1,0 +1,321 @@
+// Hacks
+// -------------------------
+
+/* CONTAINS ALL HACKS AND OTHER QUICK-FIXES */
+
+
+h1, h2, h3 {
+    line-height: 38px !important;
+}
+
+
+.pim-icon {
+    //font-size: 16px !important;
+    //color: #515054;
+    transform: translateY(8%);
+}
+
+.pim-setting-icon svg g {
+    //fill: $blue;
+    //stroke: $blue;
+}
+
+/* absolute units */
+.pim-icon-8 {
+    font-size: 8px !important;
+}
+
+.pim-icon-12 {
+    font-size: 12px !important;
+}
+
+.pim-icon-16 {
+    font-size: 16px !important;
+}
+
+.pim-icon-24 {
+    font-size: 24px !important;
+}
+
+.pim-icon-32 {
+    font-size: 28px !important;
+}
+
+.pim-icon-48 {
+    font-size: 48px !important;
+}
+
+.pim-icon-64 {
+    font-size: 64px !important;
+}
+
+.pim-icon-96 {
+    font-size: 96px !important;
+}
+
+.pim-icon-128 {
+    font-size: 128px !important;
+}
+
+/*wft ms?*/
+*{ -ms-touch-action: none;}
+
+.ace_editor { height: 200px; }
+
+.nounderline {text-decoration: none !important}
+.nounderline:hover {text-decoration: underline !important}
+.nounderline * {text-decoration: none !important; border: none}
+
+.ui-sortable-placeholder {
+     margin-left: 0 !important;
+}
+.controls-row img {
+	max-width: none;
+}
+
+.thumbnail {
+    border-radius: 0;
+    min-width: 150px;
+
+    > a {
+        display: block;
+    }
+
+    img {
+	    max-width: 100% !important;
+        width: 100%;
+    }
+}
+
+#mapCanvas img {
+  max-width: none !important;
+}
+
+.btn-group .dropdown-backdrop {
+    display: none;
+}
+
+/* loading animation for iframes and content pages */
+iframe, .content-column-body {
+    background: center center url(../img/loader.gif) no-repeat;
+    border: none;
+}
+
+/* JQUERY FILEUPLOAD TEMP STYLES */
+.fileinput-button {
+  position: relative;
+  overflow: hidden;
+  margin-bottom:5px;
+}
+.fileinput-button input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  transform: translate(-300px, 0) scale(4);
+  font-size: 23px;
+  direction: ltr;
+  cursor: pointer;
+}
+
+
+/*tree legacy icon*/
+.legacy-custom-file {
+  width: 16px;
+  height: 16px;
+  min-width: 20px; /* this ensure the icon takes up same space as font-icon (20px) */
+  display: inline-block;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+/*
+    missing icon names in helveticons that are in font-awesome - used by the datepicker,
+    basically making them equivalent to their helviton icon
+*/
+.icon-chevron-up:before {
+	content: "\e128";
+}
+.icon-chevron-down:before {
+	content: "\e0c9";
+}
+
+
+/* Styling for validation in Public Access */
+
+.pa-pim-overlay {
+    -webkit-font-smoothing: antialiased;
+    font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.pa-pim-overlay + .pa-pim-overlay {
+    padding-top: 30px;
+    border-top: 1px solid $gray-8;
+}
+
+.pa-select-type {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+
+    margin-top: 15px;
+}
+
+.pa-select-type label {
+    padding: 0 20px;
+}
+
+.pa-access-header {
+    font-weight: bold;
+    margin: 0 0 3px 0;
+    padding-bottom: 0;
+}
+
+.pa-access-description {
+    color: $gray-7;
+    margin: 0;
+}
+
+.pa-validation-message {
+    padding: 6px 12px !important;
+    margin: 5px 0 0 0 !important;
+    display: inline-block;
+}
+
+.pa-select-pages label {
+    margin: 0;
+    font-size: 15px;
+}
+
+.pa-select-pages label + .controls-row {
+    padding-top: 0;
+}
+
+.pa-select-pages .pim-detail {
+    font-size: 13px;
+    margin: 2px 0 5px;
+}
+
+.pa-choose-page a {
+    color: $ui-active;
+    font-size: 15px;
+}
+
+.pa-choose-page a:hover, .pa-choose-page a:active, .pa-choose-page a:focus {
+    color: $ui-active;
+    text-decoration: none;
+}
+
+.pa-choose-page a:before {
+    content:"+";
+    margin-right: 3px;
+    font-weight: bold;
+}
+
+.pa-choose-page .treePickerTitle {
+    font-weight: bold;
+    font-size: 13px;
+    font-style: italic;
+    background: $gray-10;
+    padding: 3px 5px;
+    color: $gray-5;
+
+    border-bottom: none;
+}
+
+
+.pa-form + .pa-form {
+    margin-top: 10px;
+}
+
+
+// The below adds a default selector to all pre elements to ensure that styles are applied 
+// without having to add the class ".code" to the element. Styles have been created by 
+// combining the various declarations from the Bootstrap code.less file and fixing some mistakes
+// in Bootstrap 2.
+// This fixes issues with the markdown editor preview and should not cause issues with any other editor. 
+
+// Inline code
+// 1: Revert border radius to match look and feel of 7.4+
+code{
+  @include border-radius($baseBorderRadius); // 1
+}
+
+// Blocks of code
+// 1: Wrapping code is unreadable on small devices.
+pre {
+  display: block;
+  padding: ($baseLineHeight - 1) / 2;
+  margin: 0 0 $baseLineHeight / 2;
+  font-family: $sansFontFamily;
+  //font-size: $baseFontSize - 1; // 14px to 13px
+  color: $gray-2;
+  line-height: $baseLineHeight;
+  white-space: pre-wrap; // 1
+  overflow-x: auto; // 1
+  background-color: $gray-10;
+  border: 1px solid $gray-8;
+  @include border-radius($baseBorderRadius);
+
+
+  // Make prettyprint styles more spaced out for readability
+  &.prettyprint {
+    margin-bottom: $baseLineHeight;
+  }
+
+  // Account for some code outputs that place code tags in pre tags
+  code {
+    padding: 0;
+    white-space: pre; // 1 
+    word-wrap: normal; // 1
+    background-color: transparent;
+    border: 0;
+  }
+}
+
+
+
+
+.umb-tree-item__arrow {
+    line-height: 0;
+    margin-right: 8px;
+}
+
+
+.umb-modalcolumn-header {
+    background: transparent;
+    border-bottom: none;
+}
+
+
+.pim-panel {
+    .umb-editor-sub-header {
+        background: $gray-10;
+    }
+}
+
+.popover {
+    max-width: 1000px;
+}
+
+
+.umb-dashboard__content {
+    padding:0px;
+    }
+
+
+.collapsing {
+    -webkit-transition: height .35s ease;
+    transition: height .35s ease;
+    overflow:hidden;
+}
+
+.mce-btn-group[role='group'] > div[id$='-body'] {
+    display: flex;
+    flex-wrap: wrap;
+}

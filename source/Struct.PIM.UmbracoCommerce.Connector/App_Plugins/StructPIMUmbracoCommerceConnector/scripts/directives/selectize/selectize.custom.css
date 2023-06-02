@@ -1,0 +1,3 @@
+.selectize-dropdown [data-group-header-selectable] {
+  cursor: pointer;
+}

@@ -1,0 +1,555 @@
+﻿.pim-sortable__list {
+    list-style: none;
+    list-style-type: none;
+    margin: 0px;
+    width: 100%;
+    line-height: 32px;
+}
+
+.pim-sortable__sub-list {
+    list-style: none;
+    list-style-type: none;
+    margin: 0px 0 0px 0;
+    padding: 0px 0 0 0px;
+    font-size: $baseFontSize;
+    position: relative;
+    //border-top: 1px dotted $borderColor;
+
+    li {
+
+        /*i {
+            color: $white;
+            transition: all 0.2s;
+        }
+
+        &:hover {
+
+            i {
+                color: $gray-4;
+            }
+        }
+            */
+    }
+
+    
+}
+
+.pim-sortable__sub-sub-list--has-clipboard-sections {
+    .pim-sortable__paste-item {
+        display: block;
+    }
+
+    .pim-sortable__sub-item {
+        &--is-empty {
+            display: list-item;
+            padding: 1px 8px;
+            background-color: $white;
+            //border: 1px solid rgba($ui-active, 0.5);
+            //opacity: 0.5;
+            a {
+                //color: $ui-active;
+            }
+
+            &:hover {
+                padding: 1px 8px 32px 8px;
+                //border-color: $ui-active;
+                background-color: $white;
+            }
+        }
+
+        &:hover {
+            padding: 12px 12px 48px 12px;
+            //border-color: $ui-active;
+            background-color: rgba($ui-active,0.05);
+
+            .pim-sortable__paste-item {
+                opacity: 1;
+                transform: translateY(0);
+                transition: all 0.25s;
+                transition-delay: 0.15s;
+            }
+        }
+    }
+}
+
+.pim-sortable__sub-sub-list {
+    list-style: none;
+    list-style-type: none;
+    margin: 0px 0 0px 0px;
+    font-size: $fontSizeSmall;
+}
+
+.pim-sortable__item {
+    background-color: $white;
+    //display: block;
+    padding: 6px 6px;
+    margin: 0 0 0px 0;
+    position: relative;
+    vertical-align: middle;
+    font-size: $baseFontSize;
+    border: 0;
+    border-bottom: 1px solid rgba($borderColor, 0.5);
+    transition: all 0.25s;
+
+    &--inner {
+        display: flex;
+    }
+
+
+    &:hover {
+        //border-color: $ui-active;
+        //background-color: rgba($ui-active,0.05);
+    }
+
+    small {
+        font-size: $fontSizeMini;
+        color: $gray-7;
+    }
+
+    &--large {
+        font-size: $fontSizeLarge;
+        padding: 12px 12px;
+        margin: 0 0 0px 0;
+
+        .pim-sortable__actions:first-child {
+            top: 8px;
+            right: 6px;
+        }
+    }
+
+    &--xlarge {
+        font-size: $fontSizeLarge;
+        padding: 12px 12px;
+        margin: 0 0 0px 0;
+
+        .pim-sortable__actions:first-child {
+            top: 8px;
+            right: 6px;
+        }
+    }
+
+
+    &--is-selected {
+        background-color: rgba($ui-active, 0.05);
+        //border-color: rgba($ui-active, 1);
+        a {
+            //color: $ui-active;
+        }
+
+        &:before {
+            display: inline-block;
+            content: "";
+            width: 3px;
+            height: 100%;
+            position: absolute;
+            top: 0px;
+            left: -3px;
+            background-color: $ui-active;
+            animation: fadeInRight 0.25s;
+        }
+    }
+}
+
+
+.pim-sortable__sub-item {
+    background-color: rgba($gray-9,0.5);
+    //display: block;
+    padding: 12px 12px;
+    margin: 0px 0 1px 0;
+    position: relative;
+    vertical-align: middle;
+    font-size: $fontSizeLarge;
+    font-weight: 600;
+    border: 0;
+    border: 0px solid rgba($borderColor, 0.5);
+    transition: all 0.25s;
+
+    &:hover {
+        .pim-sortable__sub-item-inner-wrap {
+            .pim-sortable__actions {
+                opacity: 1;
+            }
+        }
+    }
+
+    &:before {
+        display: inline-block;
+        content: "";
+        width: 3px;
+        height: 100%;
+        position: absolute;
+        top: 0px;
+        left: -3px;
+        background-color: $ui-active;
+        animation: fadeInRight 0.25s;
+    }
+
+    &--is-selected, &--is-cut, &--is-copied {
+        background-color: rgba($ui-active,0.05);
+        //border: 1px solid rgba($ui-active, 0.5);
+        //opacity: 0.5;
+        a {
+            //color: $ui-active;
+        }
+
+        &:before {
+            display: inline-block;
+            content: "";
+            width: 3px;
+            height: 100%;
+            position: absolute;
+            top: 0px;
+            left: -3px;
+            background-color: $ui-active;
+            animation: fadeInRight 0.25s;
+        }
+    }
+
+    &--is-empty {
+        display: none;
+    }
+
+
+    &--is-cut {
+        background-color: $white;
+        opacity: 0.5;
+
+        a {
+            //color: $yellow-d1;
+        }
+    }
+
+    &--is-copied {
+        //background-color: rgba($purple-d1,0.05);
+        //border: 1px solid rgba($ui-active, 0.5);
+        //opacity: 0.5;
+        a {
+            //color: $ui-active;
+        }
+
+        &:before {
+            background-color: $purple-d1;
+        }
+    }
+
+    &--is-disabled {
+    }
+
+    &:hover {
+        //border-color: $ui-active;
+        //background-color: rgba($ui-active,0.05);
+    }
+
+    small {
+        font-size: $fontSizeMini;
+        color: $gray-7;
+    }
+}
+
+.pim-sortable__sub-item-inner-wrap {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    margin: -12px;
+
+    .pim-sortable__actions {
+        position: relative;
+        margin-left: auto;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.pim-sortable__fake-item {
+    background-color: rgba(0,0,0,0);
+    display: flex;
+    align-items: center;
+    padding: 14px 0;
+    margin: -14px 0 -14px 0;
+    position: relative;
+    border: none;
+    transition: all 0.25s;
+    cursor: pointer;
+    z-index: 1;
+
+    .pim-sortable__fake-item-link {
+        display: block;
+        width: 100%;
+        height: 1px;
+        opacity: 1;
+        transition: all 0.25s;
+        transition-delay: 0s;
+        //border-top: 1px solid $borderColor;
+        background-color: rgba($borderColor,0.25);
+        overflow: hidden;
+        padding: 0px 12px;
+    }
+
+    &:hover {
+
+
+        .pim-sortable__fake-item-link {
+            background-color: $white;
+            border-bottom: 1px dashed $borderColor;
+            border-top: 1px dashed $borderColor;
+            height: 20px;
+            opacity: 1;
+            padding: 5px 12px;
+            transition-delay: 0.2s;
+            animation: fake-item-highlight 1s ease;
+            animation-delay: 0.5s;
+            animation-iteration-count: 1;
+        }
+    }
+}
+
+@keyframes fake-item-highlight {
+    0% {
+        background-color: $white;
+    }
+
+    50% {
+        background-color: $yellow-washed;
+    }
+
+    100% {
+        background-color: $white;
+    }
+}
+
+.pim-sortable__property-item {
+    background-color: $white;
+    display: flex;
+    align-items: center;
+    padding: 8px 8px;
+    margin: 0px 0;
+    position: relative;
+    vertical-align: middle;
+    font-size: $baseFontSize;
+    border: 0;
+    border-bottom: 0px solid rgba($borderColor, 0.25);
+    //transition: all 0.25s;
+    &:hover {
+        .pim-sortable__actions {
+            opacity: 1;
+        }
+    }
+
+    small {
+        font-size: $fontSizeMini;
+        color: $gray-7;
+    }
+
+
+
+
+    &--is-selected, &--is-cut, &--is-copied {
+        background-color: rgba($ui-active,0.05);
+        //border: 1px solid rgba($ui-active, 0.5);
+        //opacity: 0.5;
+        a {
+            //color: $ui-active;
+        }
+
+        &:before {
+            display: inline-block;
+            content: "";
+            width: 3px;
+            height: 100%;
+            position: absolute;
+            top: 0px;
+            left: -3px;
+            background-color: $ui-active;
+            animation: fadeInRight 0.25s;
+        }
+    }
+
+    &--is-empty {
+        display: none;
+    }
+
+
+    &--is-cut {
+        background-color: $white;
+        opacity: 0.5;
+
+        a {
+            //color: $yellow-d1;
+        }
+    }
+
+    &--is-copied {
+        background-color: rgba($purple-d1,0.05);
+        //border: 1px solid rgba($ui-active, 0.5);
+        //opacity: 0.5;
+        a {
+            //color: $ui-active;
+        }
+
+        &:before {
+            background-color: $purple-d1;
+        }
+    }
+
+    &--is-disabled {
+    }
+}
+
+.pim-sortable__sub-sub-list--has-clipboard-properties {
+    .pim-sortable__paste-item {
+        display: block;
+    }
+
+    .pim-sortable__property-item {
+        &--is-empty {
+            display: list-item;
+            padding: 1px 8px;
+            background-color: $white;
+            //border: 1px solid rgba($ui-active, 0.5);
+            //opacity: 0.5;
+            a {
+                //color: $ui-active;
+            }
+
+            &:hover {
+                padding: 1px 8px 32px 8px;
+                //border-color: $ui-active;
+                background-color: $white;
+            }
+        }
+
+        &:hover {
+            padding: 8px 8px 40px 8px;
+            //border-color: $ui-active;
+            background-color: rgba($ui-active,0.05);
+
+            .pim-sortable__paste-item {
+                opacity: 1;
+                transform: translateY(0);
+                transition: all 0.25s;
+                transition-delay: 0.15s;
+            }
+        }
+    }
+}
+
+.pim-sortable__placeholder {
+    border: 2px dashed $gray-8;
+    height: 36px;
+    width: auto;
+    background: $white;
+    margin: 8px 0;
+}
+
+.pim-sortable__select-item-icon {
+    display: inline-block;
+    color: $textColor;
+    margin-left: 4px;
+    margin-right: 6px;
+    padding-right: 12px;
+    cursor: pointer;
+    border-right: 1px solid $gray-9;
+    font-size: 16px !important;
+
+    &:hover {
+        //color: $gray-5;
+    }
+}
+
+.pim-sortable__handle {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    color: $gray-8;
+    margin-right: 6px;
+    cursor: n-resize;
+
+    &:hover {
+        color: $gray-7;
+    }
+}
+
+.pim-sortable__actions {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    margin-left: auto;
+}
+
+.pim-sortable__action-item {
+    padding: 6px;
+    font-size: $fontSizeSmall;
+    color: $gray-7;
+}
+
+.pim-sortable__content {
+    width: 100%;
+}
+
+
+
+.pim-sortable__paste-item {
+    font-size: $fontSizeMini;
+    font-weight: bold;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    transform: translateY(0px);
+    transition: all 0.15s;
+    transition-delay: 0s;
+    color: $gray-5;
+    display: none;
+    padding: 5px 0 5px 16px;
+    margin-top: 5px;
+    background-color: $gray-10;
+    border-top: 1px dashed $gray-5;
+    border-bottom: 1px dashed $gray-5;
+    margin-bottom: -1px;
+
+
+    &:before {
+        content: '\ed5c';
+        font: normal normal normal 1em/1 'pim-icon';
+        margin-left: -5px;
+        margin-right: 4px;
+
+    }
+
+    &--top {
+        display: none;
+    }
+
+    &--bottom {
+        transform: translateY(0px);
+        top: auto;
+        bottom: 0px;
+    }
+}
+
+.pim-sortable__paste-list-item {
+    background-color: transparent;
+    //display: block;
+    padding: 8px 8px;
+    margin: 0px 0 6px 0;
+    position: relative;
+    vertical-align: middle;
+    font-size: $fontSizeSmall;
+    font-weight: 600;
+    border: 2px dashed rgba($borderColor, 0.25);
+    transition: all 0.25s;
+}

@@ -1,0 +1,77 @@
+﻿<div class="StructPIM" ng-controller="umbracocommerce.shops.controller">
+    <div class="pim-panel pim-editor-wrapper area-editor">
+        <!--header-->
+        <div class="pim-editor-header pim-panel-header">
+
+            <div class="pim-panel-header-content-wrapper">
+
+                <div class="pim-panel-header-content">
+                    <div class="pim-panel-header-left-side">
+                        <div class="pim-panel-header-icon">
+                            <i class="pim-icon pim-icon-store pim-icon-32"></i>
+                        </div>
+                        <div class="pim-panel-header-title-wrapper">
+                            <div class="pim-panel-header-name">
+                                Stores
+                            </div>
+                            <div class="pim-panel-header-locked-description">
+                                Manage the stores where PIM data is being used
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="btn-group">
+                        <quickactionsbutton />
+                    </div>-->
+                </div>
+            </div>
+        </div>
+        <struct-pim-overlay ng-show="setup.overlay.show"
+                            model="setup.overlay"
+                            view="setup.overlay.view"
+                            position="right"
+                            class="pim-overlay--half">
+        </struct-pim-overlay>
+        <div class="pim-editor-container pim-panel-body pim-scrollable row-fluid" auto-scale="1">
+
+            <struct-load-indicator ng-show="loaded == false"></struct-load-indicator>
+            <div class="form-horizontal pim-pane">
+
+                <div class="pim-editor-sub-header" pim-sticky-bar="" scrollable-container=".pim-editor-container">
+                    
+                </div>
+                <div class="pim-table" ng-show="loaded == true">
+                    <div class="pim-table-head">
+                        <div class="pim-table-row">
+                            <div class="pim-table-cell" style="flex: 0 0 350px;"><span style="padding-left:20px;">Name</span></div>
+                            <div style="cursor:pointer;" class="pim-table-cell">Language</div>
+                            <div style="cursor:pointer;" class="pim-table-cell">Dimension</div>
+                            <div class="pim-table-cell" style="flex: 0 0 70px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pim-table-body" style="position:relative;">
+                        <div ng-repeat="settings in vendrSettings.GeneralSettings.ShopSettings">
+                            <div class="pim-table-row">
+                                <div class="pim-table-cell" style="flex: 0 0 350px;">
+                                    <span style="padding-left: 25px;">
+                                        {{settings.Name}}
+                                    </span>
+                                </div>
+                                <div class="pim-table-cell">
+                                    <span>{{settings.LanguageName}}</span>
+                                </div>
+                                <div class="pim-table-cell">
+                                    <span ng-bind-html="settings.Dimension"></span>
+                                </div>
+                                <div class="pim-table-cell" style="flex: 0 0 70px;">
+                                    <i class="pim-table-body__icon pim-icon-edit" title="Edit store settings" ng-click="editShopSettings(settings)"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

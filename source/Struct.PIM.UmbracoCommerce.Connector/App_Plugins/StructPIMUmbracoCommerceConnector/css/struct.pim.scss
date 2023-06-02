@@ -1,0 +1,40 @@
+
+
+// Core variables and mixins
+@import "fonts"; // Loading fonts
+@import "open-color"; // Modify this for custom colors, font-sizes, etc
+@import "variables"; // Modify this for custom colors, font-sizes, etc
+@import "mixins";
+
+//Icon font Icon moon
+$icomoon-font-path: "/app_plugins/StructPIMVendr/fonts/fonts" !default;
+@import "../fonts/style.scss";
+[class^="pim-icon-"], [class*=" pim-icon-"] {
+    font-size: 1em;
+}
+
+.StructPIM {
+    // Belle styles
+    @import "modals";
+    @import "panel";
+    @import "tree";
+    @import "forms";
+    @import "main";
+
+    // PIM Components
+    @import "components/editor";
+    @import "components/overlays";
+    @import "components/card";
+
+    @import "components/pim-sub-views";
+    @import "components/pim-table";
+    @import "components/pim-tabs";
+    @import "components/pim-load-indicator";
+    @import "components/pim-relation-picker";
+    @import "components/pim-sortable";
+    @import "components/overlays/pim-overlay-backdrop";
+    //@import "typeahead";
+    @import "hacks";
+}
+
+

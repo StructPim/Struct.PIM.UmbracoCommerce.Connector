@@ -1,0 +1,153 @@
+.pim-nav-tabs {
+    //position: absolute;
+    //z-index: 999;
+    border-bottom: 0px;
+
+    > li {
+        line-height: 40px;
+
+        a, a:focus, a:hover {
+            background-color: transparent;
+            line-height: 42px;
+            border: 0;
+            border-bottom: 3px solid transparent;
+            padding: 0 12px;
+            font-weight: 600;
+            border-radius: 0;
+
+            &:hover {
+                border-bottom: 3px solid $borderColor;
+            }
+        }
+
+        &.active {
+
+            a, a:focus, a:hover {
+                background-color: transparent;
+                border: 0;
+                border-bottom: 3px solid $ui-active;
+                //color: $ui-active;
+            }
+        }
+    }
+
+    &--large {
+        line-height: 24px;
+        font-size: 16px;
+    }
+
+    &--left {
+        
+    }
+
+    &--right {
+        margin-left: auto;
+    }
+
+    &--no-border {
+        border: 0 !important;
+    }
+}
+
+.tabs-left {
+    display: flex;
+
+
+    .pim-nav-tabs {
+        .pim-nav-tab__item {
+            line-height: 40px;
+            margin-bottom: 2px;
+
+
+
+
+            .pim-nav-tab__link {
+                display: flex;
+                flex-direction: row;
+                background-color: rgba($white,0.25);
+                line-height: 42px;
+                border: 0;
+                //border-right: 3px solid transparent;
+                padding: 0px 6px 0px 6px;
+                font-weight: 600;
+                border-radius: 0;
+                position: relative;
+
+                &:after {
+                    content: '';
+                    display: block;
+                    position: absolute;
+                    top: 0;
+                    right: -3px;
+                    width: 0px;
+                    height: 100%;
+                    background-color: $borderColor;
+                    transition: all 0.2s ease-in-out;
+                }
+
+                &:focus, &:hover {
+                    //border-right: 3px solid $borderColor;
+                    &:after {
+                        background-color: $ui-active;
+                        width: 0px;
+                    }
+                }
+
+
+                .pim-nav-tab__icon {
+                    margin-right: 6px;
+                }
+
+                .pim-nav-tab__title {
+                    flex-grow: 1;
+                }
+
+                .pim-nav-tab__meta {
+                    .pim-badge, pim-label {
+                        margin-left: 16px;
+                    }
+                }
+            }
+
+
+            &.active {
+                .pim-nav-tab__link {
+                    &:after {
+                        background-color: $ui-active;
+                        width: 3px;
+                    }
+                }
+
+                a, a:focus, a:hover {
+                    background-color: $white;
+                    //border: 0;
+                    //border-right: 3px solid $ui-active;
+                    color: $ui-active;
+                }
+            }
+        }
+    }
+}
+
+.pim-nav-tabs.-padding-left {
+  padding-left: 20px;
+}
+
+.pim-tab-content {
+    padding-top: 20px;
+    position: relative;
+    top: 31px;
+    border-top: 1px solid $borderColor;
+}
+
+.pim-tab-pane {
+    position: relative;
+    height: 100%;
+
+    &.active {
+    }
+
+    .pim-tab-pane {
+        padding-bottom: 0;
+    }
+}

@@ -1,0 +1,100 @@
+.pim-editor-sub-header {
+    padding: 10px 0;
+    background: $gray-10;
+    margin: -10px -1px 10px;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    top: 0;
+
+    &.nested {
+        margin-top: 0;
+        margin-bottom: 0;
+        background: $gray-10;
+    }
+}
+
+.pim-editor-sub-header.-pim-sticky-bar {
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.08), 0 1px 0 rgba(0, 0, 0, 0.16);
+  transition: box-shadow 1s;
+  top: 100px; /* height of header */
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+[pim-sticky-bar] {
+    transition: box-shadow 240ms;
+    position: sticky;
+    z-index: 30;
+    width: calc(100% + 2px);
+
+    &.pim-sticky-bar--active {
+        box-shadow: 0 6px 3px -3px rgba(0,0,0,.16);
+    }
+
+    .umb-dashboard__content & {
+        top: -20px; // pim-dashboard__content has 20px padding - offset here prevents sticky position from firing when page loads
+    }
+}
+
+.pim-sticky-sentinel {
+    pointer-events: none;
+    z-index: 5050;
+
+    &.-top {
+        height: 1px;
+        transform: translateY(-10px);
+    }
+}
+
+.pim-group-builder__property-preview .pim-editor-sub-header {
+   display: none;
+}
+
+.pim-editor-sub-header__content-left {
+  margin-right: auto;
+  flex-grow: 1;
+  width: 50%;
+}
+
+.pim-editor-sub-header__content-right {
+    margin-left: auto;
+    flex-grow: 1;
+    width: 50%;
+    justify-content: flex-end;
+}
+
+.pim-editor-sub-header__content-left,
+.pim-editor-sub-header__content-right {
+  display: flex;
+  align-items: stretch;
+  //flex: 1;
+}
+
+.pim-editor-sub-header__section {
+  border-left: 1px solid $gray-8;
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  h1,h2,h3,h4,h5 {
+      margin: 0px;
+  }
+}
+
+.pim-editor-sub-header__content-left .pim-editor-sub-header__section:first-child {
+  border-left: none;
+  padding-left: 0;
+}
+
+.pim-editor-sub-header__content-right .pim-editor-sub-header__section {
+  border-left: none;
+  border-right: 0px solid $gray-8;
+}
+
+.pim-editor-sub-header__content-right .pim-editor-sub-header__section:last-child {
+  border-right: none;
+  padding-right: 0;
+}
+  

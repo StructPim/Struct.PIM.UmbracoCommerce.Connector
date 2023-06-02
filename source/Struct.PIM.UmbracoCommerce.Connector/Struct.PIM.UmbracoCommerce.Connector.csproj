@@ -1,0 +1,116 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Remove="compilerconfig.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="compilerconfig.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Plugins\StructPIMUmbracoCommerceConnector\ApiControllers\VendrApiController.cs" />
+    <Compile Include="App_Plugins\StructPIMUmbracoCommerceConnector\Models\GeneralSettingsSaveModel.cs" />
+    <Compile Include="App_Plugins\StructPIMUmbracoCommerceConnector\SectionTree\StructPIMUmbracoCommerceConnectorTreeController.cs" />
+    <Compile Include="App_Plugins\StructPIMUmbracoCommerceConnector\StructComposer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Plugins\StructPIMUmbracoCommerceConnector\backoffice\structpimsettings\data-models.html" />
+    <Content Include="App_Plugins\StructPIMUmbracoCommerceConnector\backoffice\structpimsettings\settings-view.html" />
+    <Content Include="App_Plugins\StructPIMUmbracoCommerceConnector\backoffice\structpimsettings\setup.html" />
+    <Content Include="App_Plugins\StructPIMUmbracoCommerceConnector\backoffice\structpimsettings\store-edit.html" />
+    <Content Include="App_Plugins\StructPIMUmbracoCommerceConnector\backoffice\structpimsettings\stores-index.html" />
+    <Content Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\struct.pim.css" />
+    <Content Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\struct.pim.min.css" />
+    <Content Include="App_Plugins\StructPIMUmbracoCommerceConnector\fonts\fonts\pim-icon.eot" />
+    <Content Include="App_Plugins\StructPIMUmbracoCommerceConnector\fonts\fonts\pim-icon.ttf" />
+    <Content Include="App_Plugins\StructPIMUmbracoCommerceConnector\fonts\fonts\pim-icon.woff" />
+    <Content Include="App_Plugins\StructPIMUmbracoCommerceConnector\fonts\style.css" />
+    <Content Include="App_Plugins\StructPIMUmbracoCommerceConnector\fonts\style.min.css" />
+    <Content Include="App_Plugins\StructPIMUmbracoCommerceConnector\lang\en-GB.xml" />
+    <Content Include="App_Plugins\StructPIMUmbracoCommerceConnector\scripts\directives\selectize\selectize.bootstrap2.css" />
+    <Content Include="App_Plugins\StructPIMUmbracoCommerceConnector\scripts\directives\selectize\selectize.bootstrap3.css" />
+    <Content Include="App_Plugins\StructPIMUmbracoCommerceConnector\scripts\directives\selectize\selectize.css" />
+    <Content Include="App_Plugins\StructPIMUmbracoCommerceConnector\scripts\directives\selectize\selectize.custom.css" />
+    <Content Include="App_Plugins\StructPIMUmbracoCommerceConnector\scripts\directives\selectize\selectize.default.css" />
+    <Content Include="App_Plugins\StructPIMUmbracoCommerceConnector\scripts\directives\selectize\selectize.legacy.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Umbraco.Cms" Version="11.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Opt-in to app-local ICU to ensure consistent globalization APIs across different platforms -->
+    <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" Version="68.2.0.9" />
+    <PackageReference Include="Vendr" Version="3.0.11" />
+    <PackageReference Include="Vendr.Umbraco" Version="3.0.11" />
+    <PackageReference Include="Vendr.Umbraco.Startup" Version="3.0.11" />
+    <PackageReference Include="Vendr.Umbraco.Web" Version="3.0.11" />
+    <PackageReference Include="Vendr.Web" Version="3.0.11" />
+    <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="68.2.0.9" Condition="$(RuntimeIdentifier.StartsWith('linux')) or $(RuntimeIdentifier.StartsWith('win')) or ('$(RuntimeIdentifier)' == '' and !$([MSBuild]::IsOSPlatform('osx')))" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\application\_animations.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\application\_grid.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\application\_shadows.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\components\editor\subheader\_pim-editor-sub-header.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\components\overlays\_pim-overlay-backdrop.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\components\_card.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\components\_editor.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\components\_overlays.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\components\_pim-load-indicator.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\components\_pim-relation-picker.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\components\_pim-sortable.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\components\_pim-sub-views.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\components\_pim-table.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\components\_pim-tabs.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\struct.pim.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\_fonts.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\_forms.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\_hacks.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\_main.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\_mixins.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\_modals.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\_open-color.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\_panel.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\_tree.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\css\_variables.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\fonts\fonts\pim-icon.svg" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\fonts\style.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\fonts\variables.scss" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\Graphics\pim-logo.svg" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\package.manifest" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\scripts\controllers\umbracocommerce.models.controller.js" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\scripts\controllers\umbracocommerce.overview.controller.js" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\scripts\controllers\umbracocommerce.setup.controller.js" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\scripts\controllers\umbracocommerce.shopedit.controller.js" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\scripts\controllers\umbracocommerce.shops.controller.js" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\scripts\directives\selectize\angular-selectize.js" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\scripts\directives\selectize\selectize.custom.js" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\scripts\directives\selectize\selectize.min.js" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\scripts\helpers\struct.pim.umbracoHelper.js" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\scripts\services\umbracocommerce.service.js" />
+    <None Include="App_Plugins\StructPIMUmbracoCommerceConnector\scripts\setup.js" />
+    <None Include="compilerconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Struct.PIM.UmbracoCommerce.Connector.Core\Struct.PIM.UmbracoCommerce.Connector.Core.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- Razor files are needed for the backoffice to work correctly -->
+    <CopyRazorGenerateFilesToPublishDirectory>true</CopyRazorGenerateFilesToPublishDirectory>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Remove RazorCompileOnBuild and RazorCompileOnPublish when not using ModelsMode InMemoryAuto -->
+    <RazorCompileOnBuild>false</RazorCompileOnBuild>
+    <RazorCompileOnPublish>false</RazorCompileOnPublish>
+  </PropertyGroup>
+  
+</Project>

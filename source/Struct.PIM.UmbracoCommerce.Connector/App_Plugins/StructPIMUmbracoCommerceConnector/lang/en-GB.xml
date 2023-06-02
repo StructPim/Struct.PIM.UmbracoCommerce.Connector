@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language>
+  <creator>
+    <name>Struct A/S</name>
+    <link>http://struct.com</link>
+  </creator>
+  <area alias="treeHeaders">
+    <key alias="pimSettingsGroup">PIM</key>
+  </area>
+  <area alias="general">
+    <key alias="chooseAnOption">Choose an option</key>
+  </area>
+  <area alias="structPimUmbracoCommerce">
+    <key alias="setupHeadline">Setup</key>
+    <key alias="setupDescription">Manage general setup for Struct PIM Vendr.</key>
+    <key alias="setupLocalization">Localization</key>
+    <key alias="setupDefaultLanguage">Default language</key>
+    <key alias="setupDefaultLanguageDescription">Select the default language if other not available</key>
+    <key alias="setupSave">Save setup</key>
+  </area>
+</language>

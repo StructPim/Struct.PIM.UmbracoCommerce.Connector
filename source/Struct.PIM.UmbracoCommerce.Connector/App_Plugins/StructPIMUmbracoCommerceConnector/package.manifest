@@ -1,0 +1,26 @@
+﻿{
+  "css": [
+    "~/App_Plugins/StructPIMUmbracoCommerceConnector/css/struct.pim.min.css"
+  ],
+  "javascript": [
+    //directives
+
+    "~/App_Plugins/StructPIMUmbracoCommerceConnector/scripts/directives/selectize/selectize.custom.js",
+    "~/App_Plugins/StructPIMUmbracoCommerceConnector/scripts/directives/selectize/angular-selectize.js",
+
+    //helpers
+    "~/App_Plugins/StructPIMUmbracoCommerceConnector/scripts/helpers/struct.Pim.UmbracoHelper.js",
+
+    //controllers
+    "~/App_Plugins/StructPIMUmbracoCommerceConnector/scripts/controllers/umbracocommerce.shops.controller.js",
+    "~/App_Plugins/StructPIMUmbracoCommerceConnector/scripts/controllers/umbracocommerce.shopedit.controller.js",
+    "~/App_Plugins/StructPIMUmbracoCommerceConnector/scripts/controllers/umbracocommerce.models.controller.js",
+    "~/App_Plugins/StructPIMUmbracoCommerceConnector/scripts/controllers/umbracocommerce.setup.controller.js",
+    "~/App_Plugins/StructPIMUmbracoCommerceConnector/scripts/controllers/umbracocommerce.overview.controller.js",
+
+    //services
+    "~/App_Plugins/StructPIMUmbracoCommerceConnector/scripts/services/umbracocommerce.service.js",
+
+    "~/App_Plugins/StructPIMUmbracoCommerceConnector/scripts/setup.js"
+  ]
+}

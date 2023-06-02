@@ -1,0 +1,167 @@
+﻿<div class="StructPIM">
+    <div class="pim-panel pim-editor-wrapper" ng-controller="umbracocommerce.shopedit.controller">
+        <!--header-->
+        <div class="pim-editor-header pim-panel-header">
+
+            <div class="pim-panel-header-content-wrapper">
+
+                <div class="pim-panel-header-content">
+                    <div class="pim-panel-header-left-side">
+                        <div class="pim-panel-header-icon">
+                            <i class="pim-icon pim-icon-store pim-icon-32"></i>
+                        </div>
+                        <div class="pim-panel-header-title-wrapper">
+                            <div class="pim-panel-header-name">
+                                {{settings.Name}}
+                            </div>
+                            <div class="pim-panel-header-locked-description">
+                                Manage settings for vendr store
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="btn-group">
+                        <quickactionsbutton />
+                    </div>-->
+                </div>
+            </div>
+        </div>
+        <div class="pim-panel-tab-navigation">
+            <!--tabs definition-->
+            <ul class="nav nav-tabs pim-nav-tabs" role="tablist">
+                <li role="presentation" ng-class="{'active': controlModel.activeTab === 'pimSettings'}"><a ng-click="controlModel.activeTab = 'pimSettings'">PIM settings</a></li>
+                <li role="presentation" ng-class="{'active': controlModel.activeTab === 'pricingModel'}"><a ng-click="controlModel.activeTab = 'pricingModel'">Pricing</a></li>
+                <li role="presentation" ng-class="{'active': controlModel.activeTab === 'inventoryModel'}"><a ng-click="controlModel.activeTab = 'inventoryModel'">Inventory</a></li>
+            </ul>
+        </div>
+        <struct-pim-overlay ng-show="setup.overlay.show"
+                            model="setup.overlay"
+                            view="setup.overlay.view"
+                            position="right"
+                            class="pim-overlay--half">
+        </struct-pim-overlay>
+        <!--tabs container-->
+        <div class="pim-editor-container pim-panel-body pim-scrollable row-fluid" auto-scale="1" ng-show="loaded">
+
+            <div class="tab-content form-horizontal">
+
+                <div id="pimSettings" class="pim-tab-pane tab-pane" ng-class="{'active': controlModel.activeTab === 'pimSettings'}">
+                    <div class="pim-pane">
+                        <div class="card" style="margin-bottom:20px" ng-if="loaded">
+                            <div class="card-header">
+                                <h4 class="card-title">
+                                    Localization
+                                </h4>
+                            </div>
+                            <div class="card-body pim-form-layout">
+                                <div class="pim-form-layout__wrapper">
+                                    <div class="pim-form-layout__row">
+                                        <div class="pim-form-layout__column">
+                                            <div class="pim-el-wrap">
+                                                <label class="control-label">
+                                                    Language <span class="red">*</span>
+                                                    <small class="pim-detail">Select the language for this vendr shop</small>
+                                                </label>
+                                                <div class="controls controls-row">
+                                                    <selectize config="languageSelectizeConfig" ng-model="settings.LanguageId" options="languages" ng-required="true"></selectize>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pim-form-layout__column is-empty"></div>
+                                    </div>
+                                    <div class="pim-form-layout__row">
+                                        <div class="pim-form-layout__column">
+                                            <div class="pim-el-wrap">
+                                                <label class="control-label">
+                                                    Dimensions
+                                                    <small class="pim-detail">Select the dimension for this vendr shop</small>
+                                                </label>
+                                                <div class="controls controls-row">
+                                                    <div ng-repeat="dimension in dimensions">
+                                                        <span class="pim-el-wrap__field pim-el-wrap__header" title="Prefix">{{dimension.Alias}}</span>
+                                                        <selectize config="dimensionSelectizeConfig" ng-model="settings.DimensionSettings[dimension.Uid]" options="dimension.Segments" ng-required="true"></selectize>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pim-form-layout__column is-empty"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pricingModel" class="pim-tab-pane tab-pane" ng-class="{'active': controlModel.activeTab === 'pricingModel'}">
+                    <div class="pim-pane">
+                        <div class="card" style="margin-bottom:20px" ng-if="loaded" ng-repeat="priceInfo in settings.PriceMapping">
+                            <div class="card-header">
+                                <h4 class="card-title">
+                                    Pricing
+                                    <small>Currency specific price for items</small>
+                                </h4>
+                            </div>
+                            <div class="card-body pim-form-layout">
+                                <div class="pim-form-layout__wrapper">
+                                    <div class="pim-form-layout__row">
+                                        <div class="pim-form-layout__column">
+                                            <div class="pim-el-wrap">
+                                                <label class="control-label">
+                                                    Price ({{priceInfo.Currency}})
+                                                </label>
+                                                <div class="controls controls-row">
+                                                    <selectize config="attributeConfig" ng-model="priceInfo.PriceAttributeUid" options="pimVariantAttributes"></selectize>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pim-form-layout__column is-empty"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="inventoryModel" class="pim-tab-pane tab-pane" ng-class="{'active': controlModel.activeTab === 'inventoryModel'}">
+                    <div class="pim-pane">
+                        <div class="card" style="margin-bottom:20px" ng-if="loaded">
+                            <div class="card-header">
+                                <h4 class="card-title">
+                                    Inventory
+                                </h4>
+                            </div>
+                            <div class="card-body pim-form-layout">
+                                <div class="pim-form-layout__wrapper">
+                                    <div class="pim-form-layout__row">
+                                        <div class="pim-form-layout__column">
+                                            <div class="pim-el-wrap">
+                                                <label class="control-label">
+                                                    Stock
+                                                    <small class="pim-detail">Stock available on variant in PIM</small>
+                                                </label>
+                                                <div class="controls controls-row">
+                                                    <selectize config="attributeConfig" ng-model="settings.StockAttributeUid" options="pimVariantAttributes"></selectize>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pim-form-layout__column is-empty"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="pim-editor-drawer">
+            <div class="pim-editor-drawer-content">
+                <div class="pim-editor-drawer-content__right-side">
+                    <button class="btn btn-success" ng-click="saveGeneralSettings(settings.Uid)">Save settings</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

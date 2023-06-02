@@ -1,0 +1,701 @@
+// item-list
+// -------------------------
+
+
+.pim-item-list {
+	margin: 0;
+	width: auto;
+	display: block
+}
+.pim-item-list {
+    &__item {
+        display: block;
+        width: auto;
+        margin-bottom: 2px;
+        align-items: center;
+
+        div {
+            padding-left: 6px !important;
+
+            &:hover {
+                a {
+                    margin-right: 0 !important;
+                }
+            }
+        }
+
+        &.is-primary {
+            //background-color: rgba($ui-active,0.1);
+
+            .pim-tree-item__breadcrumb {
+                //color: $ui-active !important;
+            }
+
+            .pim-tree-item__label {
+               // color: $ui-active !important;
+            }
+        }
+
+        &-options {
+            display: flex;
+            justify-content: flex-end;
+            //padding: 9px 5px;
+            text-align: center;
+            cursor: pointer;
+            margin-right: 6px;
+            padding: 0px;
+
+            &-item {
+                .pim-icon {
+                    font-size: 8px;
+                }
+            }
+        }
+    }
+
+    &__header {
+        font-size: $fontSizeSmall;
+        color: $gray-5;
+        border-bottom: 0px solid $gray-9;
+        margin-bottom: 8px;
+        margin-top: 16px;
+    }
+}
+
+
+
+
+// Tree
+// -------------------------
+
+.pim-tree {
+    margin: 0;
+    min-width: 100%;
+    width: auto;
+
+    .icon-check:before {
+        content: "\ea46";
+        font-size: 12px;
+    }
+}
+
+.pim-tree li {
+	display: block;
+	min-width: 100%;
+	width: auto;
+}
+.pim-tree li.current > div,
+.pim-tree div.selected {
+	background: $ui-active;
+}
+.pim-tree li.current > div a.pim-options i,
+.pim-tree div.selected i {
+	background: $white;
+	border-color: $ui-active;
+	transition: opacity 120ms ease;
+}
+
+.pim-tree li.current > div a.pim-options:hover i,
+.pim-tree div.selected i {
+	opacity: 0.7;
+}
+
+.pim-tree li.current > div a,
+.pim-tree li.current > div i.pim-icon,
+.pim-tree li.current > div ins {
+	color: $white !important;
+	background-color: $ui-active;
+	border-color: $ui-active;
+}
+
+.pim-tree li.root > div:first-child {
+  padding: 0;
+}
+
+.pim-tree li.root > div h5, .pim-tree li.root > div h6 {
+  margin: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.pim-tree li.root > div:first-child h5 > a, .pim-tree-header {
+  display: flex;
+  padding: 20px 0 20px 20px;
+  box-sizing: border-box;
+}
+
+.pim-tree * {
+	white-space: nowrap
+}
+.pim-tree ul {
+	padding: 0;
+	margin: 0;
+	min-width: 100%;
+	width: 100%;
+	//display: table
+}
+
+.pim-tree ul.collapsed {
+    display:none;
+}
+
+.pim-tree a {
+    cursor:pointer;
+	text-decoration: none;
+	outline: none;
+}
+
+.pim-tree a:hover {
+	text-decoration: none
+}
+
+/*.pim-tree div.tree-node {
+	padding: 5px 0 5px 0;
+	position: relative;
+	overflow: hidden;
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+}*/
+
+.pim-tree div {
+  padding: 5px 0 5px 0;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.pim-tree a.noSpr {
+	background-position: 0
+}
+
+.pim-tree div > a.pim-options {
+	visibility: hidden;
+    flex: 1 0 auto;
+}
+.pim-tree div:hover > a.pim-options {
+	visibility: visible;
+}
+
+.pim-tree li.root > div a,
+.pim-tree li.root h5, .pim-tree-header {
+	color: $gray-2;
+	font-weight: bold;
+	font-size: 15px;
+}
+
+.pim-tree ins {
+	margin: -4px 0 0 -16px;
+	width: 16px;
+	height: 16px;
+	visibility: visible;
+	text-decoration: none;
+    font-size: 12px;
+	transition: opacity 120ms ease;
+}
+
+.pim-tree ins:hover {
+	opacity: 0.7;
+}
+
+.pim-tree li:hover ins {
+	visibility: visible;
+	cursor: pointer
+}
+
+.pim-tree li div {
+	padding: 0;
+}
+
+.pim-tree li > div a:not(.pim-options) {
+	padding: 6px 0;
+	display: flex;
+    flex: 1 1 100%;
+}
+
+.pim-tree li > div:hover a:not(.pim-options) {
+	//overflow: hidden;
+    margin-right: 6px;
+}
+
+.pim-tree .pim-icon {
+	vertical-align: middle;
+	margin: 0 12px 0 0;
+	color: $gray-2;
+}
+
+.pim-tree-icon-wrap {
+    position: relative;
+    height: 22px;
+}
+
+.pim-tree-icon {
+    cursor: pointer;
+}
+
+.pim-tree-icon--check {
+    position: absolute;
+    left: 6px;
+    bottom: 0px;
+    color: $ui-active !important;
+}
+
+.pim-tree i.noSpr {
+    display: inline-block;
+    margin-top: 1px;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+}
+
+.pim-tree div:hover,
+.pim-tree div.active {
+	background: $gray-10;
+}
+
+.pim-tree small.search-subtitle{
+	color: $gray-7;
+	display: block;
+	padding-left: 35px;
+}
+
+.pim-tree .pim-tree-node-search {
+    cursor:pointer;
+    /*color:$turquoise;*/
+}
+
+.pim-tree div.pim-search-group {
+  position: inherit;
+  display: inherit;
+}
+
+.pim-tree div.pim-search-group:hover {
+  background: inherit;
+}
+.pim-tree div.pim-search-group h6 {
+  /*color: $gray-5;*/
+  padding: 10px 0 10px 20px;
+  font-weight: inherit;
+  background: $gray-10;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.pim-tree .pim-search-group-item {
+	padding-left: 20px;
+}
+
+.pim-tree .pim-search-group-item-link {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	font-weight: normal !important;
+}
+
+
+
+.pim-tree .pim-tree-node-checked i[class^="icon-"],
+.pim-tree .pim-tree-node-checked i[class*=" icon-"] {
+    font-family: 'pim-icon' !important;
+    color: $green !important;
+}
+.pim-tree .pim-tree-node-checked i:before {
+    /*check box*/
+    content: "\ea46" !important;
+    font-family: inherit;
+}
+
+a.pim-options {
+	visibility: hidden;
+	display: flex;
+	justify-content: flex-end;
+    padding: 9px 5px;
+    text-align: center;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+a.pim-options i {
+	height: 5px !important;
+	width: 5px !important;
+	border-radius: 100%;
+	background: $black;
+	display: inline-block;
+	margin: 0 2px 0 0;
+}
+
+a.pim-options i:last-child {
+	margin: 0;
+}
+
+a.pim-options:hover {
+	background: $btnBackgroundHighlight;
+	@include border-radius($baseBorderRadius);
+}
+
+li.root > div > a.pim-options {
+    top: 18px;
+	display: flex;
+    padding: 10px 5px;
+}
+
+.hide-options a.pim-options{display: none !important}
+.hide-header h5{display: none !important}
+
+
+.pim-icon-item {
+	padding: 2px;
+	padding-left: 55px;
+	display: block;
+	position: relative;
+}
+
+.pim-icon-item:hover {
+	background: $gray-10;
+}
+.pim-icon-item i.icon {
+	position: absolute;
+	top: 8px;
+	left: 19px;
+}
+.pim-icon-item a:hover div {
+	text-decoration: underline;
+}
+
+.pim-icon-item a {
+	color: $gray-3;
+	padding-top: 3px;
+	height: 15px;
+	font-size: 12px;
+	text-decoration: none;
+}
+.pim-icon-item small {
+	color: $gray-6;
+	font-size: 10px;
+	display: block
+}
+.pim-icon-item:hover a.pim-options {
+	visibility: visible
+}
+.pim-icon-item .pim-spr {
+	float: left
+}
+
+
+
+// Tree item states
+// -------------------------
+div.not-published > i.icon,div.not-published > a{
+	opacity: 0.6;
+}
+div.protected:before{
+	content:"\e256";
+	font-family: 'icomoon';
+	color: $red;
+	position: absolute;
+	font-size: 20px;
+	padding-left: 7px;
+	padding-top: 7px;
+	bottom: 0;
+}
+
+div.has-unpublished-version:before{
+	content:"\e25a";
+	font-family: 'icomoon';
+	color: $green;
+	position: absolute;
+	font-size: 20px;
+	padding-left: 7px;
+	padding-top: 7px;
+	bottom: 0;
+}
+
+div.not-allowed > i.icon,div.not-allowed > a{
+	cursor: not-allowed;
+}
+
+// override small icon color
+.pim-tree li.current > div:before {
+	color: $turquoise-l2;
+}
+
+// override small icon color
+.pim-tree li.is-highlighted {
+
+    > div {
+        //background-color: $yellow-washed;
+        animation: highlight 1s 2 !important;
+        
+    }
+}
+
+@keyframes highlight {
+    0% {
+        background-color: rgba($yellow-washed,1) !important;
+    }
+
+    50% {
+        background-color: rgba($yellow-l1,0.75) !important;
+    }
+
+    100% {
+        background-color: rgba($yellow-washed,1) !important;
+    }
+}
+
+// override small icon color
+.pim-tree li.is-selected {
+
+    > div {
+        background-color: rgba($ui-active,0.05);
+        animation: select 0.5s;
+    }
+}
+
+@keyframes select {
+    0% {
+        background-color: rgba($ui-active,0);
+    }
+
+    100% {
+        background-color: rgba($ui-active,0.05);
+    }
+}
+
+div.is-container:before{
+	content:"\e04e";
+	font-family: 'icomoon';
+	color: $turquoise;
+	position: absolute;
+	font-size: 8px;
+	padding-left: 13px;
+	padding-top: 8px;
+	pointer-events: none;
+	bottom: 0;
+}
+
+div.locked:before{
+	content:"\e0a7";
+	font-family: 'icomoon';
+	color: $red;
+	position: absolute;
+	font-size: 20px;
+	padding-left: 7px;
+	padding-top: 7px;
+	bottom: 0;
+}
+
+.pim-tree li div.no-access .pim-tree-icon,
+.pim-tree li div.no-access .root-link,
+.pim-tree li div.no-access .pim-tree-item__label {
+	color: $gray-7;
+	cursor: not-allowed;
+}
+
+.pim-tree-item__breadcrumb {
+    color: $gray-5;
+    font-size: $fontSizeMini;
+}
+// Tree context menu
+// -------------------------
+.pim-actions {
+    margin: 12px 0px 0px 0px;
+    padding: 0px;
+    list-style: none;
+    user-select: none;
+}
+
+.pim-actions ul {
+}
+
+.pim-actions li.sep {
+	display: block;
+	border-top: 1px solid $gray-9;
+}
+
+.pim-actions li.sep:first-child {
+	border-top: none;
+}
+
+.pim-actions a {
+	white-space: nowrap;
+	display: block;
+	font-size: 15px;
+	color: $black;
+	padding: 9px 25px 9px 20px;
+	text-decoration: none;
+	cursor: pointer;
+	display: flex;
+    align-items: center;
+}
+
+.pim-actions a:hover, .pim-actions a:focus,
+.pim-actions li.selected {
+	color: $black !important;
+	background: $gray-10 !important;
+}
+
+.pim-actions .menu-label {
+	display: inline-block;
+	vertical-align: middle;
+	padding-left: 15px;
+}
+
+.pim-actions i {
+	color: $gray-6;
+	font-size: 18px;
+	vertical-align: middle;
+	color: $gray-3;
+}
+
+.pim-actions-child {
+	list-style: none;
+	display: block;
+	margin: 0px;
+}
+
+.pim-actions-child li {
+	display: block;
+}
+
+.pim-actions-child a {
+	display: block;
+	clear: both;
+	text-decoration: none;
+	padding-left: 10px;
+}
+.pim-actions-child li .menu-label {
+	font-size: 14px;
+	color: $black;
+	margin-left: 10px;
+}
+
+.pim-actions-child li .menu-label small {
+	font-size: 12px;
+	display: block;
+	clear: right;
+	line-height: 14px;
+	color: $gray-6;
+	white-space: normal;
+	margin-top: 2px;
+}
+.pim-actions-child li a:hover .menuLabel small {
+	text-decoration: none !important
+}
+.pim-actions-child i {
+	font-size: 30px;
+    min-width: 30px;
+    text-align: center;
+    line-height: 24px; /* set line-height to ensure all icons use same line-height */
+}
+
+.pim-actions-child li.add {
+	margin-top: 20px;
+	border-top: 1px solid $gray-8;
+	padding-top: 20px;
+}
+.pim-actions-child li.add i {
+	opacity: 0.4;
+}
+
+
+// Tree icon colors
+// -------------------------
+
+.pim-tree i.icon.blue {
+	color: $blue;
+}
+.pim-tree i.icon.green {
+	color: $green;
+}
+.pim-tree i.icon.purple {
+	color: $purple;
+}
+.pim-tree i.icon.orange {
+	color: $orange;
+}
+.pim-tree i.icon.red {
+	color: $red;
+}
+
+
+
+
+// Loading Animation
+// ------------------------
+
+.pim-tree li div.l{
+	width:100%;
+	height:1px;
+	overflow:hidden;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+}
+
+.pim-tree li div.l div {
+    //@include pim-loader;
+}
+
+//loader defaults
+.pim-tree .pim-loader{
+	height: 10px; 
+    margin: 10px 10px 10px 10px;
+}
+
+
+/*body.touch .pim-tree .icon{font-size: 19px;}*/
+body.touch .pim-tree ins{font-size: 14px; visibility: visible; padding: 7px;}
+body.touch .pim-tree li > div {
+	padding-top: 8px;
+	padding-bottom: 8px;
+	font-size: 110%;
+}
+
+// change height of this if touch devices should have a different height of preloader.
+body.touch .pim-tree li div.l div {
+	padding: 0;
+}
+
+body.touch .pim-actions a {
+	padding: 7px 25px 7px 20px;
+	font-size: 110%;
+}
+
+
+.pim-select-tree {
+    padding: 12px;
+    box-shadow: 0 0 0 1px $gray-9;
+    height: 100%;
+    box-sizing: border-box;
+    position: relative;
+
+    &__header {
+        font-size: $baseFontSize;
+        color: $gray-5;
+        border-bottom: 1px solid $gray-9;
+        padding-bottom: 8px;
+        margin-bottom: 8px;
+        display: flex;
+    }
+}
+
+
+
+.umb-tree-item.current > .umb-tree-item__inner {
+    background-color: rgba($ui-active,0.1);
+    background: rgba($ui-active,0.1);
+    //border-color: rgba($ui-active,0.8);
+    //box-shadow: 0 0 2px 0 rgba($ui-active,0.8);
+
+    
+}
+
+.umb-tree-item.active > .umb-tree-item__inner {
+    border-color: $ui-active;
+    box-shadow: 0 0 2px 0 rgba($ui-active,.8);
+    color: $ui-active-type;
+}

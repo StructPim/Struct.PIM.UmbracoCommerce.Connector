@@ -1,0 +1,599 @@
+// Panel
+// -------------------------
+.pim-panel {
+    background: $white;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
+
+.pim-panel-nobody {
+    padding-top: 100px;
+    overflow: auto;
+}
+
+.pim-panel-header {
+    background: $white;
+    border-bottom: 1px solid $borderColor-l2;
+    position: absolute;
+    height: 99px;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+}
+
+.pim-panel-body {
+    top: 101px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    position: absolute;
+    clear: both;
+    overflow: auto;
+    background: $gray-10;
+}
+
+.pim-panel-body-content {
+    padding: 20px;
+}
+
+.pim-panel-body.no-header {
+    top: 20px;
+}
+
+.pim-panel-body.with-footer {
+    bottom: 90px;
+}
+
+.pim-mediapicker-upload {
+    display: flex;
+
+    .form-search {
+        flex: 1;
+
+        &__toggle{
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+
+            input {
+                margin: 0;
+            }
+    
+            label {
+                margin-left: 5px;
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    .upload-button {
+        margin-left: 16px;
+    }
+}
+
+.pim-panel.editor-breadcrumb .pim-panel-body, .pim-panel.editor-breadcrumb .pim-bottom-bar {
+    bottom: 31px !important;
+}
+
+.pim-panel-header .pim-headline, .pim-panel-header h1 {
+    font-size: 16px;
+    border: none;
+    background: none;
+    margin: 15px 0 0 20px;
+    padding: 3px 5px;
+    line-height: 1.4;
+    height: auto;
+    width: 100%;
+    border: 1px solid $gray-10;
+}
+
+.pim-panel-header .pim-headline:focus, .pim-panel-header .pim-headline:active {
+    border: 1px solid $borderColor-l2;
+    background-color: $white;
+}
+
+.pim-headline-editor-wrapper {
+    position: relative;
+}
+
+.pim-headline-editor-wrapper .help-inline {
+    right: 0px;
+    top: 25px;
+    position: absolute;
+    font-size: 10px;
+    color: $red;
+}
+
+.pim-panel-header p {
+    margin: 0px 20px;
+}
+
+.pim-btn-toolbar .dimmed, .pim-dimmed {
+    opacity: 0.6;
+}
+
+.pim-headline-editor-wrapper input {
+    background: none;
+    border: none;
+    margin: -6px 0 0 0;
+    padding: 0 0 2px 0;
+    border-radius: 0;
+    line-height: normal;
+    border: 1px solid transparent;
+    color: $black;
+    letter-spacing: -0.01em;
+}
+
+.pim-headline-editor-wrapper input.ng-invalid {
+    color: $red;
+}
+
+.pim-headline-editor-wrapper input.ng-invalid::-moz-placeholder,
+.pim-headline-editor-wrapper input.ng-invalid:-ms-input-placeholder,
+.pim-headline-editor-wrapper input.ng-invalid::-webkit-input-placeholder {
+    color: $red;
+    line-height: 22px;
+}
+
+/*
+.pim-panel-header i {
+    font-size: 13px;
+    vertical-align: middle;
+}
+*/
+
+.pim-panel-header-meta {
+    height: 50px;
+}
+
+.pim-panel-header .pim-btn-toolbar {
+    float: right;
+    padding: 5px 20px 0 0;
+}
+
+.pim-panel-footer {
+    margin: 0;
+    padding: 20px;
+    z-index: 999;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
+
+
+/* Publish */
+.pim-btn-toolbar .dropdown-menu {
+    right: 0;
+    left: auto;
+    border-radius: $tabsBorderRadius;
+    box-shadow: none;
+    padding: 0;
+    z-index: 6020;
+}
+
+.pim-btn-toolbar .dropdown-menu small {
+    background: $turquoise-l3;
+    display: block;
+    padding: 10px 20px;
+}
+
+.pim-btn-toolbar .dropdown-menu .btn  {
+    margin: 20px 29px;
+    width: 80px;
+}
+
+/* tab buttons */
+.pim-bottom-bar {
+    background: $white;
+    -webkit-box-shadow: 0px -18px 20px rgba(255, 255, 255, 1);
+    -moz-box-shadow: 0px -18px 20px rgba(255, 255, 255, 1);
+    box-shadow: 0px -18px 20px rgba(255, 255, 255, 1);
+    border-top: 1px solid $gray-10;
+    padding: 10px 0 10px 0;
+    position: fixed;
+    bottom: 0;
+    left: 100px;
+    right: 40px;
+    z-index: 6010;
+
+    @media (min-width: 1101px) {
+        left: 460px;
+    }
+
+    @media (max-width: 767px) {
+        left: 80px;
+    }
+
+    @media (max-width: 500px) {
+        left: 60px;
+    }
+}
+
+.pim-tab-buttons {
+    padding-left: 0;
+
+    > .btn-group:not([style*="display:none"]):not([style*="display: none"]) {
+        margin-left: 0;
+    }
+
+    @media (min-width: 768px) {
+        padding-left: 180px;
+    }
+}
+
+.pim-tab-pane {
+    padding-bottom: 90px;
+}
+
+.tab-content {
+    overflow: visible;
+}
+
+.pim-panel-footer-nav {
+    position: absolute;
+    bottom: 0px;
+    height: 30px;
+    left: 0px;
+    right: 0px;
+    background: $gray-10;
+    border-top: $gray-8 1px solid;
+    display: block;
+    margin: 0;
+    overflow: hidden;
+}
+
+.pim-panel-footer-nav li a {
+    border-radius: 0;
+    display: block;
+    float: left;
+    height: 30px;
+    background: $gray-10;
+    text-align: center;
+    padding: 8px 0px 8px 30px;
+    position: relative;
+    margin: 0 1px 0 0;
+    text-decoration: none;
+    color: $gray-3;
+    font-size: 12px;
+}
+
+.pim-panel-footer-nav li a:after {
+    content: "";
+    border-top: 16px solid transparent;
+    border-bottom: 16px solid transparent;
+    border-left: 16px solid $gray-10;
+    position: absolute;
+    right: -16px;
+    top: 0;
+    z-index: 1;
+}
+
+.pim-panel-footer-nav li a:before {
+    content: "";
+    border-top: 16px solid transparent;
+    border-bottom: 16px solid transparent;
+    border-left: 16px solid $gray-8;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.pim-panel-footer-nav li:first-child a {
+    padding-left: 20px;
+}
+
+.pim-panel-footer-nav li:first-child a:before {
+    display: none;
+}
+
+.pim-panel-footer-nav li:last-child a:after {
+    display: none;
+}
+
+// Utility classes
+
+//SD: Had to add these because if we want to use the bootstrap text colors
+// in a panel/editor they'll all show up as white on white - so we need to use the
+// form styles
+.pim-dialog .muted,
+.pim-panel .muted {
+    color: $gray-5;
+}
+
+.pim-dialog a.muted:hover,
+.pim-dialog a.muted:focus,
+.pim-panel a.muted:hover,
+.pim-panel a.muted:focus {
+    color: darken($gray-5, 10%);
+}
+
+.pim-dialog .text-warning,
+.pim-panel .text-warning {
+    color: $formWarningText;
+}
+
+.pim-dialog a.text-warning:hover,
+.pim-dialog a.text-warning:focus,
+.pim-panel a.text-warning:hover,
+.pim-panel a.text-warning:focus {
+    color: darken($formWarningText, 10%);
+}
+
+.pim-dialog .text-error,
+.pim-panel .text-error {
+    color: $formErrorText;
+}
+
+.pim-dialog a.text-error:hover,
+.pim-dialog a.text-error:focus,
+.pim-panel a.text-error:hover,
+.pim-panel a.text-error:focus {
+    color: darken($formErrorText, 10%);
+}
+
+.pim-dialog .text-info,
+.pim-panel .text-info {
+    color: $formInfoText;
+}
+
+.pim-dialog a.text-info:hover,
+.pim-dialog a.text-info:focus,
+.pim-panel a.text-info:hover,
+.pim-panel a.text-info:focus {
+    color: darken($formInfoText, 10%);
+}
+
+.pim-dialog .text-success,
+.pim-panel .text-success {
+    color: $formSuccessText;
+}
+
+.pim-dialog a.text-success:hover,
+.pim-dialog a.text-success:focus,
+.pim-panel a.text-success:hover,
+.pim-panel a.text-success:focus {
+    color: darken($formSuccessText, 10%);
+}
+
+.external-logins form {
+    margin:0;
+}
+.external-logins button {
+    margin:5px;
+}
+
+/* --------- PIM PANEL TAB NAVIGATION ---------- */
+.pim-panel-tab-navigation {
+    display: block;
+    position: relative;
+    height: 45px;
+    flex: 0 0 45px;
+    background-color: $white;
+    padding: 0 20px;
+    border-bottom: 1px solid $borderColor-l2;
+    border-top: 0px solid $gray-9;
+}
+
+/* --------- PIM PANEL HEADER ---------- */
+
+.pim-panel-header-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 99px;
+  padding: 0 20px;
+}
+
+.pim-panel-header-content {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.pim-panel-header-left-side {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+}
+
+.pim-panel-header-right-side {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.pim-panel-header__section {
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+    padding-right: 15px;
+    flex: 1;
+    height: 99px;
+}
+
+.pim-panel-header-left-side.-top-position {
+    position: relative;
+    top: -12px;
+}
+
+.pim-panel-header-icon {
+    cursor: pointer;
+    margin-right: 10px;
+    padding-right: 10px;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: $white;
+    border-right: 1px solid $borderColor-l1;
+    animation: fadeIn 0.5s;
+    border-radius: 0px;
+    width: 55px;
+}
+
+.pim-panel-header-image {
+    height: 98px;
+    width: 98px;
+    position: relative;
+    background-color: $white;
+    margin-left: 0px;
+    overflow: hidden;
+    //align-self: flex-start;
+    .image {
+        //transition: transform 2s ease;
+    }
+}
+
+
+.pim-panel-header-image-not-found {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    p {
+        font-size: 10px;
+        margin: 0;
+    }
+}
+
+.pim-panel-header-title-wrapper {
+    position: relative;
+    width: 80%;
+}
+
+.pim-panel-header-alias {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+
+.pim-panel-header-alias .pim-locked-field {
+   display: flex;
+   align-items: center;
+}
+
+.pim-panel-header-alias .pim-locked-field,
+.pim-panel-header-alias .pim-locked-field .pim-locked-field__wrapper {
+   margin-bottom: 0;
+}
+
+.pim-panel-header-alias .pim-validation-label:after {
+   visibility: hidden;
+}
+
+.pim-panel-header-alias .pim-locked-field:after {
+   display: none;
+}
+
+.pim-panel-header-icon.-placeholder {
+  border: 1px dashed $gray-8;
+}
+
+.pim-panel-header-icon .icon {
+  font-size: 35px;
+  color: $gray-7;
+}
+
+
+.pim-panel-header-icon-text {
+  color: $green;
+  font-weight: bold;
+  font-size: 10px;
+}
+
+/*
+.pim-panel-header-image img {
+    max-width: 90px;
+    max-height: 90px;
+    width: auto;
+    height: auto;
+    margin: 0px;
+    position: absolute;
+    left: 50%; 
+    top: 50%; 
+    transform: translate(-50%, -50%); 
+}
+*/
+
+.pim-panel-header .pim-nav-tabs {
+  bottom: 0;
+  margin: 0;
+}
+
+input.pim-panel-header-name-input {
+  border-color: $gray-8;
+  font-size: 15px;
+  color: $black;
+  margin-bottom: 0;
+  font-weight: bold;
+  box-sizing: border-box;
+  height: 32px;
+  line-height: 32px;
+  width: 100%;
+  &:hover {
+    background: $white;
+    border: 1px solid $gray-7;
+  }
+}
+
+input.pim-panel-header-name-input.name-is-empty {
+  border: 1px dashed $gray-8;
+  background: $white;
+}
+
+.pim-panel-header-name {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+input.pim-panel-header-description {
+  background: transparent;
+  border-color: transparent;
+  margin-bottom: 0;
+  font-size: 13px;
+  box-sizing: border-box;
+  height: 25px;
+  line-height: 25px;
+  width: 100%;
+  &:hover {
+    background: $white;
+    border-color: $gray-8;
+  }
+}
+
+.pim-panel-header-locked-description {
+    font-size: 12px;
+    margin-left: 2px;
+    margin-top: 3px;
+    height: 25px;
+    line-height: 25px;
+}
+
+.pim-panel-header-actions {
+    margin-top: 6px;
+    height: 32px;
+}
+
+.pim-editor-drawer-content {
+  display: flex;
+  align-items: center;
+}
+
+.pim-editor-drawer-content__right-side {
+	margin-left: auto;
+    flex: 0 0 auto;
+    padding-left: 10px;
+}
+
+.pim-editor-drawer-content__left-side {
+	margin-right: auto;
+    padding-right: 10px;
+}

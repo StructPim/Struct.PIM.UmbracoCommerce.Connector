@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33414.496
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Struct.PIM.UmbracoCommerce.Connector", "source\Struct.PIM.UmbracoCommerce.Connector\Struct.PIM.UmbracoCommerce.Connector.csproj", "{F7166EA9-D4E7-483E-BAB1-A4F6F84D51E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Struct.PIM.UmbracoCommerce.Connector.Core", "source\Struct.PIM.UmbracoCommerce.Connector.Core\Struct.PIM.UmbracoCommerce.Connector.Core.csproj", "{D78F3406-A7A8-4D25-B6B5-1DB6B4BBCF22}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F7166EA9-D4E7-483E-BAB1-A4F6F84D51E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7166EA9-D4E7-483E-BAB1-A4F6F84D51E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7166EA9-D4E7-483E-BAB1-A4F6F84D51E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7166EA9-D4E7-483E-BAB1-A4F6F84D51E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D78F3406-A7A8-4D25-B6B5-1DB6B4BBCF22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D78F3406-A7A8-4D25-B6B5-1DB6B4BBCF22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D78F3406-A7A8-4D25-B6B5-1DB6B4BBCF22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D78F3406-A7A8-4D25-B6B5-1DB6B4BBCF22}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7FC82FEB-428C-4E42-8B42-0FF7BE85BBB9}
+	EndGlobalSection
+EndGlobal

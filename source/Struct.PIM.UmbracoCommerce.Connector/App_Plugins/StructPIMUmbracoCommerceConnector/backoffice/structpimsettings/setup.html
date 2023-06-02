@@ -1,0 +1,115 @@
+﻿<div class="StructPIM">
+    <div class="pim-panel pim-editor-wrapper" ng-controller="umbracocommerce.setup.controller">
+        <!--header-->
+        <div class="pim-editor-header pim-panel-header">
+
+            <div class="pim-panel-header-content-wrapper">
+
+                <div class="pim-panel-header-content">
+                    <div class="pim-panel-header-left-side">
+                        <div class="pim-panel-header-icon">
+                            <i class="pim-icon pim-icon-settings pim-icon-32"></i>
+                        </div>
+                        <div class="pim-panel-header-title-wrapper">
+                            <div class="pim-panel-header-name">
+                                <localize key="structPimUmbracoCommerce_setupHeadline"></localize>
+                            </div>
+                            <div class="pim-panel-header-locked-description">
+                                <localize key="structPimUmbracoCommerce_setupDescription"></localize>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="pim-panel-tab-navigation">
+            <!--tabs definition-->
+            <ul class="nav nav-tabs pim-nav-tabs" role="tablist">
+                <li role="presentation" ng-class="{'active': controlModel.activeTab === 'general'}"><a ng-click="controlModel.activeTab = 'general'">General settings</a></li>
+            </ul>
+        </div>
+        <div class="pim-editor-container pim-panel-body pim-scrollable row-fluid" auto-scale="1" ng-show="loaded">
+
+            <div class="tab-content form-horizontal">
+
+                <div id="general" class="pim-tab-pane tab-pane active" ng-class="{'active': controlModel.activeTab === 'general'}">
+                    <div class="pim-pane">
+                        <div class="card" style="margin-bottom:20px;">
+                            <div class="card-header">
+                                <h4 class="card-title">
+                                    PIM Api
+                                </h4>
+                            </div>
+                            <div class="card-body pim-form-layout">
+                                <div class="pim-form-layout__wrapper">
+                                    <div class="pim-form-layout__row">
+                                        <div class="pim-form-layout__column">
+                                            <div class="pim-el-wrap">
+                                                <label class="control-label">
+                                                    URL
+                                                    <small class="pim-detail">Set the API url for this PIM instance</small>
+                                                </label>
+                                                <div class="controls controls-row">
+                                                    <input type="text" ng-model="vendrSettings.Setup.PimApiUrl" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pim-form-layout__column is-empty"></div>
+                                    </div>
+                                    <div class="pim-form-layout__row">
+                                        <div class="pim-form-layout__column">
+                                            <div class="pim-el-wrap">
+                                                <label class="control-label">
+                                                    Key
+                                                    <small class="pim-detail">Set the API key for access</small>
+                                                </label>
+                                                <div class="controls controls-row">
+                                                    <input type="text" ng-model="vendrSettings.Setup.PimApiKey" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pim-form-layout__column is-empty"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card" style="margin-bottom:20px;">
+                            <div class="card-header">
+                                <h4 class="card-title">
+                                    <localize key="structPimUmbracoCommerce_setupLocalization"></localize>
+                                </h4>
+                            </div>
+                            <div class="card-body pim-form-layout">
+                                <div class="pim-form-layout__wrapper">
+                                    <div class="pim-form-layout__row">
+                                        <div class="pim-form-layout__column">
+                                            <div class="pim-el-wrap">
+                                                <label class="control-label">
+                                                    <localize key="structPimUmbracoCommerce_setupDefaultLanguage"></localize>
+                                                    <small class="pim-detail"><localize key="structPimUmbracoCommerce_setupDefaultLanguageDescription"></localize></small>
+                                                </label>
+                                                <div class="controls controls-row">
+                                                    <selectize config="languageSelectizeConfig" ng-model="vendrSettings.Setup.DefaultLanguage" options="languages" ng-required="true"></selectize>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pim-form-layout__column is-empty"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="pim-editor-drawer">
+            <div class="pim-editor-drawer-content">
+                <div class="pim-editor-drawer-content__right-side">
+                    <button class="btn btn-success" ng-click="syncProductAttributes()">Sync</button>
+                    <button class="btn btn-success" ng-click="saveSetup()"><localize key="structPimUmbracoCommerce_setupSave"></localize></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

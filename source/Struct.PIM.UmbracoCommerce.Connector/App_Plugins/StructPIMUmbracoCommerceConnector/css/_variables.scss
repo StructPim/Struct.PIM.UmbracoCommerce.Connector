@@ -1,0 +1,630 @@
+//
+// Variables
+// --------------------------------------------------
+
+
+$pim-icon-font-path: "../../fonts/fonts" !default;
+$pim-icon-background-color: #eee !default;
+
+$base-img-url: "../../css/img" !default;
+$assets-url: "../../assets" !default;
+
+// Global values
+// --------------------------------------------------
+
+
+// Grays
+// -------------------------
+$black:                 #000;
+$blackLight:			#1D1D1D;
+$grayDarker:            #222;
+$grayDark:              #343434;
+$gray:                  #555;
+$grayMed:               #7F7F7F;
+$blueGrey:              #607D8B;
+$grayLight:             #D9D9D9;
+$grayLighter:           #F8F8F8;
+$white:                 #FFF;
+$grayIcon:              #9E9E9E;
+
+
+// Colors
+// -------------------------
+
+$ui-active: 			#009fe3;
+$turquoise:				#03BFB3;
+$turquoise-l1:			#42CFC5;
+$turquoise-l2:			#81DED8;
+$turquoise-l3:			#C0F0ED;
+$turquoise-washed:		#F3FDFC;
+
+$purple-d2:			    #1D1333;
+$purple-d1:			    #2E2246;
+$purple:                #413659;
+$purple-l1:			    #675E7A;
+$purple-l2:			    #8D869B;
+$purple-l3:			    #B3AFBD;
+$purple-washed:		    #F6F3FD;
+
+// UI Colors
+$red:                   #EF4444;// updated 2020
+$red-d1:                #B91C1C;
+$red-d2:                #7F1D1D;
+$red-l1:			    #F87171;// updated 2020
+$red-l2:			    #FCA5A5;
+$red-l3:			    #FECACA;
+$red-washed:		    #FEF2F2;
+
+$yellow:                #F59E0B;// updated 2020
+$yellow-d1:             #D97706;
+$yellow-d2:             #B45309;
+
+$yellow-l1:			    #FBBF24;
+$yellow-l2:			    #FCD34D;
+$yellow-l3:			    #FDE68A;
+$yellow-washed:		    #FFFBEB;
+
+
+$green:                 #10B981;// updated 2020
+$green-d1:              #047857;
+$green-d2:              #064E3B;
+$green-l1:			    #34D399;
+$green-l2:			    #6EE7B7;
+$green-l3:			    #A7F3D0;
+$green-washed:		    #ECFDF5;
+
+// Grayscale
+$gray-1:                #1E1C1C;
+$gray-2:                #303033;
+$gray-3:                #515054;
+$gray-4:                #68676B;
+$gray-5:                #817F85;
+$gray-6:                #A2A1A6;
+$gray-7:                #BBBABF;
+$gray-8:                #D8D7D9;
+$gray-9:                #E9E9EB;
+$gray-10:               #F3F3F5;
+$gray-11:               #F6F6F7;
+
+$sand-1:                #DED4CF;// added 2019
+$sand-2:                #EBDED6;// added 2019
+$sand-5:                #F3ECE8;// added 2019
+$sand-6:                #F6F1EF;// added 2019
+$sand-7:                #F9F7F5;// added 2019
+
+
+// Additional Icon Colours
+$brownIcon:             #795548;
+$blueIcon:              #2196F3;
+$lightBlueIcon:         #03A9F4;
+$cyanIcon:              #00BCD4;
+$greenIcon:             #4CAF50;
+$lightGreenIcon:        #8BC34A;
+$limeIcon:              #CDDC39;
+$yellowIcon:            #FFEB3B;
+$amberIcon:             #FFC107;
+$orangeIcon:            #FF9800;
+$deepOrangeIcon:        #FF5722;
+$redIcon:               #F44336;
+$pinkIcon:              #E91E63;
+$purpleIcon:            #9C27B0;
+$deepPurpleIcon:        #673AB7;
+$indigoIcon:            #3F51B5;
+
+
+// Brand colors
+// -------------------------
+
+$structBlue:            #009fe3;
+$structBlueMid:         #80cff1; // added 2020
+$structBlueDark:        darken($structBlue, 20%); // added 2020
+$structBlueExtraDark:   darken($structBlue, 30%); // added 2019
+$structBlueLight:       #b3e2f7;
+$structBlueLighter:     lighten($structBlueLight, 2%);
+$structBlueLightest:    lighten($structBlueLight, 4%);
+$structBlueWashed:      lighten($structBlueLight, 6%);
+
+//$blueLight:               #4f89de;
+$blue:                  #2E8AEA;
+$blueMid:               #2152A3;// updated 2019
+$blueDark:              #3544b1;// updated 2019
+$blueExtraDark:         #1b264f;// added 2019
+$blueLight:             #ADD8E6;
+$blueNight:             #162335;// added 2019
+//$orange:              #f79c37;// updated 2019
+$pink:                  #D93F4C;// #C3325F;// update 2019
+$pinkLight:             #f5c1bc;// added 2019
+$pinkRedLight:          #ff8a89;// added 2019
+$brown:                 #9d8057;// added 2019
+$brownLight:            #e4e0dd;// added 2019
+$brownGrayLight:        #f6f4f4;// added 2019
+$brownGrayExtraLight:   #faf9f9;// added 2019
+$orange:                #ff9412;// added 2019
+
+//$u-greyLight:           #f2ebe6;// added 2019
+$u-white:               #f9f7f4;// added 2019
+$u-black:               $black;// added 2019
+
+
+
+// UI colors
+// -------------------------
+
+$ui-option-type:        $blueExtraDark;
+$ui-option-type-hover:  $blueMid;
+$ui-option:             $white;
+$ui-option-hover:       $sand-7;
+
+$ui-option-disabled-type:        $gray-6;
+$ui-option-disabled-type-hover:  $gray-5;
+$ui-option-disabled-hover:       $sand-7;
+
+//$ui-active:           #346ab3;
+$ui-active:             $structBlue;
+$ui-active-blur:        $structBlueLight;
+$ui-active-type:        $structBlueExtraDark;
+$ui-active-type-hover:  $structBlueMid;
+
+$ui-selected:           $structBlue;
+$ui-selected-hover:     ligthen($structBlue, 10);
+$ui-selected-type:           $structBlueExtraDark;
+$ui-selected-type-hover:     $structBlueMid;
+$ui-selected-border:           $structBlueLight;
+$ui-selected-border-hover:     darken($structBlueLight, 10);
+
+$ui-light-border:           $structBlueLight;
+$ui-light-type:             $gray-4;
+$ui-light-type-hover:       $structBlueMid;
+
+$ui-light-active-border:      $structBlueLight;
+$ui-light-active-type:        $structBlueExtraDark;
+$ui-light-active-type-hover:  $structBlueMid;
+
+
+$ui-action:             $white;
+$ui-action-hover:       $sand-7;
+$ui-action-type:             $structBlueExtraDark;
+$ui-action-type-hover:       $structBlueMid;
+$ui-action-border:             $structBlueExtraDark;
+$ui-action-border-hover:       $structBlueMid;
+
+$ui-action-discreet:              $white;
+$ui-action-discreet-hover:        $sand-7;
+$ui-action-discreet-type:         $structBlueExtraDark;
+$ui-action-discreet-type-hover:   $structBlueMid;
+$ui-action-discreet-border:         $gray-7;
+$ui-action-discreet-border-hover:   $blueMid;
+
+$type-white:                      $white;
+$type-black:                      $blueNight;
+
+$ui-btn:                        $structBlueExtraDark;
+$ui-btn-hover:                  $structBlueMid;
+$ui-btn-type:                   $white;
+
+$ui-btn-positive:               $green;
+$ui-btn-positive-hover:         lighten($green, 6%);
+$ui-btn-positive-type:          $white;
+
+$ui-btn-negative:               $red;
+$ui-btn-negative-hover:         $red;
+
+$ui-icon:             $structBlue;
+$ui-icon-hover:       $structBlueDark;
+
+
+
+$colors: (
+  white: $white,
+  black: $black,
+  gray: (
+    1: $gray-1,
+    2: $gray-2,
+    3: $gray-3,
+    4: $gray-4,
+    5: $gray-5,
+    6: $gray-6,
+    7: $gray-7,
+    8: $gray-8,
+    9: $gray-9,
+    10: $gray-10
+  ),
+  
+  red: (
+    d2: $red-d2,
+    d1: $red-d1,
+    base: $red,
+    l1: $red-l1,
+    l2: $red-l2,
+    l3: $red-l3,
+    washed: $red-washed
+  ),
+  green: (
+    d2: $green-d2,
+    d1: $green-d1,
+    base: $green,
+    l1: $green-l1,
+    l2: $green-l2,
+    l3: $green-l3,
+    washed: $green-washed
+  ),
+  purple: (
+    d2: $purple-d2,
+    d1: $purple-d1,
+    base: $purple,
+    l1: $purple-l1,
+    l2: $purple-l2,
+    l3: $purple-l3,
+    washed: $purple-washed
+  ),
+  yellow: (
+    d2: $yellow-d2,
+    d1: $yellow-d1,
+    base: $yellow,
+    l1: $yellow-l1,
+    l2: $yellow-l2,
+    l3: $yellow-l3,
+    washed: $yellow-washed
+  ),
+  
+  turquoise: (
+    base: $turquoise,
+    l1: $turquoise-l1,
+    l2: $turquoise-l2,
+    l3: $turquoise-l3,
+    washed: $turquoise-washed
+  ),
+
+  struct-blue: (
+    d2: $structBlueExtraDark,
+    d1: $structBlueDark,
+    base: $structBlue,
+    l1: $structBlueLight,
+    l2: $structBlueLighter,
+    l3: $structBlueLightest,
+    washed: $structBlueWashed
+  )
+);
+
+
+
+// Scaffolding
+// -------------------------
+$bodyBackground:        $white;
+$textColor:             $gray-2;
+$borderColor:           $gray-7;
+$borderColor-l1:        $gray-8;
+$borderColor-l2:        $gray-9;
+
+
+// Links
+// -------------------------
+$linkColor:             $gray-3;
+$linkColorHover:        $gray-1;
+
+// Typography
+// -------------------------
+$sansFontFamily:        "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$serifFontFamily:       Georgia, "Times New Roman", Times, serif;
+$monoFontFamily:        Monaco, Menlo, Consolas, "Courier New", monospace;
+
+$baseFontSize:          15px;
+$baseFontFamily:        $sansFontFamily;
+$baseLineHeight:        20px;
+$altFontFamily:         $serifFontFamily;
+
+$headingsFontFamily:    inherit; // empty to use BS default, $baseFontFamily
+$headingsFontWeight:    500;    // instead of browser default, bold
+$headingsColor:         inherit; // empty to use BS default, $textColor
+
+
+// Component sizing
+// -------------------------
+// Based on 14px font-size and 20px line-height
+
+$fontSizeXLarge:        $baseFontSize * 1.5; // ~18px
+$fontSizeLarge:         $baseFontSize * 1.25; // ~18px
+$fontSizeMedium:        $baseFontSize * 1.15; // ~14px
+$fontSizeSmall:         $baseFontSize * 0.85; // ~12px
+$fontSizeMini:          $baseFontSize * 0.75; // ~11px
+
+$paddingLarge:          11px 19px; // 44px
+$paddingSmall:          2px 10px;  // 26px
+$paddingMini:           0 6px;   // 22px
+
+
+// Disabled this to keep consistency throughout the backoffice UI. Untill a better solution is thought up, this will do.
+$baseBorderRadius:      2px; // 2px;
+$borderRadiusLarge:     6px; // 6px;
+$borderRadiusSmall:     1px; // 3px;
+
+
+// Spacing
+// -------------------------
+// 
+
+$spacing-none: 0;
+$spacing-extra-small: .25rem;
+$spacing-small: .5rem;
+$spacing-medium: 1rem;
+$spacing-large: 2rem;
+$spacing-extra-large: 4rem;
+$spacing-extra-extra-large: 8rem;
+$spacing-extra-extra-extra-large: 16rem;
+
+
+// Tables
+// -------------------------
+$tableBackground:                   transparent; // overall background-color
+$tableBackgroundAccent:             $gray-10; // for striping
+$tableBackgroundHover:              $gray-10; // for hover
+$tableBorder:                       $gray-9; // table and cell border
+
+// Buttons
+// -------------------------
+$btnBackground:                     $gray-10;
+$btnBackgroundHighlight:            $gray-8;
+$btnBorder:                         $gray-8;
+
+$btnPrimaryBackground:              $ui-active;
+$btnPrimaryBackgroundHighlight:     $ui-active;
+
+$btnSecondaryBackground:            $structBlueDark;
+$btnSecondaryBackgroundHighlight:   $structBlueExtraDark;
+
+$btnInfoBackground:                 $purple-l1;
+$btnInfoBackgroundHighlight:        $purple-l1;
+
+$btnSuccessBackground:              $green;
+$btnSuccessBackgroundHighlight:     $green-d1;
+
+$btnWarningBackground:              $yellow-d1;
+$btnWarningBackgroundHighlight:     $yellow-d2;
+
+$btnDangerBackground:               $red-l1;
+$btnDangerBackgroundHighlight:      $red-l1;
+
+$btnInverseBackground:              $gray-2;
+$btnInverseBackgroundHighlight:     $gray-2;
+
+$btnNeutralBackground:              $gray-9;
+$btnNeutralBackgroundHighlight:     $gray-9;
+
+
+// Forms
+// -------------------------
+$inputBackground:               $white;
+$inputBorder:                   $gray-7;
+$inputBorderRadius:             0;
+$inputDisabledBackground:       $gray-10;
+$inputDisabledColor:            $gray-6;
+$formActionsBackground:         $gray-9;
+$inputHeight:                   $baseLineHeight + 12px; // base line-height + 8px vertical padding + 2px top/bottom border
+$controlRequiredColor:          $red;
+
+
+// Tabs
+// -------------------------
+
+$tabsBorderRadius:				$baseBorderRadius;
+
+// Dropdowns
+// -------------------------
+$dropdownBackground:            $white;
+$dropdownBorder:                $gray-8;
+$dropdownDividerTop:            $borderColor;
+$dropdownDividerBottom:         $white;
+
+$dropdownLinkColor:             $gray-2;
+$dropdownLinkColorHover:        $white;
+$dropdownLinkColorActive:       $white;
+
+$dropdownLinkBackgroundActive:  $linkColor;
+$dropdownLinkBackgroundHover:   $dropdownLinkBackgroundActive;
+
+
+
+// COMPONENT VARIABLES
+// --------------------------------------------------
+
+// Drawer
+$drawerWidth:             400px;
+
+
+// Z-index master list
+// -------------------------
+// Used for a bird's eye view of components dependent on the z-axis
+// Try to avoid customizing these :)
+$zindexDropdown:          1000;
+$zindexPopover:           1010;
+$zindexTooltip:           1030;
+$zindexFixedNavbar:       1030;
+$zindexModalBackdrop:     1040;
+$zindexModal:             1050;
+
+$zindexUmbOverlay:        7500;
+$zindexOverlayBackdrop:   2000;
+
+// Sticky bar has a z-index of "500", which is set from javascript in directive
+// so set z-index of cropper should be lower to be behind sticky bar.
+$zindexCropperOverlay:    499;
+
+// Sprite icons path
+// -------------------------
+$iconSpritePath:          "../img/glyphicons-halflings.png";
+$iconWhiteSpritePath:     "../img/glyphicons-halflings-white.png";
+
+
+// Input placeholder text color
+// -------------------------
+$placeholderText:         $gray-8;
+
+
+// Hr border color
+// -------------------------
+$hrBorder:                $gray-9;
+
+
+// Horizontal forms & lists
+// -------------------------
+$horizontalComponentOffset:       180px;
+
+
+// Wells
+// -------------------------
+$wellBackground:                  $gray-9;
+
+
+// Navbar
+// -------------------------
+$navbarCollapseWidth:             979px;
+$navbarCollapseDesktopWidth:      $navbarCollapseWidth + 1;
+
+$navbarHeight:                    40px;
+$navbarBackgroundHighlight:       $white;
+$navbarBackground:                darken($navbarBackgroundHighlight, 5%);
+$navbarBorder:                    darken($navbarBackground, 12%);
+
+$navbarText:                      $gray-4;
+$navbarLinkColor:                 $gray-4;
+$navbarLinkColorHover:            $gray-2;
+$navbarLinkColorActive:           $gray-3;
+$navbarLinkBackgroundHover:       transparent;
+$navbarLinkBackgroundActive:      darken($navbarBackground, 5%);
+
+$navbarBrandColor:                $navbarLinkColor;
+
+// Inverted navbar
+$navbarInverseBackground:                $gray-1;
+$navbarInverseBackgroundHighlight:       $gray-2;
+$navbarInverseBorder:                    $gray-2;
+
+$navbarInverseText:                      $gray-8;
+$navbarInverseLinkColor:                 $gray-8;
+$navbarInverseLinkColorHover:            $white;
+$navbarInverseLinkColorActive:           $navbarInverseLinkColorHover;
+$navbarInverseLinkBackgroundHover:       transparent;
+$navbarInverseLinkBackgroundActive:      $navbarInverseBackground;
+
+$navbarInverseSearchBackground:          lighten($navbarInverseBackground, 25%);
+$navbarInverseSearchBackgroundFocus:     $white;
+$navbarInverseSearchBorder:              $navbarInverseBackground;
+$navbarInverseSearchPlaceholderColor:    $gray-7;
+
+$navbarInverseBrandColor:                $navbarInverseLinkColor;
+
+
+// Pagination
+// -------------------------
+$paginationBackground:                $white;
+$paginationBorder:                    $gray-8;
+$paginationActiveBackground:          $gray-10;
+
+
+// Hero unit
+// -------------------------
+$heroUnitBackground:              $gray-10;
+$heroUnitHeadingColor:            inherit;
+$heroUnitLeadColor:               inherit;
+
+
+// alerts
+// -------------------------
+$warningText:             $white;
+$warningBackground:       $yellow-d2;
+$warningBorder:           transparent;
+
+$errorText:               $white;
+$errorBackground:         $red-d1;
+$errorBorder:             transparent;
+
+$successText:             $white;
+$successBackground:       $green-d1;
+$successBorder:           transparent;
+
+$infoText:                $white;
+$infoBackground:          $ui-active;
+$infoBorder:              transparent;
+
+$alertBorderRadius:       0;
+
+// SD: Had to duplicate the above but prefix with 'form' inversed colors
+// because we cannot share the above alert colors with forms otherwise we end up with white
+// text and giant red backgrounds.
+
+// Form states
+// -------------------------
+$formWarningText:             $warningBackground;
+$formWarningBackground:       lighten($warningBackground, 38%);
+$formWarningBorder:           darken(adjust-hue($warningBackground, -10), 3%);
+
+$formErrorText:               $errorBackground;
+$formErrorBackground:         lighten($errorBackground, 55%);
+$formErrorBorder:             darken(adjust-hue($errorBackground, -10), 3%);
+
+$formSuccessText:             $successBackground;
+$formSuccessBackground:       lighten($successBackground, 48%);
+$formSuccessBorder:           darken(adjust-hue($successBackground, -10), 5%);
+
+$formInfoText:                $infoBackground;
+$formInfoBackground:          lighten($infoBackground, 41%);
+$formInfoBorder:              darken(adjust-hue($infoBackground, -10), 7%);
+
+
+// Tooltips and popovers
+// -------------------------
+$tooltipColor:            $white;
+$tooltipBackground:       $black;
+$tooltipArrowWidth:       5px;
+$tooltipArrowColor:       $tooltipBackground;
+
+$popoverBackground:       $white;
+$popoverArrowWidth:       10px;
+$popoverArrowColor:       $white;
+$popoverTitleBackground:  darken($popoverBackground, 3%);
+
+// Special enhancement for popovers
+$popoverArrowOuterWidth:  $popoverArrowWidth + 1;
+$popoverArrowOuterColor:  $gray-7;
+
+
+
+// GRID
+// --------------------------------------------------
+
+
+// Default 940px grid
+// -------------------------
+$gridColumns:             12;
+$gridColumnWidth:         60px;
+$gridGutterWidth:         0px;
+$gridRowWidth:            ($gridColumns * $gridColumnWidth) + ($gridGutterWidth * ($gridColumns - 1));
+
+// 1200px min
+$gridColumnWidth1200:     70px;
+$gridGutterWidth1200:     30px;
+$gridRowWidth1200:        ($gridColumns * $gridColumnWidth1200) + ($gridGutterWidth1200 * ($gridColumns - 1));
+
+// 768px-979px
+$gridColumnWidth768:      42px;
+$gridGutterWidth768:      20px;
+$gridRowWidth768:         ($gridColumns * $gridColumnWidth768) + ($gridGutterWidth768 * ($gridColumns - 1));
+
+
+// Fluid grid
+// -------------------------
+$fluidGridColumnWidth:    percentage($gridColumnWidth/$gridRowWidth);
+$fluidGridGutterWidth:    percentage($gridGutterWidth/$gridRowWidth);
+
+// 1200px min
+$fluidGridColumnWidth1200:     percentage($gridColumnWidth1200/$gridRowWidth1200);
+$fluidGridGutterWidth1200:     percentage($gridGutterWidth1200/$gridRowWidth1200);
+
+// 768px-979px
+$fluidGridColumnWidth768:      percentage($gridColumnWidth768/$gridRowWidth768);
+$fluidGridGutterWidth768:      percentage($gridGutterWidth768/$gridRowWidth768);
+
+// SORTABLE
+// --------------------------------------------------
+$sortableHelperBg: $turquoise-l2;
+$sortablePlaceholderBg : $turquoise;

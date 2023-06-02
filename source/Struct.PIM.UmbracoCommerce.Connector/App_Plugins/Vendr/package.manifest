@@ -1,0 +1,123 @@
+﻿{
+  "propertyEditors": [
+    {
+      "alias": "Vendr.StorePicker",
+      "name": "Vendr: Store Picker",
+      "editor": {
+        "view": "~/App_Plugins/Vendr/backoffice/views/propertyeditors/storepicker/storepicker.html",
+        "hideLabel": false,
+        "valueType": "STRING"
+      }
+    },
+    {
+      "alias": "Vendr.TaxClassPicker",
+      "name": "Vendr: Tax Class Picker [Obsolete, use Store Entity Picker instead]",
+      "editor": {
+        "view": "~/App_Plugins/Vendr/backoffice/views/propertyeditors/taxclasspicker/taxclasspicker.html",
+        "hideLabel": false,
+        "valueType": "STRING"
+      }
+    },
+    {
+      "alias": "Vendr.StoreEntityPicker",
+      "name": "Vendr: Store Entity Picker",
+      "editor": {
+        "view": "~/App_Plugins/Vendr/backoffice/views/propertyeditors/storeentitypicker/storeentitypicker.html",
+        "hideLabel": false,
+        "valueType": "STRING"
+      },
+      "prevalues": {
+        "fields": [
+          {
+            "label": "Store Config",
+            "key": "storeConfig",
+            "view": "~/App_Plugins/Vendr/backoffice/views/prevalueeditors/storeconfig/storeconfig.html",
+            "hideLabel": true
+          },
+          {
+            "label": "Store Entity Type",
+            "description": "The type of store entity to pick from",
+            "key": "entityType",
+            "view": "~/App_Plugins/Vendr/backoffice/views/propertyeditors/dropdown/dropdown.html",
+            "config": {
+              "items": {
+                "OrderStatus": "Order Status",
+                "Country": "Country",
+                "ShippingMethod": "Shipping Method",
+                "PaymentMethod": "Payment Method",
+                "Currency": "Currency",
+                "TaxClass": "Tax Class",
+                "EmailTemplate": "Email Template",
+                "Discount": "Discount"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "alias": "Vendr.Stock",
+      "name": "Vendr: Stock",
+      "editor": {
+        "view": "~/App_Plugins/Vendr/backoffice/views/propertyeditors/stock/stock.html",
+        "hideLabel": false,
+        "valueType": "DECIMAL"
+      },
+      "prevalues": {
+        "fields": [
+          {
+            "label": "Decimal places",
+            "description": "Number of decimal places to allow. Default/Max is 6.",
+            "key": "fraction",
+            "view": "number"
+          }
+        ]
+      }
+    },
+    {
+      "alias": "Vendr.Price",
+      "name": "Vendr: Price",
+      "editor": {
+        "view": "~/App_Plugins/Vendr/backoffice/views/propertyeditors/price/price.html",
+        "hideLabel": false,
+        "valueType": "JSON"
+      },
+      "prevalues": {
+        "fields": [
+          {
+            "label": "Decimal places",
+            "description": "Number of decimal places to allow. Default is 2, Max is 4.",
+            "key": "fraction",
+            "view": "number"
+          }
+        ]
+      }
+    }
+  ],
+  "dashboards": [
+    {
+      "alias": "CommerceDashboard",
+      "view": "~/App_Plugins/Vendr/backoffice/views/dashboards/commerce.dashboard.html",
+      "sections": [
+        "commerce"
+      ],
+      "weight": -10
+    }
+  ],
+  "javascript": [
+    "~/App_Plugins/Vendr/backoffice/js/vendr.modules.js",
+    "~/App_Plugins/Vendr/backoffice/js/vendr.vendor.js",
+    "~/App_Plugins/Vendr/backoffice/js/vendr.extensions.js",
+    "~/App_Plugins/Vendr/backoffice/js/vendr.providers.js",
+    "~/App_Plugins/Vendr/backoffice/js/vendr.interceptors.js",
+    "~/App_Plugins/Vendr/backoffice/js/vendr.decorators.js",
+    "~/App_Plugins/Vendr/backoffice/js/vendr.filters.js",
+    "~/App_Plugins/Vendr/backoffice/js/vendr.directives.js",
+    "~/App_Plugins/Vendr/backoffice/js/vendr.resources.js",
+    "~/App_Plugins/Vendr/backoffice/js/vendr.services.js",
+    "~/App_Plugins/Vendr/backoffice/js/vendr.controllers.js"
+  ],
+  "css": [
+    "~/App_Plugins/Vendr/backoffice/css/vendr.css"
+  ]
+}

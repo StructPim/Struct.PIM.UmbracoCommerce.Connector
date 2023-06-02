@@ -1,0 +1,354 @@
+.pim-overlay-wrap {
+    position: fixed;
+    z-index: $zindexUmbOverlay;
+    height: calc(100% - 55px);
+    top: 55px !important;
+    left: 0;
+    bottom: 0px !important;
+    right: 0px !important;
+    background-color: rgba($black,0.25);
+    width: auto;
+    animation: fadeBackground 0.8s cubic-bezier(0.05, 0.74, 0.27, 0.99);
+}
+
+@keyframes fadeBackground {
+    from {
+        background-color: rgba($black,0);
+    }
+
+    to {
+        background-color: rgba($black,0.25);
+    }
+}
+
+.pim-overlay-inner-wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.pim-overlay {
+    position: absolute;
+    overflow: hidden;
+    background: $white;
+    z-index: 1;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    height: 100%;
+}
+
+.pim-overlay--no-overflow {
+
+
+    .pim-overlay {
+        overflow: visible;
+    }
+}
+
+.pim-overlay__backdrop {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+    background: $black;
+    opacity: 0.25;
+    //z-index: $zindexUmbOverlay - 1;
+    z-index: -1;
+}
+
+
+.pim-overlay__form {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    height: 100%;
+}
+
+.pim-overlay-header {
+    background: $white;
+    border-bottom: 1px solid $borderColor-l2;
+    padding: 10px;
+    margin-top: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 100px;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+}
+
+.pim-overlay-header__left-content {
+    flex-grow: 1;
+}
+
+.pim-overlay-header__right-content {
+    
+}
+
+.pim-overlay__title {
+    font-size: $fontSizeLarge;
+    color: $black;
+    font-weight: bold;
+    margin: 7px 0;
+}
+
+.pim-overlay__subtitle {
+    font-size: $fontSizeSmall;
+    color: $gray-3;
+    margin: 0;
+}
+
+.pim-overlay-tab-navigation {
+    position: relative;
+    height: 45px;
+    flex: 0 0 45px;
+    background-color: $white;
+    padding: 0 20px;
+    border-bottom: 1px solid $borderColor-l2;
+}
+
+.pim-overlay-info {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 45px;
+    padding: 0px 20px;
+    margin: 0;
+    background: $white;
+    border-bottom: 1px solid $borderColor-l2;
+    align-items: center;
+}
+
+.pim-overlay-sub-header {
+    padding: 0;
+    height: 45px;
+    background: transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pim-overlay-container {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    height: auto;
+    background-color: rgba($white,1);
+    padding: 20px;
+
+    &--has-tabs {
+        padding: 0px;
+
+        .pim-overlay-info {
+            margin: -20px -20px 20px -20px;
+        }
+    }
+}
+
+.pim-overlay-drawer {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 31px;
+    padding: 10px 20px;
+    margin: 0;
+    background: $white;
+    border-top: 1px solid $borderColor;
+}
+
+.pim-overlay-drawer.-auto-height {
+    flex-basis: auto;
+}
+
+.pim-overlay-drawer .pim-overlay-drawer__align-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.pim-overlay-drawer .pim-overlay-drawer-content .dropdown-menu {
+    right: 0;
+    left: auto;
+}
+
+/* ---------- OVERLAY CENTER ---------- */
+.pim-overlay.pim-overlay-center {
+    position: absolute;
+    width: 600px;
+    height: 500px;
+    top: 10px;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.pim-overlay.pim-overlay-center .pim-overlay-header {
+    text-align: center;
+}
+
+.pim-overlay.pim-overlay-center .pim-overlay-container {
+    padding: 20px;
+}
+
+/* ---------- OVERLAY TARGET ---------- */
+.pim-overlay.pim-overlay-target {
+    width: 400px;
+    height: 400px;
+    box-sizing: border-box;
+}
+
+.pim-overlay.pim-overlay-target .pim-overlay-header {
+    text-align: center;
+}
+
+.pim-overlay.pim-overlay-target .pim-overlay-container {
+    padding: 10px;
+}
+
+.pim-overlay--full {
+    .pim-overlay {
+        width: calc(100% - 50px) !important;
+    }
+}
+
+
+.pim-overlay--quarter {
+    .pim-overlay {
+        width: 50% !important;
+    }
+}
+
+.pim-overlay--half {
+    .pim-overlay {
+        width: 50% !important;
+    }
+}
+
+
+/* ---------- OVERLAY RIGHT ---------- */
+.pim-overlay.pim-overlay-right {
+    width: 500px;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border: none;
+    box-shadow: 0 0 20px rgba(0,0,0,0.19), 0 0 6px rgba(0,0,0,0.23);
+    animation: slideInRight 0.8s cubic-bezier(0.05, 0.74, 0.27, 0.99);
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0%);
+    }
+}
+
+.pim-overlay.pim-overlay-right .pim-overlay-header {
+    flex-basis: 100px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.pim-overlay.pim-overlay-right .pim-overlay-container {
+    padding: 20px;
+}
+
+/* ---------- OVERLAY LEFT ---------- */
+.pim-overlay.pim-overlay-left {
+    width: 500px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    border: none;
+    box-shadow: 0 0 20px rgba(0,0,0,0.19), 0 0 6px rgba(0,0,0,0.23);
+    margin-left: 81px;
+}
+
+// push left overlay when drawer is open
+.pim-drawer-is-visible .pim-overlay.pim-overlay-left {
+    left: $drawerWidth;
+}
+
+.pim-overlay.pim-overlay-left .pim-overlay-header {
+    flex-basis: 100px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.pim-overlay.pim-overlay-left .pim-overlay-container {
+    padding: 20px;
+}
+
+@media (max-width: 767px) {
+    .pim-overlay.pim-overlay-left {
+        margin-left: 61px;
+    }
+}
+
+@media (max-width: 500px) {
+    .pim-overlay.pim-overlay-left {
+        margin-left: 41px;
+        width: calc(100% - 41px);
+    }
+}
+
+/* ---------- OVERLAY ITEM DETAILS ---------- */
+.pim-overlay__item-details {
+    position: absolute;
+    left: 0;
+    bottom: 51px;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    background: $gray-10;
+    border-bottom: 1px solid $purple-l3;
+    pointer-events: none;
+}
+
+.pim-overlay__item-details-title-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.pim-overlay__item-details-icon {
+    font-size: 16px;
+    margin-right: 10px;
+    vertical-align: middle;
+    color: $gray-6;
+}
+
+.pim-overlay__item-details-title {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.pim-overlay__item-details-description {
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+/*ensures dialogs doesnt have side-by-side labels*/
+/*
+.pim-overlay .control-label,
+.pim-overlay .form-horizontal .control-label,
+.form-horizontal .pim-overlay .control-label
+ {
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    float: none;
+}
+
+
+.pim-overlay .controls-row,
+.pim-overlay .form-horizontal .controls,
+.form-horizontal .pim-overlay .controls {
+    margin-left: 0 !important;
+}
+*/

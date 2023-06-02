@@ -1,0 +1,30 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+    <StructPIMVendrFilesPath>
+      $([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..'))\App_Plugins\StructPIMVendr\**\*.*
+
+    </StructPIMVendrFilesPath>
+	</PropertyGroup>
+	<Target Name="CopyStructPIMVendrAssets" BeforeTargets="Build">
+		<ItemGroup>
+      <StructPIMVendrFiles Include="$(StructPIMVendrFilesPath)" />
+		</ItemGroup>
+		<Message
+			Text="Copying StructPIM Vendr files: $(StructPIMVendrFilesPath) - #@(StructPIMVendrFiles->Count()) files"
+			Importance="high" />
+		<Copy SourceFiles="@(StructPIMVendrFiles)"
+		      DestinationFiles="@(StructPIMVendrFiles->'$(MSBuildProjectDirectory)\App_Plugins\StructPIMVendr\%(RecursiveDir)%(Filename)%(Extension)')"
+		      SkipUnchangedFiles="true" />
+
+	</Target>
+
+	<Target Name="ClearStructPIMVendrAssets" BeforeTargets="Clean">
+		<ItemGroup>
+      <StructPIMVendrDir
+				Include="$(MSBuildProjectDirectory)\App_Plugins\StructPIMVendr" />
+		</ItemGroup>
+		<Message Text="Clear old Struct PIM Vendr data"  Importance="high" />
+		<RemoveDir Directories="@(StructPIMVendrDir)"  />
+	</Target>
+
+</Project>

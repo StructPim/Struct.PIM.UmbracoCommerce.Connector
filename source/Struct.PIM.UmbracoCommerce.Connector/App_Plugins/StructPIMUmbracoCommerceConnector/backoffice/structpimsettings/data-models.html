@@ -1,0 +1,306 @@
+﻿<div class="StructPIM">
+    <div class="pim-panel pim-editor-wrapper" ng-controller="umbracocommerce.models.controller">
+        <!--header-->
+        <div class="pim-editor-header pim-panel-header">
+
+            <div class="pim-panel-header-content-wrapper">
+
+                <div class="pim-panel-header-content">
+                    <div class="pim-panel-header-left-side">
+                        <div class="pim-panel-header-icon">
+                            <i class="pim-icon pim-icon-settings pim-icon-32"></i>
+                        </div>
+                        <div class="pim-panel-header-title-wrapper">
+                            <div class="pim-panel-header-name">
+                                Data models
+                            </div>
+                            <div class="pim-panel-header-locked-description">
+                                Manage models for Struct PIM Vendr setup.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="pim-panel-tab-navigation">
+            <!--tabs definition-->
+            <ul class="nav nav-tabs pim-nav-tabs" role="tablist">
+                <li role="presentation" ng-class="{'active': controlModel.activeTab === 'productModel'}"><a ng-click="controlModel.activeTab = 'productModel'">Product model</a></li>
+                <li role="presentation" ng-class="{'active': controlModel.activeTab === 'variantModel'}"><a ng-click="controlModel.activeTab = 'variantModel'">Variant model</a></li>
+            </ul>
+        </div>
+        <div class="pim-editor-container pim-panel-body pim-scrollable row-fluid" auto-scale="1" ng-show="loaded">
+
+            <div class="tab-content form-horizontal">
+
+                <div id="productModel" class="pim-tab-pane tab-pane active" ng-class="{'active': controlModel.activeTab === 'productModel'}">
+                    <div class="pim-pane">
+                        <div class="card" style="margin-bottom:20px" ng-if="loaded">
+                            <div class="card-header">
+                                <h4 class="card-title">
+                                    Publishing
+                                </h4>
+                            </div>
+                            <div class="card-body pim-form-layout">
+                                <div class="pim-form-layout__wrapper">
+                                    <div class="pim-form-layout__row">
+                                        <div class="pim-form-layout__column">
+                                            <div class="pim-el-wrap">
+                                                <label class="control-label">
+                                                    Publishing
+                                                    <small class="pim-detail">Select attribute that must be filled out before publishing a product</small>
+                                                </label>
+                                                <div class="controls controls-row">
+                                                    <selectize config="attributeConfig" ng-model="vendrSettings.ProductMapping.PublishingAttributeUid" options="pimProductAttributes"></selectize>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pim-form-layout__column is-empty"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="card" style="margin-bottom:20px" ng-if="loaded">
+                            <div class="card-header">
+                                <h4 class="card-title">
+                                    General
+                                </h4>
+                            </div>
+                            <div class="card-body pim-form-layout">
+                                <div class="pim-form-layout__wrapper">
+                                    <div class="pim-form-layout__row">
+                                        <div class="pim-form-layout__column">
+                                            <div class="pim-el-wrap">
+                                                <label class="control-label">
+                                                    Title <span class="red">*</span>
+                                                    <small class="pim-detail">The name of the product.</small>
+                                                </label>
+                                                <div class="controls controls-row">
+                                                    <selectize config="attributeConfig" ng-model="vendrSettings.ProductMapping.TitleAttributeUid" options="pimProductAttributes" ng-required="true"></selectize>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pim-form-layout__column is-empty"></div>
+                                    </div>
+                                    <div class="pim-form-layout__row">
+                                        <div class="pim-form-layout__column">
+                                            <div class="pim-el-wrap">
+                                                <label class="control-label">
+                                                    SKU <span class="red">*</span>
+                                                    <small class="pim-detail">The SKU of the product.</small>
+                                                </label>
+                                                <div class="controls controls-row">
+                                                    <selectize config="attributeConfig" ng-model="vendrSettings.ProductMapping.SkuAttributeUid" options="pimProductAttributes" ng-required="true"></selectize>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pim-form-layout__column is-empty"></div>
+                                    </div>
+                                    <div class="pim-form-layout__row">
+                                        <div class="pim-form-layout__column">
+                                            <div class="pim-el-wrap">
+                                                <label class="control-label">
+                                                    Properties
+                                                    <small class="pim-detail">Select addtional properties to include for display.</small>
+                                                </label>
+                                                <div class="controls controls-row">
+                                                    <selectize config="attributesConfig" ng-model="vendrSettings.ProductMapping.PropertyAttributeUids" options="pimProductAttributes"></selectize>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pim-form-layout__column is-empty"></div>
+                                    </div>
+                                    <div class="pim-form-layout__row">
+                                        <div class="pim-form-layout__column">
+                                            <div class="pim-el-wrap">
+                                                <label class="control-label">
+                                                    Properties (scopes)
+                                                    <small class="pim-detail">Select scopes of properties to be included for display</small>
+                                                </label>
+                                                <div class="controls controls-row">
+                                                    <selectize config="scopeConfig" ng-model="vendrSettings.ProductMapping.PropertyScopes" options="pimScopes"></selectize>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pim-form-layout__column is-empty"></div>
+                                    </div>
+                                    <div class="pim-form-layout__row">
+                                        <div class="pim-form-layout__column">
+                                            <div class="pim-el-wrap">
+                                                <label class="control-label">
+                                                    Is gift card
+                                                    <small class="pim-detail">Identifies product as gift card</small>
+                                                </label>
+                                                <div class="controls controls-row">
+                                                    <selectize config="attributeConfig" ng-model="vendrSettings.ProductMapping.IsGiftcardAttributeUid" options="pimProductAttributes" ng-required="true"></selectize>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pim-form-layout__column is-empty"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card" style="margin-bottom:20px" ng-if="loaded">
+                            <div class="card-header">
+                                <h4 class="card-title">
+                                    Searching
+                                </h4>
+                            </div>
+                            <div class="card-body pim-form-layout">
+                                <div class="pim-form-layout__wrapper">
+                                    <div class="pim-form-layout__row">
+                                        <div class="pim-form-layout__column">
+                                            <div class="pim-el-wrap">
+                                                <label class="control-label">
+                                                    Searching
+                                                    <small class="pim-detail">Select attributes to search in when finding products</small>
+                                                </label>
+                                                <div class="controls controls-row">
+                                                    <selectize config="attributesConfig" ng-model="vendrSettings.ProductMapping.SearchableAttributeUids" options="pimProductAttributes" ng-required="true"></selectize>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pim-form-layout__column is-empty"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="variantModel" class="pim-tab-pane tab-pane" ng-class="{'active': controlModel.activeTab === 'variantModel'}">
+                    <div class="pim-pane">
+                        <div class="card" style="margin-bottom:20px" ng-if="loaded">
+                            <div class="card-header">
+                                <h4 class="card-title">
+                                    Publishing
+                                </h4>
+                            </div>
+                            <div class="card-body pim-form-layout">
+                                <div class="pim-form-layout__wrapper">
+                                    <div class="pim-form-layout__row">
+                                        <div class="pim-form-layout__column">
+                                            <div class="pim-el-wrap">
+                                                <label class="control-label">
+                                                    Publishing
+                                                    <small class="pim-detail">Select attribute that must be filled out before publishing a variant</small>
+                                                </label>
+                                                <div class="controls controls-row">
+                                                    <selectize config="attributeConfig" ng-model="vendrSettings.VariantMapping.PublishingAttributeUid" options="pimVariantAttributes"></selectize>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pim-form-layout__column is-empty"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card" style="margin-bottom:20px" ng-if="loaded">
+                            <div class="card-header">
+                                <h4 class="card-title">
+                                    General
+                                </h4>
+                            </div>
+                            <div class="card-body pim-form-layout">
+                                <div class="pim-form-layout__wrapper">
+                                    <div class="pim-form-layout__row">
+                                        <div class="pim-form-layout__column">
+                                            <div class="pim-el-wrap">
+                                                <label class="control-label">
+                                                    Title <span class="red">*</span>
+                                                    <small class="pim-detail">The name of the variant.</small>
+                                                </label>
+                                                <div class="controls controls-row">
+                                                    <selectize config="attributeConfig" ng-model="vendrSettings.VariantMapping.TitleAttributeUid" options="pimVariantAttributes" ng-required="true"></selectize>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pim-form-layout__column is-empty"></div>
+                                    </div>
+                                    <div class="pim-form-layout__row">
+                                        <div class="pim-form-layout__column">
+                                            <div class="pim-el-wrap">
+                                                <label class="control-label">
+                                                    SKU <span class="red">*</span>
+                                                    <small class="pim-detail">The SKU of the variant.</small>
+                                                </label>
+                                                <div class="controls controls-row">
+                                                    <selectize config="attributeConfig" ng-model="vendrSettings.VariantMapping.SkuAttributeUid" options="pimVariantAttributes" ng-required="true"></selectize>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pim-form-layout__column is-empty"></div>
+                                    </div>
+                                    <div class="pim-form-layout__row">
+                                        <div class="pim-form-layout__column">
+                                            <div class="pim-el-wrap">
+                                                <label class="control-label">
+                                                    Properties
+                                                    <small class="pim-detail">Select addtional properties to include for display.</small>
+                                                </label>
+                                                <div class="controls controls-row">
+                                                    <selectize config="attributesConfig" ng-model="vendrSettings.VariantMapping.PropertyAttributeUids" options="pimVariantAttributes"></selectize>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pim-form-layout__column is-empty"></div>
+                                    </div>
+                                    <div class="pim-form-layout__row">
+                                        <div class="pim-form-layout__column">
+                                            <div class="pim-el-wrap">
+                                                <label class="control-label">
+                                                    Properties (scopes)
+                                                    <small class="pim-detail">Select scopes of properties to be included for display</small>
+                                                </label>
+                                                <div class="controls controls-row">
+                                                    <selectize config="scopeConfig" ng-model="vendrSettings.VariantMapping.PropertyScopes" options="pimScopes"></selectize>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pim-form-layout__column is-empty"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card" style="margin-bottom:20px" ng-if="loaded">
+                            <div class="card-header">
+                                <h4 class="card-title">
+                                    Searching
+                                </h4>
+                            </div>
+                            <div class="card-body pim-form-layout">
+                                <div class="pim-form-layout__wrapper">
+                                    <div class="pim-form-layout__row">
+                                        <div class="pim-form-layout__column">
+                                            <div class="pim-el-wrap">
+                                                <label class="control-label">
+                                                    Searching
+                                                    <small class="pim-detail">Select attributes to search in when finding variants</small>
+                                                </label>
+                                                <div class="controls controls-row">
+                                                    <selectize config="attributesConfig" ng-model="vendrSettings.VariantMapping.SearchableAttributeUids" options="pimVariantAttributes" ng-required="true"></selectize>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pim-form-layout__column is-empty"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="pim-editor-drawer">
+            <div class="pim-editor-drawer-content">
+                <div class="pim-editor-drawer-content__right-side">
+                    <button ng-show="controlModel.activeTab == 'productModel'" class="btn btn-success" ng-disabled="validate() == false" ng-click="saveProductMapping()">Save product model</button>
+                    <button ng-show="controlModel.activeTab == 'variantModel'" class="btn btn-success" ng-disabled="validate() == false" ng-click="saveVariantMapping()">Save variant model</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
