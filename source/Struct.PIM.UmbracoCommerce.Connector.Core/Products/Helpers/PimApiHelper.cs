@@ -5,6 +5,7 @@ using Struct.PIM.Api.Models.Shared;
 using Struct.PIM.Api.Models.Variant;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Settings;
+using Struct.PIM.UmbracoCommerce.Connector.Core.Settings.Entity;
 using System.Globalization;
 
 namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
@@ -22,11 +23,11 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
         {
             var integrationSettings = _settingsFacade.GetIntegrationSettings();
             if (string.IsNullOrEmpty(integrationSettings.Setup.PimApiUrl))
-                throw new InvalidOperationException("StructPIM.ApiUrl must be set in settings to use Struct PIM Umbraco Commerce");
+                throw new InvalidOperationException("StructPIM.ApiUrl must be set in settings to use Struct PIM Vendr");
 
             if (string.IsNullOrEmpty(integrationSettings.Setup.PimApiKey))
-                throw new InvalidOperationException("StructPIM.ApiKey must be set in settings to use Struct PIM Umbraco Commerce");
-            
+                throw new InvalidOperationException("StructPIM.ApiKey must be set in settings to use Struct PIM Vendr");
+
             return new PIM.Api.Client.StructPIMApiClient(integrationSettings.Setup.PimApiUrl, integrationSettings.Setup.PimApiKey);
         }
 
@@ -67,7 +68,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             //        .SelectMany(y => (y as DynamicTabSetup)?.Sections?
             //            .SelectMany(z => (z as DynamicSectionSetup)?.Properties?
             //                .Select(n => (n as AttributeSetup)?.AttributeUid))))?.ToHashSet();
-                            
+
             //if(productAttributeUids?.Any() ?? false)
             //{
             //    attributes = attributes.Where(x => productAttributeUids.Contains(x.Uid)).ToList();
@@ -94,6 +95,25 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
 
             var mappedAttributes = Map(attributes);
             return mappedAttributes;
+        }
+
+        public Dictionary<string, Tuple<string, string>> GetDimensionSegmentData(StoreSettings? storeSetting)
+        {
+            var dimensions = storeSetting.DimensionSettings;
+            var dimensionsPim = GetPimDimensions();
+            var dimensionSegmentData = new Dictionary<string, Tuple<string, string>>();
+            foreach (var dim in dimensions)
+            {
+                var dPim = dimensionsPim.Where(d => d.Uid == Guid.Parse(dim.Key)).FirstOrDefault();
+                var segment = dPim?.Segments.Where(s => s.Uid == Guid.Parse(dim.Value)).FirstOrDefault();
+                if (segment != null)
+                {
+                    dimensionSegmentData.Add(dPim.Uid.ToString().ToLower(), new Tuple<string, string>(dPim.Alias, segment.Identifier));
+                }
+
+
+            }
+            return dimensionSegmentData;
         }
 
         internal List<PimAttribute> Map(List<Api.Models.Attribute.Attribute> attributes)
@@ -149,16 +169,27 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             return result;
         }
 
-        public string GetAliasPath(Api.Models.Attribute.Attribute attribute, string pathUserFreindly, Guid targetAttributeUid, string language, bool allLevels, bool previousIsFixedList)
+        public string GetAliasPath(Api.Models.Attribute.Attribute attribute, string pathUserFreindly, Guid targetAttributeUid, string language, bool allLevels, bool previousIsFixedList, bool showLanguageAndSegmentAllLevels)
         {
             var delimiter = string.IsNullOrEmpty(pathUserFreindly) ? string.Empty : ".";
+            var attributeLanguage = language;
+            if (!attribute.Localized)
+            {
+                attributeLanguage = null;
+            }
+            string segmentUid = null;
+            if (attribute.DimensionUid != null)
+            {
+                segmentUid = attribute.DimensionUid.ToString();
+            }
+            var languageSegment = $"_{attributeLanguage ?? "NA"}_{segmentUid?.ToString() ?? "NA"}";
 
             if (attribute is FixedListAttribute fixedListAttribute)
             {
                 if (attribute.Uid == targetAttributeUid)
                     return pathUserFreindly + delimiter + attribute.Alias;
 
-                var path = GetAliasPath(fixedListAttribute.ReferencedAttribute, pathUserFreindly + delimiter + fixedListAttribute.Alias, targetAttributeUid, language, allLevels, true);
+                var path = GetAliasPath(fixedListAttribute.ReferencedAttribute, pathUserFreindly + delimiter + fixedListAttribute.Alias + (showLanguageAndSegmentAllLevels ? languageSegment : string.Empty), targetAttributeUid, language, allLevels, true, showLanguageAndSegmentAllLevels);
 
                 if (!string.IsNullOrEmpty(path))
                 {
@@ -172,7 +203,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
 
                 foreach (var subAttribute in complexAttribute.SubAttributes)
                 {
-                    var path = GetAliasPath(subAttribute, allLevels && !previousIsFixedList ? pathUserFreindly + delimiter + complexAttribute.Alias : pathUserFreindly, targetAttributeUid, language, allLevels, false);
+                    var path = GetAliasPath(subAttribute, allLevels && !previousIsFixedList ? pathUserFreindly + delimiter + complexAttribute.Alias + (showLanguageAndSegmentAllLevels ? languageSegment : string.Empty) : pathUserFreindly, targetAttributeUid, language, allLevels, false, showLanguageAndSegmentAllLevels);
 
                     if (!string.IsNullOrEmpty(path))
                     {
@@ -185,16 +216,6 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             {
                 if (attribute.Uid == targetAttributeUid)
                 {
-                    if (!attribute.Localized)
-                    {
-                        language = null;
-                    }
-                    string segmentUid = null;
-                    if (attribute.DimensionUid != null)
-                    {
-                        segmentUid = attribute.DimensionUid.ToString();
-                    }
-                    var languageSegment = $"_{language ?? "NA"}_{segmentUid?.ToString() ?? "NA"}";
                     return pathUserFreindly + delimiter + attribute.Alias + languageSegment;
                 }
                 return string.Empty;
@@ -323,8 +344,8 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
 
             var productStructures = PIMClient().ProductStructures.GetProductStructures().Where(x => allowedProductStructures.Contains(x.Uid)).ToList();
             var variationDefinitions = productStructures.Where(x => x.VariationDefinitions != null).SelectMany(x => x.VariationDefinitions.Where(y => allowedVariationDefinitons.Contains(y.Uid))).ToList();
-            
-            if(variationDefinitions.Any())
+
+            if (variationDefinitions.Any())
                 return variationDefinitions.SelectMany(x => x.DefiningAttributes).Distinct().ToList();
 
             return new List<Guid> { };

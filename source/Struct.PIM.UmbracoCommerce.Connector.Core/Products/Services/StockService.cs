@@ -180,6 +180,8 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
             var language = _pimApiHelper.GetLanguage(null);
             var storeSetting = integrationSettings?.GeneralSettings?.ShopSettings?.Where(s => s.Uid == storeId).FirstOrDefault();
 
+            var dimensionSegmentData = _pimApiHelper.GetDimensionSegmentData(storeSetting);
+
             var attributeValueUids = new List<Guid>();
 
             if (!string.IsNullOrEmpty(storeSetting?.StockAttributeUid))
@@ -196,7 +198,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                 {
                     if (!string.IsNullOrEmpty(storeSetting?.StockAttributeUid))
                     {
-                        PimAttributeValueDTO value = _pimAttributeHelper.GetValueForAttribute(storeSetting?.StockAttributeUid, variantValue, language);
+                        PimAttributeValueDTO value = _pimAttributeHelper.GetValueForAttribute(storeSetting?.StockAttributeUid, variantValue, language, dimensionSegmentData);
                         if (value.Value != null)
                         {
                             if (decimal.TryParse(value.Value, out decimal stockValue))
@@ -222,7 +224,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                 {
                     if (!string.IsNullOrEmpty(storeSetting?.StockAttributeUid))
                     {
-                        PimAttributeValueDTO value = _pimAttributeHelper.GetValueForAttribute(storeSetting?.StockAttributeUid, productValue, language);
+                        PimAttributeValueDTO value = _pimAttributeHelper.GetValueForAttribute(storeSetting?.StockAttributeUid, productValue, language, dimensionSegmentData);
                         if (value.Value != null)
                         {
                             if (decimal.TryParse(value.Value, out decimal stockValue))

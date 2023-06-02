@@ -15,16 +15,17 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             _pimApiHelper = pimApiHelper;
         }
 
-        internal PimAttributeValueDTO GetValueForAttribute(string attributeUid, HasAttributeValues entityValue, LanguageModel language, Api.Models.Attribute.Attribute rootAttribute = null)
+        internal PimAttributeValueDTO GetValueForAttribute(string attributeUid, HasAttributeValues entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Api.Models.Attribute.Attribute rootAttribute = null)
         {
             var attributeUids = attributeUid.Split(".");
             if (rootAttribute == null)
             {
                 rootAttribute = _pimApiHelper.GetPimAttribute(Guid.Parse(attributeUids[0]));
             }
+            var thisAttribute = _pimApiHelper.GetPimAttribute(Guid.Parse(attributeUids[0]));
             var targetAttributeUid = attributeUids.Last();
 
-            var fieldUid = _pimApiHelper.GetAliasPath(rootAttribute, string.Empty, Guid.Parse(targetAttributeUid), language.CultureCode, true, rootAttribute is FixedListAttribute);
+            var fieldUid = _pimApiHelper.GetAliasPath(rootAttribute, string.Empty, Guid.Parse(targetAttributeUid), language.CultureCode, true, rootAttribute is FixedListAttribute, true);
             var fieldAlias = fieldUid.Split(".").ToList();
             var alias = fieldAlias.First().Split("_").First();
             if (entityValue.Values.TryGetValue(alias, out dynamic values))
@@ -36,14 +37,14 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                     {
                         fieldAlias.RemoveAt(0);
                         var valuesDictionary = ((JObject)values).ToObject<Dictionary<string, object>>();
-                        value = FindValue(fieldAlias.First(), valuesDictionary, fieldAlias, language.CultureCode, null);
+                        value = FindValue(fieldAlias.First(), valuesDictionary, fieldAlias, language.CultureCode, dimensionSegmentData);
                     }
                     else
                     {
                         var valuesDictionary = new Dictionary<string, object>();
                         var data = fieldAlias.First().Split("_");
                         valuesDictionary.Add(alias, values);
-                        value = FindValue(fieldAlias.First(), valuesDictionary, fieldAlias, language.CultureCode, null);
+                        value = FindValue(fieldAlias.First(), valuesDictionary, fieldAlias, language.CultureCode, dimensionSegmentData);
 
                     }
                 }
@@ -55,7 +56,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             }
         }
 
-        internal string RenderAttribute(Api.Models.Attribute.Attribute rootAttribute, Api.Models.Attribute.Attribute attribute, HasAttributeValues variantValue, IEnumerable<PimAttribute> paths, LanguageModel language, string rootPath)
+        internal string RenderAttribute(Api.Models.Attribute.Attribute rootAttribute, Api.Models.Attribute.Attribute attribute, HasAttributeValues variantValue, IEnumerable<PimAttribute> paths, LanguageModel language, string rootPath, Dictionary<string, Tuple<string, string>> dimensionSegmentData)
         {
             string renderValue = string.Empty;
             if (attribute is ComplexAttribute complexAttribute)
@@ -69,7 +70,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                         if (renderAttribute != null && (renderAttribute is ComplexAttribute || renderAttribute is FixedListAttribute))
                         {
                             var newRootPath = !string.IsNullOrEmpty(rootPath) ? rootPath + "." + renderAttribute.Uid : renderAttribute.Uid.ToString();
-                            renderValue += RenderAttribute(rootAttribute, renderAttribute, variantValue, paths.Where(p => p.Uid.StartsWith(newRootPath)), language, newRootPath);
+                            renderValue += RenderAttribute(rootAttribute, renderAttribute, variantValue, paths.Where(p => p.Uid.StartsWith(newRootPath)), language, newRootPath, dimensionSegmentData);
                         }
                         else
                         {
@@ -77,7 +78,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                             if (foundUid != null)
                             {
 
-                                PimAttributeValueDTO value = GetValueForAttribute(foundUid.Uid, variantValue, language, rootAttribute);
+                                PimAttributeValueDTO value = GetValueForAttribute(foundUid.Uid, variantValue, language, dimensionSegmentData, rootAttribute);
                                 renderValue += value.Value + " ";
                             }
                         }
@@ -88,7 +89,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                     foreach (var path in paths)
                     {
                         //Todo need some more
-                        PimAttributeValueDTO value = GetValueForAttribute(path.Uid, variantValue, language, rootAttribute);
+                        PimAttributeValueDTO value = GetValueForAttribute(path.Uid, variantValue, language, dimensionSegmentData, rootAttribute);
                         renderValue += value.Value + " ";
                     }
                 }
@@ -99,42 +100,106 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                 if (fixedListAttribute.ReferencedAttribute is ComplexAttribute)
                 {
                     var newRootPath = !string.IsNullOrEmpty(rootPath) ? rootPath + "." + fixedListAttribute.ReferencedAttribute.Uid : fixedListAttribute.ReferencedAttribute.Uid.ToString();
-                    renderValue += RenderAttribute(rootAttribute, fixedListAttribute.ReferencedAttribute, variantValue, paths.Where(p => p.Uid.StartsWith(newRootPath)), language, newRootPath);
+                    renderValue += RenderAttribute(rootAttribute, fixedListAttribute.ReferencedAttribute, variantValue, paths.Where(p => p.Uid.StartsWith(newRootPath)), language, newRootPath, dimensionSegmentData);
                 }
                 else
                 {
                     foreach (var path in paths)
                     {
                         //Todo need some more
-                        PimAttributeValueDTO value = GetValueForAttribute(path.Uid, variantValue, language, rootAttribute);
+                        PimAttributeValueDTO value = GetValueForAttribute(path.Uid, variantValue, language, dimensionSegmentData, rootAttribute);
                         renderValue += value.Value + " ";
                     }
                 }
             }
             else
             {
-                PimAttributeValueDTO value = GetValueForAttribute(attribute.Uid.ToString(), variantValue, language, rootAttribute);
+                PimAttributeValueDTO value = GetValueForAttribute(attribute.Uid.ToString(), variantValue, language, dimensionSegmentData, rootAttribute);
                 renderValue = value.Value;
             }
 
             return renderValue;
         }
 
-        private PimAttributeValueDTO FindValue(string alias, Dictionary<string, object> values, List<string> fieldAlias, string cultureCode, string segmentId)
+        private PimAttributeValueDTO FindValue(string alias, Dictionary<string, object> values, List<string> fieldAlias, string cultureCode, Dictionary<string, Tuple<string, string>> dimensionSegmentData)
         {
             if (fieldAlias.Count > 1)
             {
-                if (values.TryGetValue(alias, out var value))
+                var data = alias.Split("_");
+                if (data.Length == 3)
                 {
-                    if (value == null)
-                    {
-                        return new PimAttributeValueDTO();
-                    }
-                    fieldAlias.RemoveAt(0);
-                    var valuesDictionary = ((JObject)value).ToObject<Dictionary<string, object>>();
-                    return FindValue(fieldAlias.First(), valuesDictionary, fieldAlias, cultureCode, segmentId);
-                }
 
+                    if (values.TryGetValue(data[0], out var value))
+                    {
+                        if (value == null)
+                        {
+                            return new PimAttributeValueDTO();
+                        }
+                        // valueIsLocalized and valueIsSegmentedBydimensionUid
+                        if (data[1] != "NA" && data[2] != "NA")
+                        {
+                            if (dimensionSegmentData.TryGetValue(data[2].ToLower(), out var datas))
+                            {
+                                var valueSegmentedBydimensionUid = ((JArray)value).Children<JObject>().FirstOrDefault(o => o["CultureCode"]?.ToString() == cultureCode && o["Dimension"]?.ToString() == datas.Item1 && o["Segment"]?.ToString() == datas.Item2)?.GetValue("Data");
+                                fieldAlias.RemoveAt(0);
+                                var valuesDictionary2 = ((JObject)valueSegmentedBydimensionUid).ToObject<Dictionary<string, object>>();
+                                return FindValue(fieldAlias.First(), valuesDictionary2, fieldAlias, cultureCode, dimensionSegmentData);
+                            }
+                            else
+                            {
+                            }
+                        }
+                        // valueIsLocalized
+                        else if (data[1] != "NA")
+                        {
+                            if (dimensionSegmentData.TryGetValue(data[2].ToLower(), out var datas))
+                            {
+                                var valueSegmentedBydimensionUid = ((JArray)value).Children<JObject>().FirstOrDefault(o => o["CultureCode"]?.ToString() == cultureCode)?.GetValue("Data");
+                                fieldAlias.RemoveAt(0);
+                                var valuesDictionary2 = ((JObject)valueSegmentedBydimensionUid).ToObject<Dictionary<string, object>>();
+                                return FindValue(fieldAlias.First(), valuesDictionary2, fieldAlias, cultureCode, dimensionSegmentData);
+                            }
+                            else
+                            {
+                            }
+                        }
+                        //valueIsSegmentedBydimensionUid
+                        else if (data[2] != "NA")
+                        {
+                            if (dimensionSegmentData.TryGetValue(data[2].ToLower(), out var datas))
+                            {
+                                var valueSegmentedBydimensionUid = ((JArray)value).Children<JObject>().FirstOrDefault(o => o["Dimension"]?.ToString() == datas.Item1 && o["Segment"]?.ToString() == datas.Item2)?.GetValue("Data");
+                                fieldAlias.RemoveAt(0);
+                                var valuesDictionary2 = ((JObject)valueSegmentedBydimensionUid).ToObject<Dictionary<string, object>>();
+                                return FindValue(fieldAlias.First(), valuesDictionary2, fieldAlias, cultureCode, dimensionSegmentData);
+                            }
+                            else
+                            {
+                            }
+
+                        }
+                        //standard value
+                        else
+                        {
+                            fieldAlias.RemoveAt(0);
+                            var valuesDictionary = ((JObject)value).ToObject<Dictionary<string, object>>();
+                            return FindValue(fieldAlias.First(), valuesDictionary, fieldAlias, cultureCode, dimensionSegmentData);
+                        }
+                    }
+                }
+                else
+                {
+                    if (values.TryGetValue(alias, out var value))
+                    {
+                        if (value == null)
+                        {
+                            return new PimAttributeValueDTO();
+                        }
+                        fieldAlias.RemoveAt(0);
+                        var valuesDictionary = ((JObject)value).ToObject<Dictionary<string, object>>();
+                        return FindValue(fieldAlias.First(), valuesDictionary, fieldAlias, cultureCode, dimensionSegmentData);
+                    }
+                }
             }
             else
             {
@@ -148,12 +213,23 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                     // valueIsLocalized and valueIsSegmentedBydimensionUid
                     if (data[1] != "NA" && data[2] != "NA")
                     {
-                        var valueLocalizedAndSegmentedBydimensionUid = ((JArray)value).Children<JObject>().FirstOrDefault(o => o["CultureCode"]?.ToString() == cultureCode && o["Segment"]?.ToString() == segmentId)?.GetValue("Data")?.ToString();
-                        return new PimAttributeValueDTO
+                        if (dimensionSegmentData.TryGetValue(data[2].ToLower(), out var datas))
                         {
-                            Value = valueLocalizedAndSegmentedBydimensionUid,
-                            Alias = Guid.NewGuid().ToString(),
-                        };
+                            var valueSegmentedBydimensionUid = ((JArray)value).Children<JObject>().FirstOrDefault(o => o["CultureCode"]?.ToString() == cultureCode && o["Dimension"]?.ToString() == datas.Item1 && o["Segment"]?.ToString() == datas.Item2)?.GetValue("Data")?.ToString();
+                            return new PimAttributeValueDTO
+                            {
+                                Value = valueSegmentedBydimensionUid,
+                                Alias = Guid.NewGuid().ToString(),
+                            };
+                        }
+                        else
+                        {
+                            return new PimAttributeValueDTO
+                            {
+                                Value = null,
+                                Alias = Guid.NewGuid().ToString(),
+                            };
+                        }
                     }
                     // valueIsLocalized
                     else if (data[1] != "NA")
@@ -168,12 +244,23 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                     //valueIsSegmentedBydimensionUid
                     else if (data[2] != "NA")
                     {
-                        var valueSegmentedBydimensionUid = ((JArray)value).Children<JObject>().FirstOrDefault(o => o["Segment"]?.ToString() == segmentId)?.GetValue("Data")?.ToString();
-                        return new PimAttributeValueDTO
+                        if (dimensionSegmentData.TryGetValue(data[2].ToLower(), out var datas))
                         {
-                            Value = valueSegmentedBydimensionUid,
-                            Alias = Guid.NewGuid().ToString(),
-                        };
+                            var valueSegmentedBydimensionUid = ((JArray)value).Children<JObject>().FirstOrDefault(o => o["Dimension"]?.ToString() == datas.Item1 && o["Segment"]?.ToString() == datas.Item2)?.GetValue("Data")?.ToString();
+                            return new PimAttributeValueDTO
+                            {
+                                Value = valueSegmentedBydimensionUid,
+                                Alias = Guid.NewGuid().ToString(),
+                            };
+                        }
+                        else
+                        {
+                            return new PimAttributeValueDTO
+                            {
+                                Value = null,
+                                Alias = Guid.NewGuid().ToString(),
+                            };
+                        }
 
                     }
                     //standard value
@@ -195,46 +282,5 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
 
             throw new Exception("Mapping not found for product");
         }
-
-        //public string GetAttrubuteValueFromAliasPath(Api.Models.Attribute.Attribute attribute, Guid targetAttributeUid, string language, int? segmentId)
-        //{
-        //    if (attribute is FixedListAttribute fixedListAttribute)
-        //    {
-        //        var value = GetAttrubuteValueFromAliasPath(fixedListAttribute.ReferencedAttribute, targetAttributeUid, language, segmentId);
-
-        //        if (!string.IsNullOrEmpty(value))
-        //        {
-        //            return value;
-        //        }
-        //    }
-        //    else if (attribute is ComplexAttribute complexAttribute)
-        //    {
-        //        foreach (var subAttribute in complexAttribute.SubAttributes)
-        //        {
-        //            var value = GetAttrubuteValueFromAliasPath(subAttribute, targetAttributeUid, language, segmentId);
-
-        //            if (!string.IsNullOrEmpty(value))
-        //            {
-        //                return value;
-        //            }
-
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (attribute.Uid == targetAttributeUid)
-        //        {
-        //            if (!attribute.Localized)
-        //            {
-        //                language = null;
-        //            }
-        //            var languageSegment = $"_{language ?? "NA"}_{segmentId?.ToString() ?? "NA"}";
-        //            return attribute + attribute.Alias + languageSegment;
-        //        }
-        //        return string.Empty;
-        //    }
-
-        //    return string.Empty;
-        //}
     }
 }
