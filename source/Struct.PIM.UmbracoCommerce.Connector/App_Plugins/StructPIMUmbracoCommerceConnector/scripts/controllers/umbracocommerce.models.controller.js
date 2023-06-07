@@ -37,11 +37,11 @@ app.controller("umbracocommerce.models.controller",
         $scope.init = function () {
             structPimUmbracoHelper.updateTree(["data-models"]);
 
-            umbracoCommerceService.getAttributes('Product')
+            umbracoCommerceService.getAttributes('Product', '')
                 .then(function (response) {
                     $scope.pimProductAttributes = response.data;
 
-                    umbracoCommerceService.getAttributes('Variant')
+                    umbracoCommerceService.getAttributes('Variant', '')
                         .then(function (response) {
                             $scope.pimVariantAttributes = response.data;
 

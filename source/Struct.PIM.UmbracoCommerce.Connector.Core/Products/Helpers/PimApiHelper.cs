@@ -1,4 +1,5 @@
 ﻿using Struct.PIM.Api.Models.Attribute;
+using Struct.PIM.Api.Models.GlobalList;
 using Struct.PIM.Api.Models.Language;
 using Struct.PIM.Api.Models.Product;
 using Struct.PIM.Api.Models.Shared;
@@ -59,6 +60,13 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             return dimensions.OrderBy(x => x.Alias).ToList();
         }
 
+        public List<Api.Models.Catalogue.CatalogueModel> GetCatalogues()
+        {
+            var catalogues = PIMClient().Catalogues.GetCatalogues();
+
+            return catalogues.OrderBy(x => x.Label).ToList();
+        }
+
         public List<PimAttribute> GetAttributeWithProductReference()
         {
             var attributes = GetPimAttributes();
@@ -97,11 +105,28 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             return mappedAttributes;
         }
 
+        public List<GlobalListValue> GetGlobalListAttributeValues(Guid uid)
+        {
+            var client = PIMClient();
+            return client.GlobalLists.GetGlobalListValues(uid).GlobalListValues.ToList();
+        }
+
+
+        public GlobalList GetGlobalList(Guid uid)
+        {
+            var client = PIMClient();
+            return client.GlobalLists.GetGlobalList(uid);
+        }
+
         public Dictionary<string, Tuple<string, string>> GetDimensionSegmentData(StoreSettings? storeSetting)
         {
-            var dimensions = storeSetting.DimensionSettings;
-            var dimensionsPim = GetPimDimensions();
             var dimensionSegmentData = new Dictionary<string, Tuple<string, string>>();
+            var dimensions = storeSetting?.DimensionSettings;
+            if (dimensions == null)
+                return dimensionSegmentData;
+
+            var dimensionsPim = GetPimDimensions();
+            
             foreach (var dim in dimensions)
             {
                 var dPim = dimensionsPim.Where(d => d.Uid == Guid.Parse(dim.Key)).FirstOrDefault();
@@ -110,8 +135,6 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                 {
                     dimensionSegmentData.Add(dPim.Uid.ToString().ToLower(), new Tuple<string, string>(dPim.Alias, segment.Identifier));
                 }
-
-
             }
             return dimensionSegmentData;
         }
@@ -121,107 +144,57 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             var result = new List<PimAttribute>();
             foreach (var attribute in attributes)
             {
-                // vi kigger ikke på list attibutter til at starte med.
                 if (attribute is ListAttribute)
                 {
                     continue;
                 }
-                else if (attribute is ComplexAttribute || attribute is FixedListAttribute)
+                
+                result.Add(new PimAttribute
+                {
+                    Alias = attribute.Alias,
+                    Uid = attribute.Uid.ToString(),
+                    Type = attribute.AttributeType
+                });
+
+                if (attribute is ComplexAttribute || attribute is FixedListAttribute)
                 {
                     result.AddRange(GetAliasPaths(attribute, string.Empty, string.Empty));
-                }
-                else
-                {
-                    result.Add(new PimAttribute
-                    {
-                        Alias = attribute.Alias,
-                        Uid = attribute.Uid.ToString(),
-                    });
                 }
             }
             return result;
         }
 
-        private List<PimAttribute> GetAliasPaths(Api.Models.Attribute.Attribute attribute, string path, string pathUserFreindly)
+        private List<PimAttribute> GetAliasPaths(Api.Models.Attribute.Attribute attribute, string path, string pathUserFriendly)
         {
             var result = new List<PimAttribute>();
             var delimiter = string.IsNullOrEmpty(path) ? string.Empty : ".";
             if (attribute is FixedListAttribute fixedListAttribute)
             {
-                result.AddRange(GetAliasPaths(fixedListAttribute.ReferencedAttribute, path + delimiter + fixedListAttribute.Uid, pathUserFreindly + delimiter + fixedListAttribute.Alias));
+                result.AddRange(GetAliasPaths(fixedListAttribute.ReferencedAttribute, path + delimiter + fixedListAttribute.Uid, pathUserFriendly + delimiter + fixedListAttribute.Alias));
             }
             else if (attribute is ComplexAttribute complexAttribute)
             {
+                result.Add(new PimAttribute
+                {
+                    Alias = pathUserFriendly + delimiter + attribute.Alias,
+                    Uid = path + delimiter + attribute.Uid,
+                });
+
                 foreach (var subAttribute in complexAttribute.SubAttributes)
                 {
-                    result.AddRange(GetAliasPaths(subAttribute, path + delimiter + complexAttribute.Uid, pathUserFreindly + delimiter + complexAttribute.Alias));
+                    result.AddRange(GetAliasPaths(subAttribute, path + delimiter + complexAttribute.Uid, pathUserFriendly + delimiter + complexAttribute.Alias));
                 }
             }
             else
             {
                 result.Add(new PimAttribute
                 {
-                    Alias = pathUserFreindly + delimiter + attribute.Alias,
+                    Alias = pathUserFriendly + delimiter + attribute.Alias,
                     Uid = path + delimiter + attribute.Uid,
                 });
             }
 
             return result;
-        }
-
-        public string GetAliasPath(Api.Models.Attribute.Attribute attribute, string pathUserFreindly, Guid targetAttributeUid, string language, bool allLevels, bool previousIsFixedList, bool showLanguageAndSegmentAllLevels)
-        {
-            var delimiter = string.IsNullOrEmpty(pathUserFreindly) ? string.Empty : ".";
-            var attributeLanguage = language;
-            if (!attribute.Localized)
-            {
-                attributeLanguage = null;
-            }
-            string segmentUid = null;
-            if (attribute.DimensionUid != null)
-            {
-                segmentUid = attribute.DimensionUid.ToString();
-            }
-            var languageSegment = $"_{attributeLanguage ?? "NA"}_{segmentUid?.ToString() ?? "NA"}";
-
-            if (attribute is FixedListAttribute fixedListAttribute)
-            {
-                if (attribute.Uid == targetAttributeUid)
-                    return pathUserFreindly + delimiter + attribute.Alias;
-
-                var path = GetAliasPath(fixedListAttribute.ReferencedAttribute, pathUserFreindly + delimiter + fixedListAttribute.Alias + (showLanguageAndSegmentAllLevels ? languageSegment : string.Empty), targetAttributeUid, language, allLevels, true, showLanguageAndSegmentAllLevels);
-
-                if (!string.IsNullOrEmpty(path))
-                {
-                    return path;
-                }
-            }
-            else if (attribute is ComplexAttribute complexAttribute)
-            {
-                if (attribute.Uid == targetAttributeUid)
-                    return pathUserFreindly + delimiter + attribute.Alias;
-
-                foreach (var subAttribute in complexAttribute.SubAttributes)
-                {
-                    var path = GetAliasPath(subAttribute, allLevels && !previousIsFixedList ? pathUserFreindly + delimiter + complexAttribute.Alias + (showLanguageAndSegmentAllLevels ? languageSegment : string.Empty) : pathUserFreindly, targetAttributeUid, language, allLevels, false, showLanguageAndSegmentAllLevels);
-
-                    if (!string.IsNullOrEmpty(path))
-                    {
-                        return path;
-                    }
-
-                }
-            }
-            else
-            {
-                if (attribute.Uid == targetAttributeUid)
-                {
-                    return pathUserFreindly + delimiter + attribute.Alias + languageSegment;
-                }
-                return string.Empty;
-            }
-
-            return string.Empty;
         }
 
         internal Api.Models.Attribute.Attribute GetPimAttribute(Guid attributeUid)
@@ -275,32 +248,30 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             return PIMClient().Variants.GetVariantAttributeValues(variantValuesRequestModel);
         }
 
-        internal LanguageModel? GetLanguage(string languageIsoCode)
+        internal LanguageModel GetLanguage(string languageIsoCode)
         {
             var languages = PIMClient().Languages.GetLanguages();
-            LanguageModel language = null;
+            LanguageModel? language = null;
 
-            if (languageIsoCode == null)
-            {
-                language = languages.FirstOrDefault();
-            }
-            if (language == null)
-            {
-                language = languages.FirstOrDefault(x => x.CultureCode.Equals(languageIsoCode, StringComparison.InvariantCultureIgnoreCase));
-            }
-            if (language == null)
-            {
-                var culture = CultureInfo.GetCultureInfo(languageIsoCode);
-                language = languages.FirstOrDefault(x => x.Name.Equals(culture.DisplayName, StringComparison.InvariantCultureIgnoreCase));
-            }
-            if (language == null)
+            if (string.IsNullOrEmpty(languageIsoCode))
             {
                 var integrationSettings = _settingsFacade.GetIntegrationSettings();
                 language = languages.FirstOrDefault(x => x.CultureCode.Equals(integrationSettings.Setup?.DefaultLanguage, StringComparison.InvariantCultureIgnoreCase));
             }
+            else if (!string.IsNullOrEmpty(languageIsoCode))
+            {
+                language = languages.FirstOrDefault(x => x.CultureCode.Equals(languageIsoCode, StringComparison.InvariantCultureIgnoreCase));
+                
+                if (language == null)
+                {
+                    var culture = CultureInfo.GetCultureInfo(languageIsoCode);
+                    language = languages.FirstOrDefault(x => x.Name.Equals(culture.DisplayName, StringComparison.InvariantCultureIgnoreCase));
+                }
+            }
+
             if (language == null)
             {
-                language = languages.FirstOrDefault();
+                language = languages.First();
             }
 
             return language;

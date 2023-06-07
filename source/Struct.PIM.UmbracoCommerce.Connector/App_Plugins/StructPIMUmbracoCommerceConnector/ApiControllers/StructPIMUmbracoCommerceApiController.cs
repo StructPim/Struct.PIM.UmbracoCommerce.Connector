@@ -20,17 +20,25 @@ namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins.ApiControllers
         }
 
         [HttpGet("GetAttributes")]
-        public IActionResult GetAttributes(string type)
+        public IActionResult GetAttributes(string type, string attributeType)
         {
             if (type == "Product")
             {
                 var pimAttributes = _productService.GetAttributeWithProductReference();
+
+                if (!string.IsNullOrEmpty(attributeType))
+                    pimAttributes = pimAttributes.Where(x => x.Type == attributeType).ToList();
+
                 return Ok(pimAttributes.OrderBy(a => a.Alias));
 
             }
             else if(type == "Variant")
             {
                 var pimAttributes = _productService.GetAttributeWithVariantReference();
+
+                if (!string.IsNullOrEmpty(attributeType))
+                    pimAttributes = pimAttributes.Where(x => x.Type == attributeType).ToList();
+
                 return Ok(pimAttributes.OrderBy(a => a.Alias));
             }
             else
@@ -58,8 +66,14 @@ namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins.ApiControllers
         {
             var integrationSettings = _settingsFacade.GetIntegrationSettings(true);
 
-
             return Ok(integrationSettings);
+        }
+
+        [HttpGet("GetCatalogues")]
+        public IActionResult GetCatalogues()
+        {
+            var catalogues = _productService.GetCatalogues();
+            return Ok(catalogues);
         }
 
         [HttpPost("SaveGeneralSettings")]
@@ -102,6 +116,13 @@ namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins.ApiControllers
         {
             //_productService.SyncTaxClasses();
             return Ok();
+        }
+
+        [HttpGet("GetFilterAttributeValues")]
+        public IActionResult GetFilterAttributeValues(string filter)
+        {
+            var attributeValues = _productService.GetGlobalListAttributeValues(Guid.Parse(filter));
+            return Ok(attributeValues);
         }
     }
 }

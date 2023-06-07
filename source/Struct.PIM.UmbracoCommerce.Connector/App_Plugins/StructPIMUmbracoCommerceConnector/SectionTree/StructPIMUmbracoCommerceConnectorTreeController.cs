@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Polly;
 using Umbraco.Cms.Web.Common.Attributes;
 using System.Runtime.CompilerServices;
+using Struct.PIM.UmbracoCommerce.Connector.Core.Settings;
 
 namespace Struct.PIM.UmbracoCommerce.Connector.SectionTree
 {
@@ -22,14 +23,17 @@ namespace Struct.PIM.UmbracoCommerce.Connector.SectionTree
     {
 
         private readonly IMenuItemCollectionFactory _menuItemCollectionFactory;
+        private readonly SettingsFacade _settingsFacade;
 
         public StructPIMUmbracoCommerceConnectorTreeController(ILocalizedTextService localizedTextService,
             UmbracoApiControllerTypeCollection umbracoApiControllerTypeCollection,
             IMenuItemCollectionFactory menuItemCollectionFactory,
-            IEventAggregator eventAggregator)
+            IEventAggregator eventAggregator,
+            SettingsFacade settingsFacade)
             : base(localizedTextService, umbracoApiControllerTypeCollection, eventAggregator)
         {
             _menuItemCollectionFactory = menuItemCollectionFactory ?? throw new ArgumentNullException(nameof(menuItemCollectionFactory));
+            _settingsFacade = settingsFacade;
         }
 
         protected override ActionResult<TreeNodeCollection> GetTreeNodes(string id, FormCollection queryStrings)
@@ -38,28 +42,32 @@ namespace Struct.PIM.UmbracoCommerce.Connector.SectionTree
 
             if (id == Constants.System.Root.ToInvariantString())
             {
-                nodes.Add(
-                    CreateTreeNode(
-                        "stores",
-                        "-1",
-                        queryStrings,
-                        "Stores",
-                        "pim-icon pim-icon-store",
-                        false,
-                        this.GetRoutePath("stores", "index")
-                    )
-                );
-                nodes.Add(
-                    CreateTreeNode(
-                        "data-models",
-                        "-1",
-                        queryStrings,
-                        "Data models",
-                        "pim-icon pim-icon-3d-model",
-                        false,
-                        this.SectionAlias + "/" + this.TreeAlias + "/data-models"
-                    )
-                );
+                if (!string.IsNullOrEmpty(_settingsFacade.GetIntegrationSettings()?.Setup?.PimApiUrl))
+                {
+                    nodes.Add(
+                        CreateTreeNode(
+                            "stores",
+                            "-1",
+                            queryStrings,
+                            "Stores",
+                            "pim-icon pim-icon-store",
+                            false,
+                            this.GetRoutePath("stores", "index")
+                        )
+                    );
+                    nodes.Add(
+                        CreateTreeNode(
+                            "data-models",
+                            "-1",
+                            queryStrings,
+                            "Data models",
+                            "pim-icon pim-icon-3d-model",
+                            false,
+                            this.SectionAlias + "/" + this.TreeAlias + "/data-models"
+                        )
+                    );
+                }
+
                 nodes.Add(
                     CreateTreeNode(
                         "setup",

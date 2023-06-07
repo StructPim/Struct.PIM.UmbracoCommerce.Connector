@@ -88,6 +88,76 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card" style="margin-bottom:20px" ng-if="loaded">
+                            <div class="card-header">
+                                <h4 class="card-title">
+                                    Synchronization
+                                </h4>
+                            </div>
+                            <div class="card-body pim-form-layout">
+                                <div class="pim-form-layout__wrapper">
+                                    <div class="pim-form-layout__row">
+                                        <div class="pim-form-layout__column">
+                                            <div class="pim-el-wrap">
+                                                <label class="control-label">
+                                                    Catalogue <span class="red">*</span>
+                                                    <small class="pim-detail">Select the catalogue for this store</small>
+                                                </label>
+                                                <div class="controls controls-row">
+                                                    <selectize config="catalogueSelectizeConfig" ng-model="settings.Catalogue" options="productCatalogues" ng-required="true"></selectize>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pim-form-layout__column is-empty"></div>
+                                    </div>
+                                    <div class="pim-form-layout__row">
+                                        <div class="pim-form-layout__column">
+                                            <div class="pim-el-wrap">
+                                                <label class="control-label">
+                                                    Filter
+                                                    <small class="pim-detail">Only products with at least one of the chosen attribute values will be available for this store</small>
+                                                </label>
+                                                <div class="controls controls-row">
+                                                    <div class="flex mb1" style="width:100%;">
+                                                        <div class="flex" style="flex-wrap: wrap;">
+                                                            <div class="input--half" style="">
+                                                                <div style="margin-right:20px; margin-bottom:20px;">
+                                                                    <div class="pim-el-wrap__header">
+                                                                        <div class="pim-el-wrap__fields pim-el-wrap__fields--left">
+                                                                            <span class="pim-el-wrap__field">
+                                                                                <span title="Prefix">Attribute</span>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <selectize ng-change="attributechange()" ng-model="settings.FilterAttributeUid" ng-required="true" options="filterAttributes" config="filterAttributeConfig"></selectize>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="input--half" style="">
+                                                                <div style="margin-right:20px; margin-bottom:20px;">
+                                                                    <div class="pim-el-wrap__header">
+                                                                        <div class="pim-el-wrap__fields pim-el-wrap__fields--left">
+                                                                            <span class="pim-el-wrap__field">
+                                                                                <span title="Prefix">AttributeValue</span>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div>
+                                                                        <selectize ng-model="settings.FilterAttributeGlobalListValueKeys" ng-required="true" options="filterAttributeValueOptions" config="filterAttributeValueConfig"></selectize>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

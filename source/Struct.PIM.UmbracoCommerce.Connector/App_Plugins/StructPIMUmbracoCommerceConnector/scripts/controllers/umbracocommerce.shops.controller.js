@@ -23,7 +23,9 @@ app.controller("umbracocommerce.shops.controller",
                             $scope.languages = response.data;
 
                             _.each($scope.commerceSettings.GeneralSettings.ShopSettings, function (d) {
-                                d.LanguageName = _.where($scope.languages, { Id: d.LanguageId })[0].Name;
+                                if (d.LanguageId) {
+                                    d.LanguageName = _.where($scope.languages, { Id: d.LanguageId })[0].Name;
+                                }
                             });
                         },
                         function (response) {

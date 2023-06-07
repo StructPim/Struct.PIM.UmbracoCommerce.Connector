@@ -25,7 +25,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             var thisAttribute = _pimApiHelper.GetPimAttribute(Guid.Parse(attributeUids[0]));
             var targetAttributeUid = attributeUids.Last();
 
-            var fieldUid = _pimApiHelper.GetAliasPath(rootAttribute, string.Empty, Guid.Parse(targetAttributeUid), language.CultureCode, true, rootAttribute is FixedListAttribute, true);
+            var fieldUid = GetAliasPath(rootAttribute, string.Empty, Guid.Parse(targetAttributeUid), language.CultureCode, true, rootAttribute is FixedListAttribute, true);
             var fieldAlias = fieldUid.Split(".").ToList();
             var alias = fieldAlias.First().Split("_").First();
             if (entityValue.Values.TryGetValue(alias, out dynamic values))
@@ -128,7 +128,6 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                 var data = alias.Split("_");
                 if (data.Length == 3)
                 {
-
                     if (values.TryGetValue(data[0], out var value))
                     {
                         if (value == null)
@@ -281,6 +280,61 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
 
 
             throw new Exception("Mapping not found for product");
+        }
+
+        public string GetAliasPath(Api.Models.Attribute.Attribute attribute, string pathUserFriendly, Guid targetAttributeUid, string? language, bool allLevels, bool previousIsFixedList, bool showLanguageAndSegmentAllLevels)
+        {
+            var delimiter = string.IsNullOrEmpty(pathUserFriendly) ? string.Empty : ".";
+            var attributeLanguage = language;
+            if (!attribute.Localized)
+            {
+                attributeLanguage = null;
+            }
+            string segmentUid = null;
+            if (attribute.DimensionUid != null)
+            {
+                segmentUid = attribute.DimensionUid.ToString();
+            }
+            var languageSegment = $"_{attributeLanguage ?? "NA"}_{segmentUid?.ToString() ?? "NA"}";
+
+            if (attribute is FixedListAttribute fixedListAttribute)
+            {
+                if (attribute.Uid == targetAttributeUid)
+                    return pathUserFriendly + delimiter + attribute.Alias;
+
+                var path = GetAliasPath(fixedListAttribute.ReferencedAttribute, pathUserFriendly + delimiter + fixedListAttribute.Alias + (showLanguageAndSegmentAllLevels ? languageSegment : string.Empty), targetAttributeUid, language, allLevels, true, showLanguageAndSegmentAllLevels);
+
+                if (!string.IsNullOrEmpty(path))
+                {
+                    return path;
+                }
+            }
+            else if (attribute is ComplexAttribute complexAttribute)
+            {
+                if (attribute.Uid == targetAttributeUid)
+                    return pathUserFriendly + delimiter + attribute.Alias;
+
+                foreach (var subAttribute in complexAttribute.SubAttributes)
+                {
+                    var path = GetAliasPath(subAttribute, allLevels && !previousIsFixedList ? pathUserFriendly + delimiter + complexAttribute.Alias + (showLanguageAndSegmentAllLevels ? languageSegment : string.Empty) : pathUserFriendly, targetAttributeUid, language, allLevels, false, showLanguageAndSegmentAllLevels);
+
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        return path;
+                    }
+
+                }
+            }
+            else
+            {
+                if (attribute.Uid == targetAttributeUid)
+                {
+                    return pathUserFriendly + delimiter + attribute.Alias + languageSegment;
+                }
+                return string.Empty;
+            }
+
+            return string.Empty;
         }
     }
 }

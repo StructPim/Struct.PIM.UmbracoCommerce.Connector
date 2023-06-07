@@ -107,6 +107,8 @@
     <!-- Remove RazorCompileOnBuild and RazorCompileOnPublish when not using ModelsMode InMemoryAuto -->
     <RazorCompileOnBuild>false</RazorCompileOnBuild>
     <RazorCompileOnPublish>false</RazorCompileOnPublish>
+    <AssemblyVersion>1.0.8.100</AssemblyVersion>
+    <FileVersion>1.0.8.100</FileVersion>
   </PropertyGroup>
   
 </Project>

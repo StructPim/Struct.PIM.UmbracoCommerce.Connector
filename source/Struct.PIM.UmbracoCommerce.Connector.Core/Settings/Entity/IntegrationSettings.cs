@@ -71,6 +71,11 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Settings.Entity
         public string StockAttributeUid { get; set; }
 
         public List<PriceInfo> PriceMapping { get; set; } = new List<PriceInfo>();
+
+        public string FilterAttributeUid { get; set; }
+        public List<string> FilterAttributeGlobalListValueKeys { get; set; }
+
+        public Guid? Catalogue { get; set; }
     }
 
     public class PriceInfo

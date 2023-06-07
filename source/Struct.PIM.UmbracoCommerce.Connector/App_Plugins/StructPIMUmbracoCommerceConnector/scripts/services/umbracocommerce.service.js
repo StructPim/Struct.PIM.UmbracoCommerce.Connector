@@ -4,14 +4,20 @@
             getIntegrationSettings: function () {
                 return $http.get("backoffice/structpimumbracocommerce/GetIntegrationSettings");
             },
-            getAttributes: function (type) {
-                return $http.get("backoffice/structpimumbracocommerce/GetAttributes?type=" + type);
+            getAttributes: function (type, attributeType) {
+                return $http.get("backoffice/structpimumbracocommerce/GetAttributes?type=" + type + "&attributetype=" + attributeType);
+            },
+            getFilterAttributeValues: function (filter) {
+                return $http.get("backoffice/structpimumbracocommerce/GetFilterAttributeValues?filter=" + filter);
             },
             getAttributeScopes: function () {
                 return $http.get("backoffice/structpimumbracocommerce/GetAttributeScopes");
             },
             getDimensions: function () {
                 return $http.get("backoffice/structpimumbracocommerce/GetDimensions");
+            },
+            getCatalogues: function () {
+                return $http.get("backoffice/structpimumbracocommerce/GetCatalogues");
             },
             getLanguages: function () {
                 return $http.get("backoffice/structpimumbracocommerce/GetLanguages");
