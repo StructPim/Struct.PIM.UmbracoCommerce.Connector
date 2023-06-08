@@ -1,4 +1,5 @@
 ﻿using Struct.PIM.Api.Models.Attribute;
+using Struct.PIM.Api.Models.DataConfiguration;
 using Struct.PIM.Api.Models.GlobalList;
 using Struct.PIM.Api.Models.Language;
 using Struct.PIM.Api.Models.Product;
@@ -71,35 +72,59 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
         {
             var attributes = GetPimAttributes();
 
-            //var productAttributeUids = PIMClient().ProductStructures.GetProductStructures()
-            //    .SelectMany(x => x.ProductConfiguration.Tabs?
-            //        .SelectMany(y => (y as DynamicTabSetup)?.Sections?
-            //            .SelectMany(z => (z as DynamicSectionSetup)?.Properties?
-            //                .Select(n => (n as AttributeSetup)?.AttributeUid))))?.ToHashSet();
+            var tabSetups = PIMClient().ProductStructures.GetProductStructures().Where(x => x.ProductConfiguration.Tabs?.Any() ?? false).SelectMany(x => x.ProductConfiguration.Tabs).ToList();
+            var productAttributeUids = GetAttributesFromConfigurationTabs(tabSetups);
 
-            //if(productAttributeUids?.Any() ?? false)
-            //{
-            //    attributes = attributes.Where(x => productAttributeUids.Contains(x.Uid)).ToList();
-            //}
+            if (productAttributeUids?.Any() ?? false)
+            {
+                attributes = attributes.Where(x => productAttributeUids.Contains(x.Uid)).ToList();
+            }
 
             var mappedAttributes = Map(attributes);
             return mappedAttributes;
+        }
+
+        public List<Guid> GetAttributesFromConfigurationTabs(List<Api.Models.DataConfiguration.TabSetup> tabSetups)
+        {
+            var attributes = new List<Guid>();
+
+            foreach(var tab in tabSetups)
+            {
+                var dynamicTab = tab as DynamicTabSetup;
+                if(dynamicTab?.Sections?.Any() ?? false)
+                {
+                    foreach(var section in dynamicTab.Sections)
+                    {
+                        var dynamicSection = section as DynamicSectionSetup;
+
+                        if(dynamicSection?.Properties?.Any() ?? false)
+                        {
+                            foreach(var property in dynamicSection.Properties)
+                            {
+                                var dynamicProperty = property as AttributeSetup;
+
+                                if (dynamicProperty != null)
+                                    attributes.Add(dynamicProperty.AttributeUid);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            return attributes;
         }
 
         public List<PimAttribute> GetAttributeWithVariantReference()
         {
             var attributes = GetPimAttributes();
 
-            //var variantAttributeUids = PIMClient().ProductStructures.GetProductStructures()
-            //    .SelectMany(x => x.VariantConfiguration.Tabs?
-            //        .SelectMany(y => (y as DynamicTabSetup)?.Sections?
-            //            .SelectMany(z => (z as DynamicSectionSetup)?.Properties?
-            //                .Select(n => (n as AttributeSetup)?.AttributeUid))))?.ToHashSet();
+            var tabSetups = PIMClient().ProductStructures.GetProductStructures().Where(x => x.HasVariants && (x.VariantConfiguration.Tabs?.Any() ?? false)).SelectMany(x => x.VariantConfiguration.Tabs).ToList();
+            var variantAttributeUids = GetAttributesFromConfigurationTabs(tabSetups);
 
-            //if (variantAttributeUids?.Any() ?? false)
-            //{
-            //    attributes = attributes.Where(x => variantAttributeUids.Contains(x.Uid)).ToList();
-            //}
+            if (variantAttributeUids?.Any() ?? false)
+            {
+                attributes = attributes.Where(x => variantAttributeUids.Contains(x.Uid)).ToList();
+            }
 
             var mappedAttributes = Map(attributes);
             return mappedAttributes;

@@ -531,17 +531,23 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
             if (attributes?.Any() ?? false)
             {
                 var filters = new List<FieldFilterModel>();
+                var allowedVariants = new List<List<string>>();
 
                 foreach (var attr in attributes)
                 {
+                    var allowedVariantsByAttribute = new List<List<string>>();
+
                     foreach (var filterVariantIds in attr.Value)
                     {
-                        foreach (var variantId in filterVariantIds.Split(";"))
-                        {
-                            filters.Add(new FieldFilterModel { FieldUid = "Id", FilterValue = variantId, QueryOperator = QueryOperator.Equals });
-                        }
+                        allowedVariantsByAttribute.Add(filterVariantIds.Split(";").ToList());
                     }
 
+                    allowedVariants.Add(allowedVariantsByAttribute.SelectMany(x => x).Distinct().ToList());
+                }
+
+                foreach(var variantId in allowedVariants.IntersectAll())
+                {
+                    filters.Add(new FieldFilterModel { FieldUid = "Id", FilterValue = variantId, QueryOperator = QueryOperator.Equals });
                 }
 
                 queryModel.SubQueries.Add(
@@ -677,15 +683,16 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                                     (
                                         new AttributeName
                                         (
-                                            attribute.Alias.ToLower(),
+                                            attribute.Alias,
                                             attributeName
                                         ),
                                         new AttributeValue
                                         (
                                             Guid.NewGuid().ToString(),
-                                            value?.ToLower())
+                                            value
                                         )
-                                    );
+                                    )
+                                );
                             }
                         }
                     }

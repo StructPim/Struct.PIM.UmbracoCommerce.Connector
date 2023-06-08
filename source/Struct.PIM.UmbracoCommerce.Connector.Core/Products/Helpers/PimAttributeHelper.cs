@@ -18,11 +18,11 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
         internal PimAttributeValueDTO GetValueForAttribute(string attributeUid, HasAttributeValues entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Api.Models.Attribute.Attribute rootAttribute = null)
         {
             var attributeUids = attributeUid.Split(".");
+            var thisAttribute = _pimApiHelper.GetPimAttribute(Guid.Parse(attributeUids[0]));
             if (rootAttribute == null)
             {
-                rootAttribute = _pimApiHelper.GetPimAttribute(Guid.Parse(attributeUids[0]));
+                rootAttribute = thisAttribute;
             }
-            var thisAttribute = _pimApiHelper.GetPimAttribute(Guid.Parse(attributeUids[0]));
             var targetAttributeUid = attributeUids.Last();
 
             var fieldUid = GetAliasPath(rootAttribute, string.Empty, Guid.Parse(targetAttributeUid), language.CultureCode, true, rootAttribute is FixedListAttribute, true);

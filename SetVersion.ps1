@@ -60,7 +60,7 @@ function Update-NuspecVersion
   $threeletterversion = [string]::Join(".",$arr);
   
   $NewPackageVersion = '<version>' + $threeletterversion + '</version>';
-  $coreDependency = '<dependency id="Struct.PIM.UmbracoCommerce.Connector.Core" version="[' + $threeletterversion + ']" />';
+  $coreDependency = '<dependency id="Struct.PIM.UmbracoCommerce.Connector.Core" version="[' + $threeletterversion + ']" exclude="Build,Analyzers" />';
   
   foreach ($o in $input) 
   {
@@ -69,7 +69,7 @@ function Update-NuspecVersion
 
      Get-Content $o.FullName -encoding utf8 |
 		%{$_ -replace '<version>[0-9]+(\.([0-9]+|\*)){1,3}</version>', $NewPackageVersion }  |
-		%{$_ -replace '<dependency id="Struct.PIM.UmbracoCommerce.Connector.Core" version="[[0-9]+(\.([0-9]+|\*)){1,3}]" />', $coreDependency }  |
+		%{$_ -replace '<dependency id="Struct.PIM.UmbracoCommerce.Connector.Core" version="[[0-9]+(\.([0-9]+|\*)){1,3}]" exclude="Build,Analyzers" />', $coreDependency }  |
         Set-Content $TmpFile -encoding utf8
     
     move-item $TmpFile $o.FullName -force
