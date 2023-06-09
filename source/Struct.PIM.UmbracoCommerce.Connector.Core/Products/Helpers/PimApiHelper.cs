@@ -38,6 +38,18 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             return new PIM.Api.Client.StructPIMApiClient(integrationSettings.Setup.PimApiUrl, integrationSettings.Setup.PimApiKey);
         }
 
+        public bool IsValid()
+        {
+            try
+            {
+                return GetLanguages().Any();
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public Dictionary<Guid, Api.Models.Attribute.Attribute> GetAttributes()
         {
             if(_attributes.Value == null)

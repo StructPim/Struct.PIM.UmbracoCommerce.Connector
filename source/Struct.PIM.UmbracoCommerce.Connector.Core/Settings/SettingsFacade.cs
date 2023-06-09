@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Struct.PIM.ShopifyConnector.Settings.Entity;
+using Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Settings.Entity;
 using Umbraco.Cms.Infrastructure.Scoping;
 using Umbraco.Commerce.Core.Services;
@@ -161,6 +162,11 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Settings
                     return integrationSettings;
                 }
             }
+        }
+
+        public bool IsSetupValid()
+        {
+            return new PimApiHelper(this).IsValid();
         }
 
         public void SaveGeneralSettings(GeneralSettings editorModel, Guid shopSettingsUid)

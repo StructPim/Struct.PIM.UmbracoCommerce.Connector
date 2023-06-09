@@ -39,6 +39,9 @@
             },
             syncProductAttributes: function () {
                 return $http.post("backoffice/structpimumbracocommerce/SyncProductAttributes", {});
+            },
+            isSetupValid: function () {
+                return $http.get("backoffice/structpimumbracocommerce/IsSetupValid");
             }
         };
     });

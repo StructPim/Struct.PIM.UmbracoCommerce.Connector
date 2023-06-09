@@ -34,11 +34,21 @@
         <div class="pim-editor-container pim-panel-body pim-scrollable row-fluid" auto-scale="1">
 
             <struct-load-indicator ng-show="loaded == false"></struct-load-indicator>
-            <div class="form-horizontal pim-pane">
-
-                <div class="pim-editor-sub-header" pim-sticky-bar="" scrollable-container=".pim-editor-container">
-                    
+            <div class="form-horizontal pim-pane" ng-if="!isValid">
+                <div class="card">
+                    <div class="card-body pim-form-layout">
+                        <div class="pim-form-layout__wrapper">
+                            <div class="pim-form-layout__row">
+                                <div class="pim-form-layout__column text-error">
+                                    Setup connection to StructPIM through <a class="underline" href="#/settings/structpimsettings/setup">Setup</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
+
+            <div class="form-horizontal pim-pane">
                 <div class="pim-table" ng-show="loaded == true">
                     <div class="pim-table-head">
                         <div class="pim-table-row">

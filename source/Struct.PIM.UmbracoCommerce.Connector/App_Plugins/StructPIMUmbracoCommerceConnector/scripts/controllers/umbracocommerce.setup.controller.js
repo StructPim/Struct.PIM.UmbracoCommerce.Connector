@@ -30,8 +30,20 @@ app.controller("umbracocommerce.setup.controller",
                 function (response) {
                     $scope.loaded = true;
                     structPimUmbracoHelper.handleError(response);
-                });      
+                });
 
+            umbracoCommerceService.isSetupValid()
+                .then(function (response) {
+                    $scope.isValid = response.data;
+                    $scope.loaded = true;
+
+                    if ($scope.isValid) {
+                        $scope.loadData();
+                    }
+                });
+        };
+
+        $scope.loadData = function () {
             umbracoCommerceService.getLanguages()
                 .then(function (response) {
                     $scope.languages = response.data;
@@ -39,20 +51,20 @@ app.controller("umbracocommerce.setup.controller",
                 function (response) {
                     structPimUmbracoHelper.handleError(response);
                 });    
-        };
+        }
 
         $scope.saveSetup = function () {
             umbracoCommerceService.saveSetup($scope.commerceSettings.Setup)
                 .then(function (response) {
                     structPimUmbracoHelper.setSuccessNotification("Setup has been updated");
 
-                    umbracoCommerceService.getLanguages()
+                    umbracoCommerceService.isSetupValid()
                         .then(function (response) {
-                            $scope.languages = response.data;
-                        },
-                        function (response) {
-                            structPimUmbracoHelper.handleError(response);
-                        });   
+                            $scope.isValid = response.data;
+                            if ($scope.isValid) {
+                                $scope.loadData();
+                            }
+                        });
                 },
                 function (response) {
                     structPimUmbracoHelper.handleError(response);

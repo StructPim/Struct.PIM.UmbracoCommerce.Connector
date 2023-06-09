@@ -42,31 +42,28 @@ namespace Struct.PIM.UmbracoCommerce.Connector.SectionTree
 
             if (id == Constants.System.Root.ToInvariantString())
             {
-                if (!string.IsNullOrEmpty(_settingsFacade.GetIntegrationSettings()?.Setup?.PimApiUrl))
-                {
-                    nodes.Add(
-                        CreateTreeNode(
-                            "stores",
-                            "-1",
-                            queryStrings,
-                            "Stores",
-                            "pim-icon pim-icon-store",
-                            false,
-                            this.GetRoutePath("stores", "index")
-                        )
-                    );
-                    nodes.Add(
-                        CreateTreeNode(
-                            "data-models",
-                            "-1",
-                            queryStrings,
-                            "Data models",
-                            "pim-icon pim-icon-3d-model",
-                            false,
-                            this.SectionAlias + "/" + this.TreeAlias + "/data-models"
-                        )
-                    );
-                }
+                nodes.Add(
+                    CreateTreeNode(
+                        "stores",
+                        "-1",
+                        queryStrings,
+                        "Stores",
+                        "pim-icon pim-icon-store",
+                        false,
+                        this.GetRoutePath("stores", "index")
+                    )
+                );
+                nodes.Add(
+                    CreateTreeNode(
+                        "data-models",
+                        "-1",
+                        queryStrings,
+                        "Data models",
+                        "pim-icon pim-icon-3d-model",
+                        false,
+                        this.SectionAlias + "/" + this.TreeAlias + "/data-models"
+                    )
+                );
 
                 nodes.Add(
                     CreateTreeNode(

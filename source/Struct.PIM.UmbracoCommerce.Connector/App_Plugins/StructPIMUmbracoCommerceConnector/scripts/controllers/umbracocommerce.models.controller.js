@@ -8,6 +8,7 @@ app.controller("umbracocommerce.models.controller",
         $scope.pimVariantAttributes = [];
         $scope.pimProductAttributes = [];
         $scope.pimScopes = [];
+        $scope.isValid = true;
         
         $scope.setup = {
             overlay: { show: false, model: {}, view: "" }
@@ -37,6 +38,16 @@ app.controller("umbracocommerce.models.controller",
         $scope.init = function () {
             structPimUmbracoHelper.updateTree(["data-models"]);
 
+            umbracoCommerceService.isSetupValid()
+                .then(function (response) {
+                    $scope.isValid = response.data;
+                    if ($scope.isValid) {
+                        $scope.loadData();
+                    }
+                });
+        };
+
+        $scope.loadData = function () {
             umbracoCommerceService.getAttributes('Product', '')
                 .then(function (response) {
                     $scope.pimProductAttributes = response.data;
@@ -53,7 +64,7 @@ app.controller("umbracocommerce.models.controller",
                                 function (response) {
                                     $scope.loaded = true;
                                     structPimUmbracoHelper.handleError(response);
-                                });                            
+                                });
                         },
                         function (response) {
                             $scope.loaded = true;
@@ -63,7 +74,7 @@ app.controller("umbracocommerce.models.controller",
                 function (response) {
                     $scope.loaded = true;
                     structPimUmbracoHelper.handleError(response);
-                });          
+                });
 
             umbracoCommerceService.getAttributeScopes()
                 .then(function (response) {
@@ -71,8 +82,8 @@ app.controller("umbracocommerce.models.controller",
                 },
                 function (response) {
                     structPimUmbracoHelper.handleError(response);
-                });    
-        };
+                });  
+        }
 
         $scope.saveProductMapping = function () {
             umbracoCommerceService.saveProductMapping($scope.commerceSettings.ProductMapping)

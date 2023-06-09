@@ -128,5 +128,12 @@ namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins.ApiControllers
             var attributeValues = _productService.GetGlobalListAttributeValues(Guid.Parse(filter));
             return Ok(attributeValues);
         }
+
+        [HttpGet("IsSetupValid")]
+        public IActionResult IsSetupValid()
+        {
+            return Ok(_settingsFacade.IsSetupValid());
+        }
+
     }
 }

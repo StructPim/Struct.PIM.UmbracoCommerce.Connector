@@ -45,107 +45,109 @@
             <div class="tab-content form-horizontal">
 
                 <div id="pimSettings" class="pim-tab-pane tab-pane" ng-class="{'active': controlModel.activeTab === 'pimSettings'}">
-                    <div class="pim-pane">
-                        <div class="card" style="margin-bottom:20px" ng-if="loaded">
-                            <div class="card-header">
-                                <h4 class="card-title">
-                                    Localization
-                                </h4>
-                            </div>
-                            <div class="card-body pim-form-layout">
-                                <div class="pim-form-layout__wrapper">
-                                    <div class="pim-form-layout__row">
-                                        <div class="pim-form-layout__column">
-                                            <div class="pim-el-wrap">
-                                                <label class="control-label">
-                                                    Language <span class="red">*</span>
-                                                    <small class="pim-detail">Select the language for this Umbraco Commerce store</small>
-                                                </label>
-                                                <div class="controls controls-row">
-                                                    <selectize config="languageSelectizeConfig" ng-model="settings.LanguageId" options="languages" ng-required="true"></selectize>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="pim-form-layout__column is-empty"></div>
-                                    </div>
-                                    <div class="pim-form-layout__row">
-                                        <div class="pim-form-layout__column">
-                                            <div class="pim-el-wrap">
-                                                <label class="control-label">
-                                                    Dimensions <span class="red">*</span>
-                                                    <small class="pim-detail">Select the dimension for this Umbraco Commerce store</small>
-                                                </label>
-                                                <div class="controls controls-row">
-                                                    <div ng-repeat="dimension in dimensions">
-                                                        <span class="pim-el-wrap__field pim-el-wrap__header" title="Prefix">{{dimension.Alias}}</span>
-                                                        <selectize config="dimensionSelectizeConfig" ng-model="settings.DimensionSettings[dimension.Uid]" options="dimension.Segments" ng-required="true"></selectize>
+                    <ng-form name="settingsForm">
+                        <div class="pim-pane">
+                            <div class="card" style="margin-bottom:20px" ng-if="loaded">
+                                <div class="card-header">
+                                    <h4 class="card-title">
+                                        Localization
+                                    </h4>
+                                </div>
+                                <div class="card-body pim-form-layout">
+                                    <div class="pim-form-layout__wrapper">
+                                        <div class="pim-form-layout__row">
+                                            <div class="pim-form-layout__column">
+                                                <div class="pim-el-wrap">
+                                                    <label class="control-label">
+                                                        Language <span class="red">*</span>
+                                                        <small class="pim-detail">Select the language for this Umbraco Commerce store</small>
+                                                    </label>
+                                                    <div class="controls controls-row">
+                                                        <selectize config="languageSelectizeConfig" ng-model="settings.LanguageId" options="languages" ng-required="true"></selectize>
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="pim-form-layout__column is-empty"></div>
                                         </div>
-                                        <div class="pim-form-layout__column is-empty"></div>
+                                        <div class="pim-form-layout__row">
+                                            <div class="pim-form-layout__column">
+                                                <div class="pim-el-wrap">
+                                                    <label class="control-label">
+                                                        Dimensions <span class="red">*</span>
+                                                        <small class="pim-detail">Select the dimension for this Umbraco Commerce store</small>
+                                                    </label>
+                                                    <div class="controls controls-row">
+                                                        <div ng-repeat="dimension in dimensions">
+                                                            <span class="pim-el-wrap__field pim-el-wrap__header" title="Prefix">{{dimension.Alias}}</span>
+                                                            <selectize config="dimensionSelectizeConfig" ng-model="settings.DimensionSettings[dimension.Uid]" options="dimension.Segments" ng-required="true"></selectize>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="pim-form-layout__column is-empty"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card" style="margin-bottom:20px" ng-if="loaded">
-                            <div class="card-header">
-                                <h4 class="card-title">
-                                    Synchronization
-                                </h4>
-                            </div>
-                            <div class="card-body pim-form-layout">
-                                <div class="pim-form-layout__wrapper">
-                                    <div class="pim-form-layout__row">
-                                        <div class="pim-form-layout__column">
-                                            <div class="pim-el-wrap">
-                                                <label class="control-label">
-                                                    Catalogue <span class="red">*</span>
-                                                    <small class="pim-detail">Select the catalogue for this store</small>
-                                                </label>
-                                                <div class="controls controls-row">
-                                                    <selectize config="catalogueSelectizeConfig" ng-model="settings.Catalogue" options="productCatalogues" ng-required="true"></selectize>
+                            <div class="card" style="margin-bottom:20px" ng-if="loaded">
+                                <div class="card-header">
+                                    <h4 class="card-title">
+                                        Synchronization
+                                    </h4>
+                                </div>
+                                <div class="card-body pim-form-layout">
+                                    <div class="pim-form-layout__wrapper">
+                                        <div class="pim-form-layout__row">
+                                            <div class="pim-form-layout__column">
+                                                <div class="pim-el-wrap">
+                                                    <label class="control-label">
+                                                        Catalogue <span class="red">*</span>
+                                                        <small class="pim-detail">Select the catalogue for this store</small>
+                                                    </label>
+                                                    <div class="controls controls-row">
+                                                        <selectize config="catalogueSelectizeConfig" ng-model="settings.Catalogue" options="productCatalogues" ng-required="true"></selectize>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <div class="pim-form-layout__column is-empty"></div>
                                         </div>
-                                        <div class="pim-form-layout__column is-empty"></div>
-                                    </div>
-                                    <div class="pim-form-layout__row">
-                                        <div class="pim-form-layout__column">
-                                            <div class="pim-el-wrap">
-                                                <label class="control-label">
-                                                    Filter
-                                                    <small class="pim-detail">Only products with at least one of the chosen attribute values will be available for this store</small>
-                                                </label>
-                                                <div class="controls controls-row">
-                                                    <div class="flex mb1" style="width:100%;">
-                                                        <div class="flex" style="flex-wrap: wrap;">
-                                                            <div class="input--half" style="">
-                                                                <div style="margin-right:20px; margin-bottom:20px;">
-                                                                    <div class="pim-el-wrap__header">
-                                                                        <div class="pim-el-wrap__fields pim-el-wrap__fields--left">
-                                                                            <span class="pim-el-wrap__field">
-                                                                                <span title="Prefix">Attribute</span>
-                                                                            </span>
+                                        <div class="pim-form-layout__row">
+                                            <div class="pim-form-layout__column">
+                                                <div class="pim-el-wrap">
+                                                    <label class="control-label">
+                                                        Filter
+                                                        <small class="pim-detail">Only products with at least one of the chosen attribute values will be available for this store</small>
+                                                    </label>
+                                                    <div class="controls controls-row">
+                                                        <div class="flex mb1" style="width:100%;">
+                                                            <div class="flex" style="flex-wrap: wrap;">
+                                                                <div class="input--half" style="">
+                                                                    <div style="margin-right:20px; margin-bottom:20px;">
+                                                                        <div class="pim-el-wrap__header">
+                                                                            <div class="pim-el-wrap__fields pim-el-wrap__fields--left">
+                                                                                <span class="pim-el-wrap__field">
+                                                                                    <span title="Prefix">Attribute</span>
+                                                                                </span>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div>
-                                                                        <selectize ng-change="attributechange()" ng-model="settings.FilterAttributeUid" ng-required="true" options="filterAttributes" config="filterAttributeConfig"></selectize>
+                                                                        <div>
+                                                                            <selectize ng-change="attributechange()" ng-model="settings.FilterAttributeUid" options="filterAttributes" config="filterAttributeConfig"></selectize>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="input--half" style="">
-                                                                <div style="margin-right:20px; margin-bottom:20px;">
-                                                                    <div class="pim-el-wrap__header">
-                                                                        <div class="pim-el-wrap__fields pim-el-wrap__fields--left">
-                                                                            <span class="pim-el-wrap__field">
-                                                                                <span title="Prefix">AttributeValue</span>
-                                                                            </span>
+                                                                <div class="input--half" style="">
+                                                                    <div style="margin-right:20px; margin-bottom:20px;">
+                                                                        <div class="pim-el-wrap__header">
+                                                                            <div class="pim-el-wrap__fields pim-el-wrap__fields--left">
+                                                                                <span class="pim-el-wrap__field">
+                                                                                    <span title="Prefix">AttributeValue</span>
+                                                                                </span>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
 
-                                                                    <div>
-                                                                        <selectize ng-model="settings.FilterAttributeGlobalListValueKeys" ng-required="true" options="filterAttributeValueOptions" config="filterAttributeValueConfig"></selectize>
+                                                                        <div>
+                                                                            <selectize ng-model="settings.FilterAttributeGlobalListValueKeys" ng-required="settings.FilterAttributeUid" options="filterAttributeValueOptions" config="filterAttributeValueConfig"></selectize>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -158,68 +160,72 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </ng-form>
                 </div>
 
                 <div id="pricingModel" class="pim-tab-pane tab-pane" ng-class="{'active': controlModel.activeTab === 'pricingModel'}">
-                    <div class="pim-pane">
-                        <div class="card" style="margin-bottom:20px" ng-if="loaded" ng-repeat="priceInfo in settings.PriceMapping">
-                            <div class="card-header">
-                                <h4 class="card-title">
-                                    Pricing
-                                    <small>Currency specific price for items</small>
-                                </h4>
-                            </div>
-                            <div class="card-body pim-form-layout">
-                                <div class="pim-form-layout__wrapper">
-                                    <div class="pim-form-layout__row">
-                                        <div class="pim-form-layout__column">
-                                            <div class="pim-el-wrap">
-                                                <label class="control-label">
-                                                    Price ({{priceInfo.Currency}})
-                                                </label>
-                                                <div class="controls controls-row">
-                                                    <selectize config="attributeConfig" ng-model="priceInfo.PriceAttributeUid" options="pimVariantAttributes"></selectize>
+                    <ng-form>
+                        <div class="pim-pane">
+                            <div class="card" style="margin-bottom:20px" ng-if="loaded" ng-repeat="priceInfo in settings.PriceMapping">
+                                <div class="card-header">
+                                    <h4 class="card-title">
+                                        Pricing
+                                        <small>Currency specific price for items</small>
+                                    </h4>
+                                </div>
+                                <div class="card-body pim-form-layout">
+                                    <div class="pim-form-layout__wrapper">
+                                        <div class="pim-form-layout__row">
+                                            <div class="pim-form-layout__column">
+                                                <div class="pim-el-wrap">
+                                                    <label class="control-label">
+                                                        Price ({{priceInfo.Currency}})
+                                                    </label>
+                                                    <div class="controls controls-row">
+                                                        <selectize config="attributeConfig" ng-model="priceInfo.PriceAttributeUid" options="pimVariantAttributes"></selectize>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <div class="pim-form-layout__column is-empty"></div>
                                         </div>
-                                        <div class="pim-form-layout__column is-empty"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </ng-form>
                 </div>
 
 
                 <div id="inventoryModel" class="pim-tab-pane tab-pane" ng-class="{'active': controlModel.activeTab === 'inventoryModel'}">
-                    <div class="pim-pane">
-                        <div class="card" style="margin-bottom:20px" ng-if="loaded">
-                            <div class="card-header">
-                                <h4 class="card-title">
-                                    Inventory
-                                </h4>
-                            </div>
-                            <div class="card-body pim-form-layout">
-                                <div class="pim-form-layout__wrapper">
-                                    <div class="pim-form-layout__row">
-                                        <div class="pim-form-layout__column">
-                                            <div class="pim-el-wrap">
-                                                <label class="control-label">
-                                                    Stock
-                                                    <small class="pim-detail">Stock available on variant in PIM</small>
-                                                </label>
-                                                <div class="controls controls-row">
-                                                    <selectize config="attributeConfig" ng-model="settings.StockAttributeUid" options="pimVariantAttributes"></selectize>
+                    <ng-form name="inventoryForm">
+                        <div class="pim-pane">
+                            <div class="card" style="margin-bottom:20px" ng-if="loaded">
+                                <div class="card-header">
+                                    <h4 class="card-title">
+                                        Inventory
+                                    </h4>
+                                </div>
+                                <div class="card-body pim-form-layout">
+                                    <div class="pim-form-layout__wrapper">
+                                        <div class="pim-form-layout__row">
+                                            <div class="pim-form-layout__column">
+                                                <div class="pim-el-wrap">
+                                                    <label class="control-label">
+                                                        Stock
+                                                        <small class="pim-detail">Stock available on variant in PIM</small>
+                                                    </label>
+                                                    <div class="controls controls-row">
+                                                        <selectize config="attributeConfig" ng-model="settings.StockAttributeUid" options="pimVariantAttributes"></selectize>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <div class="pim-form-layout__column is-empty"></div>
                                         </div>
-                                        <div class="pim-form-layout__column is-empty"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </ng-form>
                 </div>
             </div>
 
@@ -228,7 +234,7 @@
         <div class="pim-editor-drawer">
             <div class="pim-editor-drawer-content">
                 <div class="pim-editor-drawer-content__right-side">
-                    <button class="btn btn-success" ng-click="saveGeneralSettings(settings.Uid)">Save settings</button>
+                    <button class="btn btn-success" ng-disabled="settingsForm.$invalid || pricingForm.$invalid || inventoryForm.$invalid" ng-click="saveGeneralSettings(settings.Uid)">Save settings</button>
                 </div>
             </div>
         </div>

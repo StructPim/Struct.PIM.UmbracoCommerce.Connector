@@ -6,6 +6,7 @@ app.controller("umbracocommerce.shops.controller",
         $scope.loaded = false;
         $scope.languages = [];
         $scope.dimensions = [];
+        $scope.isValid = true;
 
         $scope.setup = {
             overlay: { show: false, model: {}, view: "" }
@@ -14,6 +15,16 @@ app.controller("umbracocommerce.shops.controller",
         $scope.init = function () {
             structPimUmbracoHelper.updateTree(["stores"]);
 
+            umbracoCommerceService.isSetupValid()
+                .then(function (response) {
+                    $scope.isValid = response.data;
+                    if ($scope.isValid) {
+                        $scope.loadData();
+                    } 
+                });
+        };
+
+        $scope.loadData = function () {
             umbracoCommerceService.getIntegrationSettings()
                 .then(function (response) {
                     $scope.commerceSettings = response.data;
@@ -46,7 +57,7 @@ app.controller("umbracocommerce.shops.controller",
                                         if (d.DimensionSettings && d.DimensionSettings[dimension.Uid]) {
                                             var dimensionSegmentUid = d.DimensionSettings[dimension.Uid];
                                             var dimensionSegment = _.where(dimension.Segments, { Uid: dimensionSegmentUid });
-                                            
+
                                             if (dimensionSegment.length > 0) {
                                                 dimensionText += dimension.Alias + ": " + dimensionSegment[0].Name + "<br>";
                                             }
@@ -60,14 +71,13 @@ app.controller("umbracocommerce.shops.controller",
                             structPimUmbracoHelper.handleError(response);
                         });
 
-
                     $scope.loaded = true;
                 },
                 function (response) {
                     $scope.loaded = true;
                     structPimUmbracoHelper.handleError(response);
                 });
-        };
+        }
 
         $scope.editShopSettings = function (settings) {
             $location.path("/settings/structpimsettings/store-edit/" + settings.Uid);
