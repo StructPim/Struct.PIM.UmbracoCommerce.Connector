@@ -3,6 +3,7 @@ using Struct.PIM.Api.Models.Attribute;
 using Struct.PIM.Api.Models.Language;
 using Struct.PIM.Api.Models.Shared;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity;
+using Attribute = Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity.Attribute;
 
 namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
 {
@@ -15,10 +16,37 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             _pimApiHelper = pimApiHelper;
         }
 
-        internal PimAttributeValueDTO GetValueForAttribute(string attributeUid, HasAttributeValues entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Api.Models.Attribute.Attribute rootAttribute = null)
+        internal decimal? GetDecimalValue(string attributeUid, HasAttributeValues entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Api.Models.Attribute.Attribute rootAttribute = null)
+        {
+            var value = GetValue(attributeUid, entityValue, language, dimensionSegmentData);
+            if (decimal.TryParse(value.Value, out decimal decimalValue))
+                return decimalValue;
+
+            return null;
+        }
+
+        internal bool? GetBoolValue(string attributeUid, HasAttributeValues entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Api.Models.Attribute.Attribute rootAttribute = null)
+        {
+            var value = GetValue(attributeUid, entityValue, language, dimensionSegmentData);
+            if (bool.TryParse(value.Value, out bool booleanValue))
+                return booleanValue;
+            
+            return null;
+        }
+
+        internal string GetStringValue(string attributeUid, HasAttributeValues entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Api.Models.Attribute.Attribute rootAttribute = null)
+        {
+            var value = GetValue(attributeUid, entityValue, language, dimensionSegmentData);
+            return value?.Value;
+        }
+
+        internal AttributeValue GetValue(string attributeUid, HasAttributeValues entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Api.Models.Attribute.Attribute rootAttribute = null)
         {
             var attributeUids = attributeUid.Split(".");
-            var thisAttribute = _pimApiHelper.GetPimAttribute(Guid.Parse(attributeUids[0]));
+            var attributes = _pimApiHelper.GetAttributes();
+            if (!attributes.TryGetValue(Guid.Parse(attributeUids[0]), out var thisAttribute))
+                return new AttributeValue();
+
             if (rootAttribute == null)
             {
                 rootAttribute = thisAttribute;
@@ -30,7 +58,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             var alias = fieldAlias.First().Split("_").First();
             if (entityValue.Values.TryGetValue(alias, out dynamic values))
             {
-                PimAttributeValueDTO value = new PimAttributeValueDTO();
+                AttributeValue value = new AttributeValue();
                 if (values != null)
                 {
                     if (fieldAlias.Count > 1)
@@ -56,7 +84,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             }
         }
 
-        internal string RenderAttribute(Api.Models.Attribute.Attribute rootAttribute, Api.Models.Attribute.Attribute attribute, HasAttributeValues variantValue, IEnumerable<PimAttribute> paths, LanguageModel language, string rootPath, Dictionary<string, Tuple<string, string>> dimensionSegmentData)
+        internal string RenderAttribute(Api.Models.Attribute.Attribute rootAttribute, Api.Models.Attribute.Attribute attribute, HasAttributeValues variantValue, IEnumerable<Attribute> paths, LanguageModel language, string rootPath, Dictionary<string, Tuple<string, string>> dimensionSegmentData)
         {
             string renderValue = string.Empty;
             if (attribute is ComplexAttribute complexAttribute)
@@ -78,8 +106,8 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                             if (foundUid != null)
                             {
 
-                                PimAttributeValueDTO value = GetValueForAttribute(foundUid.Uid, variantValue, language, dimensionSegmentData, rootAttribute);
-                                renderValue += value.Value + " ";
+                                var value = GetValue(foundUid.Uid, variantValue, language, dimensionSegmentData, rootAttribute);
+                                renderValue += value?.Value + " ";
                             }
                         }
                     }
@@ -89,8 +117,8 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                     foreach (var path in paths)
                     {
                         //Todo need some more
-                        PimAttributeValueDTO value = GetValueForAttribute(path.Uid, variantValue, language, dimensionSegmentData, rootAttribute);
-                        renderValue += value.Value + " ";
+                        var value = GetValue(path.Uid, variantValue, language, dimensionSegmentData, rootAttribute);
+                        renderValue += value?.Value + " ";
                     }
                 }
 
@@ -107,21 +135,21 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                     foreach (var path in paths)
                     {
                         //Todo need some more
-                        PimAttributeValueDTO value = GetValueForAttribute(path.Uid, variantValue, language, dimensionSegmentData, rootAttribute);
-                        renderValue += value.Value + " ";
+                        var value = GetValue(path.Uid, variantValue, language, dimensionSegmentData, rootAttribute);
+                        renderValue += value?.Value + " ";
                     }
                 }
             }
             else
             {
-                PimAttributeValueDTO value = GetValueForAttribute(attribute.Uid.ToString(), variantValue, language, dimensionSegmentData, rootAttribute);
-                renderValue = value.Value;
+                var value = GetValue(attribute.Uid.ToString(), variantValue, language, dimensionSegmentData, rootAttribute);
+                renderValue = value?.Value;
             }
 
             return renderValue;
         }
 
-        private PimAttributeValueDTO FindValue(string alias, Dictionary<string, object> values, List<string> fieldAlias, string cultureCode, Dictionary<string, Tuple<string, string>> dimensionSegmentData)
+        private AttributeValue FindValue(string alias, Dictionary<string, object> values, List<string> fieldAlias, string cultureCode, Dictionary<string, Tuple<string, string>> dimensionSegmentData)
         {
             if (fieldAlias.Count > 1)
             {
@@ -132,7 +160,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                     {
                         if (value == null)
                         {
-                            return new PimAttributeValueDTO();
+                            return new AttributeValue();
                         }
                         // valueIsLocalized and valueIsSegmentedBydimensionUid
                         if (data[1] != "NA" && data[2] != "NA")
@@ -192,7 +220,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                     {
                         if (value == null)
                         {
-                            return new PimAttributeValueDTO();
+                            return new AttributeValue();
                         }
                         fieldAlias.RemoveAt(0);
                         var valuesDictionary = ((JObject)value).ToObject<Dictionary<string, object>>();
@@ -215,7 +243,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                         if (dimensionSegmentData.TryGetValue(data[2].ToLower(), out var datas))
                         {
                             var valueSegmentedBydimensionUid = ((JArray)value).Children<JObject>().FirstOrDefault(o => o["CultureCode"]?.ToString() == cultureCode && o["Dimension"]?.ToString() == datas.Item1 && o["Segment"]?.ToString() == datas.Item2)?.GetValue("Data")?.ToString();
-                            return new PimAttributeValueDTO
+                            return new AttributeValue
                             {
                                 Value = valueSegmentedBydimensionUid,
                                 Alias = Guid.NewGuid().ToString(),
@@ -223,7 +251,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                         }
                         else
                         {
-                            return new PimAttributeValueDTO
+                            return new AttributeValue
                             {
                                 Value = null,
                                 Alias = Guid.NewGuid().ToString(),
@@ -234,7 +262,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                     else if (data[1] != "NA")
                     {
                         var valueLocalized = ((JArray)value).Children<JObject>().FirstOrDefault(o => o["CultureCode"]?.ToString() == cultureCode)?.GetValue("Data")?.ToString();
-                        return new PimAttributeValueDTO
+                        return new AttributeValue
                         {
                             Value = valueLocalized,
                             Alias = Guid.NewGuid().ToString(),
@@ -246,7 +274,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                         if (dimensionSegmentData.TryGetValue(data[2].ToLower(), out var datas))
                         {
                             var valueSegmentedBydimensionUid = ((JArray)value).Children<JObject>().FirstOrDefault(o => o["Dimension"]?.ToString() == datas.Item1 && o["Segment"]?.ToString() == datas.Item2)?.GetValue("Data")?.ToString();
-                            return new PimAttributeValueDTO
+                            return new AttributeValue
                             {
                                 Value = valueSegmentedBydimensionUid,
                                 Alias = Guid.NewGuid().ToString(),
@@ -254,7 +282,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                         }
                         else
                         {
-                            return new PimAttributeValueDTO
+                            return new AttributeValue
                             {
                                 Value = null,
                                 Alias = Guid.NewGuid().ToString(),
@@ -265,7 +293,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                     //standard value
                     else
                     {
-                        return new PimAttributeValueDTO
+                        return new AttributeValue
                         {
                             Value = value?.ToString() ?? throw new Exception($"Error in data. value not found for alias {alias}"),
                             Alias = Guid.NewGuid().ToString(),

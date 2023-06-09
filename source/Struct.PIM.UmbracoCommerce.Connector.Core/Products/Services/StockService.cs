@@ -64,54 +64,55 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
 
         public void IncreaseStock(Guid storeId, string productReference, decimal increaseBy)
         {
-            //throw new NotImplementedException();
         }
 
         public void IncreaseStock(Guid storeId, string productReference, string productVariantReference, decimal increaseBy)
         {
-            //throw new NotImplementedException();
         }
 
         public void InvalidateStockCache(Guid storeId, string productReference, string productVariantReference)
         {
-            //throw new NotImplementedException();
         }
 
         public void InvalidateStockCache()
         {
-            //throw new NotImplementedException();
         }
 
         public void ReduceStock(Guid storeId, string productReference, decimal reduceBy)
         {
-            //throw new NotImplementedException();
         }
 
         public void ReduceStock(Guid storeId, string productReference, string productVariantReference, decimal reduceBy)
         {
-            //throw new NotImplementedException();
         }
 
         public void SetStock(Guid storeId, string productReference, decimal value)
         {
-            //throw new NotImplementedException();
         }
 
         public void SetStock(Guid storeId, string productReference, string productVariantReference, decimal value)
         {
-            //throw new NotImplementedException();
         }
 
         public bool TryGetStock(Guid storeId, string productReference, out decimal? stock)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(productReference))
+            {
+                stock = null;
+                return false;
+            }
+
+            if (!int.TryParse(productReference, out var productId))
+                throw new InvalidCastException("productReference must be integer");
+
+            return GetStock(storeId, productId, null, out stock);
         }
 
         public bool TryGetStock(Guid storeId, string productReference, string productVariantReference, out decimal? stock)
         {
             if (string.IsNullOrEmpty(productReference) && string.IsNullOrEmpty(productVariantReference))
             {
-                stock = default(decimal);
+                stock = null;
                 return false;
             }
 
@@ -138,37 +139,31 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
 
         public bool TryIncreaseStock(Guid storeId, string productReference, decimal increaseBy)
         {
-            //throw new NotImplementedException();
             return false;
         }
 
         public bool TryIncreaseStock(Guid storeId, string productReference, string productVariantReference, decimal increaseBy)
         {
-            //throw new NotImplementedException();
             return false;
         }
 
         public bool TryReduceStock(Guid storeId, string productReference, decimal reduceBy)
         {
-            //throw new NotImplementedException();
             return false;
         }
 
         public bool TryReduceStock(Guid storeId, string productReference, string productVariantReference, decimal reduceBy)
         {
-            //throw new NotImplementedException();
             return false;
         }
 
         public bool TrySetStock(Guid storeId, string productReference, decimal value)
         {
-            //throw new NotImplementedException();
             return false;
         }
 
         public bool TrySetStock(Guid storeId, string productReference, string productVariantReference, decimal value)
         {
-            //throw new NotImplementedException();
             return false;
         }
 
@@ -176,7 +171,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
         {
             var integrationSettings = _settingsFacade.GetIntegrationSettings();
 
-            stock = default(decimal);
+            stock = null;
             var language = _pimApiHelper.GetLanguage(null);
             var storeSetting = integrationSettings?.GeneralSettings?.ShopSettings?.Where(s => s.Uid == storeId).FirstOrDefault();
 
@@ -198,22 +193,17 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                 {
                     if (!string.IsNullOrEmpty(storeSetting?.StockAttributeUid))
                     {
-                        PimAttributeValueDTO value = _pimAttributeHelper.GetValueForAttribute(storeSetting?.StockAttributeUid, variantValue, language, dimensionSegmentData);
-                        if (value.Value != null)
+                        var value = _pimAttributeHelper.GetDecimalValue(storeSetting.StockAttributeUid, variantValue, language, dimensionSegmentData);
+                        if (value.HasValue)
                         {
-                            if (decimal.TryParse(value.Value, out decimal stockValue))
-                            {
-                                stock = stockValue;
-                                return true;
-                            }
+                            stock = value.Value;
+                            return true;
                         }
                         else
                         {
-                            stock = 0;
                             return false;
                         }
                     }
-
                 }
             }
             else
@@ -224,21 +214,17 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                 {
                     if (!string.IsNullOrEmpty(storeSetting?.StockAttributeUid))
                     {
-                        PimAttributeValueDTO value = _pimAttributeHelper.GetValueForAttribute(storeSetting?.StockAttributeUid, productValue, language, dimensionSegmentData);
-                        if (value.Value != null)
+                        var value = _pimAttributeHelper.GetDecimalValue(storeSetting.StockAttributeUid, productValue, language, dimensionSegmentData);
+                        if (value.HasValue)
                         {
-                            if (decimal.TryParse(value.Value, out decimal stockValue))
-                            {
-                                stock = stockValue;
-                                return true;
-                            }
+                            stock = value.Value;
+                            return true;
                         }
                         else
                         {
                             return false;
                         }
                     }
-
                 }
             }
             return false;

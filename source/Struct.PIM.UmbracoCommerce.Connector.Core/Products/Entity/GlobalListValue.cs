@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
 {
-    public class PimAttributeValueDTO
+    public class GlobalListValue
     {
-        public string Alias { get; set; } = string.Empty;   
+        public string Uid { get; set; } = string.Empty;   
         public string Value { get; set; } = string.Empty;
     }
 }

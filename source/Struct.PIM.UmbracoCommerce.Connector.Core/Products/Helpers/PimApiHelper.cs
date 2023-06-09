@@ -15,7 +15,12 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
     public class PimApiHelper
     {
         private readonly SettingsFacade _settingsFacade;
-
+        private AsyncLocal<Dictionary<Guid, Api.Models.Attribute.Attribute>> _attributes = new AsyncLocal<Dictionary<Guid, Api.Models.Attribute.Attribute>>();
+        private AsyncLocal<List<Api.Models.Attribute.AttributeScope>> _attributeScopes = new AsyncLocal<List<Api.Models.Attribute.AttributeScope>>();
+        private AsyncLocal<Dictionary<Guid, List<Guid>>> _attributesByScope = new AsyncLocal<Dictionary<Guid, List<Guid>>>();
+        private AsyncLocal<List<Api.Models.Dimension.DimensionModel>> _dimensions = new AsyncLocal<List<Api.Models.Dimension.DimensionModel>>();
+        private AsyncLocal<List<Api.Models.Language.LanguageModel>> _languages = new AsyncLocal<List<Api.Models.Language.LanguageModel>>();
+        
         public PimApiHelper(SettingsFacade settingsFacade)
         {
             _settingsFacade = settingsFacade;
@@ -33,44 +38,71 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             return new PIM.Api.Client.StructPIMApiClient(integrationSettings.Setup.PimApiUrl, integrationSettings.Setup.PimApiKey);
         }
 
-        public List<Api.Models.Attribute.Attribute> GetPimAttributes()
+        public Dictionary<Guid, Api.Models.Attribute.Attribute> GetAttributes()
         {
-            var attributes = PIMClient().Attributes.GetAttributes();
+            if(_attributes.Value == null)
+                _attributes.Value = PIMClient().Attributes.GetAttributes().ToDictionary(x => x.Uid);
 
-            return attributes;
+            return _attributes.Value;
         }
+
+        internal List<Api.Models.Attribute.Attribute> GetAttributes(List<Guid> attributeUids)
+        {
+            var attributes = GetAttributes();
+            var matchedAttributes = new List<Api.Models.Attribute.Attribute>();
+
+            foreach(var uid in attributeUids)
+            {
+                if(attributes.TryGetValue(uid, out var attr))
+                    matchedAttributes.Add(attr);
+            }
+
+            return matchedAttributes;
+        }
+
+        internal Api.Models.Attribute.Attribute? GetAttribute(Guid attributeUid)
+        {
+            var attributes = GetAttributes();
+
+            if (attributes.TryGetValue(attributeUid, out var attribute))
+                return attribute;
+
+            return null;
+        }
+
 
         public List<Api.Models.Language.LanguageModel> GetLanguages()
         {
-            var languages = PIMClient().Languages.GetLanguages();
+            if(_languages.Value == null)
+                _languages.Value = PIMClient().Languages.GetLanguages();
 
-            return languages;
+            return _languages.Value;
         }
 
-        public List<Api.Models.Attribute.AttributeScope> GetPimAttributeScopes()
+        public List<Api.Models.Attribute.AttributeScope> GetAttributeScopes()
         {
-            var attributeScopes = PIMClient().Attributes.GetAttributeScopes();
+            if (_attributeScopes.Value == null)
+                _attributeScopes.Value = PIMClient().Attributes.GetAttributeScopes().OrderBy(x => x.Alias).ToList();
 
-            return attributeScopes.OrderBy(x => x.Alias).ToList();
+            return _attributeScopes.Value;
         }
 
-        public List<Api.Models.Dimension.DimensionModel> GetPimDimensions()
+        public List<Api.Models.Dimension.DimensionModel> GetDimensions()
         {
-            var dimensions = PIMClient().Dimensions.GetDimensions();
+            if(_dimensions.Value == null)
+                _dimensions.Value = PIMClient().Dimensions.GetDimensions().OrderBy(x => x.Alias).ToList();
 
-            return dimensions.OrderBy(x => x.Alias).ToList();
+            return _dimensions.Value;
         }
 
         public List<Api.Models.Catalogue.CatalogueModel> GetCatalogues()
         {
-            var catalogues = PIMClient().Catalogues.GetCatalogues();
-
-            return catalogues.OrderBy(x => x.Label).ToList();
+            return PIMClient().Catalogues.GetCatalogues().OrderBy(x => x.Label).ToList();
         }
 
-        public List<PimAttribute> GetAttributeWithProductReference()
+        public List<Entity.Attribute> GetAttributeWithProductReference()
         {
-            var attributes = GetPimAttributes();
+            var attributes = GetAttributes().Values.ToList();
 
             var tabSetups = PIMClient().ProductStructures.GetProductStructures().Where(x => x.ProductConfiguration.Tabs?.Any() ?? false).SelectMany(x => x.ProductConfiguration.Tabs).ToList();
             var productAttributeUids = GetAttributesFromConfigurationTabs(tabSetups);
@@ -114,9 +146,9 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             return attributes;
         }
 
-        public List<PimAttribute> GetAttributeWithVariantReference()
+        public List<Entity.Attribute> GetAttributeWithVariantReference()
         {
-            var attributes = GetPimAttributes();
+            var attributes = GetAttributes().Values.ToList();
 
             var tabSetups = PIMClient().ProductStructures.GetProductStructures().Where(x => x.HasVariants && (x.VariantConfiguration.Tabs?.Any() ?? false)).SelectMany(x => x.VariantConfiguration.Tabs).ToList();
             var variantAttributeUids = GetAttributesFromConfigurationTabs(tabSetups);
@@ -130,7 +162,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             return mappedAttributes;
         }
 
-        public List<GlobalListValue> GetGlobalListAttributeValues(Guid uid)
+        public List<Api.Models.GlobalList.GlobalListValue> GetGlobalListAttributeValues(Guid uid)
         {
             var client = PIMClient();
             return client.GlobalLists.GetGlobalListValues(uid).GlobalListValues.ToList();
@@ -150,7 +182,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             if (dimensions == null)
                 return dimensionSegmentData;
 
-            var dimensionsPim = GetPimDimensions();
+            var dimensionsPim = GetDimensions();
             
             foreach (var dim in dimensions)
             {
@@ -164,9 +196,9 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             return dimensionSegmentData;
         }
 
-        internal List<PimAttribute> Map(List<Api.Models.Attribute.Attribute> attributes)
+        internal List<Entity.Attribute> Map(List<Api.Models.Attribute.Attribute> attributes)
         {
-            var result = new List<PimAttribute>();
+            var result = new List<Entity.Attribute>();
             foreach (var attribute in attributes)
             {
                 if (attribute is ListAttribute)
@@ -174,7 +206,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                     continue;
                 }
                 
-                result.Add(new PimAttribute
+                result.Add(new Entity.Attribute
                 {
                     Alias = attribute.Alias,
                     Uid = attribute.Uid.ToString(),
@@ -189,9 +221,9 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             return result;
         }
 
-        private List<PimAttribute> GetAliasPaths(Api.Models.Attribute.Attribute attribute, string path, string pathUserFriendly)
+        private List<Entity.Attribute> GetAliasPaths(Api.Models.Attribute.Attribute attribute, string path, string pathUserFriendly)
         {
-            var result = new List<PimAttribute>();
+            var result = new List<Entity.Attribute>();
             var delimiter = string.IsNullOrEmpty(path) ? string.Empty : ".";
             if (attribute is FixedListAttribute fixedListAttribute)
             {
@@ -199,7 +231,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             }
             else if (attribute is ComplexAttribute complexAttribute)
             {
-                result.Add(new PimAttribute
+                result.Add(new Entity.Attribute
                 {
                     Alias = pathUserFriendly + delimiter + attribute.Alias,
                     Uid = path + delimiter + attribute.Uid,
@@ -212,7 +244,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             }
             else
             {
-                result.Add(new PimAttribute
+                result.Add(new Entity.Attribute
                 {
                     Alias = pathUserFriendly + delimiter + attribute.Alias,
                     Uid = path + delimiter + attribute.Uid,
@@ -220,21 +252,6 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             }
 
             return result;
-        }
-
-        internal Api.Models.Attribute.Attribute GetPimAttribute(Guid attributeUid)
-        {
-            return PIMClient().Attributes.GetAttribute(attributeUid);
-        }
-
-        internal Api.Models.Attribute.Attribute? GetPimAttribute(string alias)
-        {
-            return PIMClient().Attributes.GetAttributes().FirstOrDefault(x => x.Alias == alias);
-        }
-
-        internal List<Api.Models.Attribute.Attribute> GetPimAttributes(List<Guid> attributeUids)
-        {
-            return PIMClient().Attributes.GetAttributes(attributeUids);
         }
 
         internal IEnumerable<ListItem> SearchProductPaged(SearchPagedModel searchModel)
@@ -275,7 +292,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
 
         internal LanguageModel GetLanguage(string languageIsoCode)
         {
-            var languages = PIMClient().Languages.GetLanguages();
+            var languages = GetLanguages();
             LanguageModel? language = null;
 
             if (string.IsNullOrEmpty(languageIsoCode))
@@ -304,9 +321,38 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
 
         internal List<Guid> GetAttributeUidsFromScopeUids(IEnumerable<Guid> attributeScopeUids)
         {
-            var reuslt = PIMClient().Attributes.GetAttributeScopesAttributes(new AttributeScopeAttributesModel { AttributeScopeUids = attributeScopeUids.ToList() });
-            var items = reuslt.SelectMany(d => d.Value).Distinct().ToList();
-            return items;
+            var result = new List<Guid>();
+            var missingScopes = new List<Guid>();
+
+            if (_attributesByScope.Value != null)
+            {
+                foreach (var scope in attributeScopeUids)
+                {
+                    if (!_attributesByScope.Value.ContainsKey(scope))
+                        missingScopes.Add(scope);
+                }
+            }
+            else
+            {
+                _attributesByScope.Value = new Dictionary<Guid, List<Guid>>();
+                missingScopes.AddRange(attributeScopeUids);
+            }
+
+            if (missingScopes.Any())
+            {
+                foreach(var scope in PIMClient().Attributes.GetAttributeScopesAttributes(new AttributeScopeAttributesModel { AttributeScopeUids = missingScopes }))
+                {
+                    _attributesByScope.Value.Add(scope.Key, scope.Value);
+                }
+            }
+
+            foreach (var scope in attributeScopeUids)
+            {
+                if (_attributesByScope.Value.TryGetValue(scope, out var attributeUids))
+                    result.AddRange(attributeUids);
+            }
+
+            return result.Distinct().ToList();
         }
 
         internal ProductModel GetProduct(int productId)

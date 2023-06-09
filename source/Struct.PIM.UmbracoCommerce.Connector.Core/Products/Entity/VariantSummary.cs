@@ -2,7 +2,7 @@
 
 namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
 {
-    public class ProductVariant
+    public class VariantSummary : IProductVariantSummary
     {
         public string Reference { get; set; } = string.Empty;
 
@@ -12,7 +12,6 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
 
         public IEnumerable<ProductPrice> Prices { get; set; } = new List<ProductPrice>();
 
-        public List<AttributeCombination> Attributes { get; set; } = new List<AttributeCombination>();
-        public Dictionary<string, string> Properties { get; set; } = new Dictionary<string, string>();
+        public IReadOnlyDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
     }
 }

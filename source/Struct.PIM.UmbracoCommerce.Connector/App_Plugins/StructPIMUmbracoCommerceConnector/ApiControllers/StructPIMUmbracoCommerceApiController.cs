@@ -12,11 +12,15 @@ namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins.ApiControllers
     {
         private readonly SettingsFacade _settingsFacade;
         private readonly Core.Products.Services.ProductService _productService;
+        private readonly Core.Products.Services.ConfigurationService _configurationService;
+        private readonly Core.Products.Services.AttributeService _attributeService;
 
-        public StructPIMUmbracoCommerceApiController(SettingsFacade settingsFacade, Core.Products.Services.ProductService productService)
+        public StructPIMUmbracoCommerceApiController(SettingsFacade settingsFacade, Core.Products.Services.ProductService productService, Core.Products.Services.ConfigurationService configurationService, Core.Products.Services.AttributeService attributeService)
         {
             _settingsFacade = settingsFacade;
             _productService = productService;
+            _configurationService = configurationService;
+            _attributeService = attributeService;
         }
 
         [HttpGet("GetAttributes")]
@@ -24,7 +28,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins.ApiControllers
         {
             if (type == "Product")
             {
-                var pimAttributes = _productService.GetAttributeWithProductReference();
+                var pimAttributes = _attributeService.GetAttributeWithProductReference();
 
                 if (!string.IsNullOrEmpty(attributeType))
                     pimAttributes = pimAttributes.Where(x => x.Type == attributeType).ToList();
@@ -34,7 +38,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins.ApiControllers
             }
             else if(type == "Variant")
             {
-                var pimAttributes = _productService.GetAttributeWithVariantReference();
+                var pimAttributes = _attributeService.GetAttributeWithVariantReference();
 
                 if (!string.IsNullOrEmpty(attributeType))
                     pimAttributes = pimAttributes.Where(x => x.Type == attributeType).ToList();
@@ -50,14 +54,14 @@ namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins.ApiControllers
         [HttpGet("GetAttributeScopes")]
         public IActionResult GetAttributeScopes()
         {
-            var pimScopes = _productService.GetAttributeScopes();
+            var pimScopes = _attributeService.GetAttributeScopes();
             return Ok(pimScopes);
         }
 
         [HttpGet("GetDimensions")]
         public IActionResult GetDimensions()
         {
-            var dimensions = _productService.GetDimensions();
+            var dimensions = _configurationService.GetDimensions();
             return Ok(dimensions);
         }
 
@@ -107,7 +111,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins.ApiControllers
         [HttpGet("GetLanguages")]
         public IActionResult GetLanguages()
         {
-            var languages = _productService.GetLanguages();
+            var languages = _configurationService.GetLanguages();
             return Ok(languages);
         }
 

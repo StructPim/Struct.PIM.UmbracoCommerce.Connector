@@ -2,12 +2,16 @@
 
 namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
 {
-    public class ProductSnapshot : IProductSnapshot
+    public class VariantSnapshot : IProductSnapshot
     {
-        internal ProductSnapshot() { }
+        internal VariantSnapshot() { }
         public Guid StoreId { get; set; }
 
         public string ProductReference { get; set; }
+
+        public string ProductVariantReference { get; set; }
+
+        public IEnumerable<AttributeCombination> Attributes { get; set; }
 
         public Guid? TaxClassId { get; set; }
 
@@ -20,9 +24,5 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
         public string Name { get; set; }
 
         public IEnumerable<ProductPrice> Prices { get; set; }
-
-        public string ProductVariantReference => string.Empty;
-
-        public IEnumerable<AttributeCombination> Attributes => new List<AttributeCombination>();
     }
 }

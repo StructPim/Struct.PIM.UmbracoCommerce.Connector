@@ -2,9 +2,9 @@
 
 namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
 {
-    public class ProductLookup : IProductSummary
+    public class ProductSummary : IProductSummary
     {
-
+        internal ProductSummary() { }
         public string Reference { get; set; }
 
         public string Sku { get; set; }

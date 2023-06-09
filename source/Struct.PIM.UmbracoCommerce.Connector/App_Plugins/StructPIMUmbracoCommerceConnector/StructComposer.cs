@@ -15,6 +15,8 @@ namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins
             builder.Services.AddSingleton<SettingsFacade>();
 
             builder.Services.AddUnique<Core.Products.Services.ProductService, Core.Products.Services.ProductService>();
+            builder.Services.AddUnique<Core.Products.Services.ConfigurationService, Core.Products.Services.ConfigurationService>();
+            builder.Services.AddUnique<Core.Products.Services.AttributeService, Core.Products.Services.AttributeService>();
             builder.Services.AddUnique<IStockService, StockService>();
             builder.Services.AddUnique<IProductAdapter, ProductAdapter>();
         }
