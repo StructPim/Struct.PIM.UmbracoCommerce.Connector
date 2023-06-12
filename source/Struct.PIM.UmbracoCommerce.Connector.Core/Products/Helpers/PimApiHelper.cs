@@ -379,6 +379,12 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             return products;
         }
 
+        internal VariantModel GetVariant(int variantId)
+        {
+            var variant = PIMClient().Variants.GetVariant(variantId);
+            return variant;
+        }
+
         internal List<Guid> GetVariationDefinitionDefiningAttributes(Guid productStructureUid, Guid variationDefinitionUid)
         {
             var productStructure = PIMClient().ProductStructures.GetProductStructure(productStructureUid);
@@ -405,13 +411,13 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             return new List<Guid> { };
         }
 
-        internal List<VariantAttributeValuesModel> GetVariantsAttributeValuesByProductId(int productId, List<Guid> definingAttributeUids, List<string> cultureCodes = null, List<string> segments = null)
+        internal List<VariantAttributeValuesModel> GetVariantsAttributeValuesByProductId(int productId, List<Guid> attributeUids, List<string> cultureCodes = null, List<string> segments = null)
         {
             var variantIds = PIMClient().Products.GetVariantIds(productId);
             var variantValuesRequestModel = new VariantValuesRequestModel()
             {
                 VariantIds = variantIds,
-                Uids = definingAttributeUids,
+                Uids = attributeUids,
                 IncludeValues = ValueIncludeMode.Uids,
                 LimitToCultureCodes = cultureCodes,
                 LimitToSegments = segments,

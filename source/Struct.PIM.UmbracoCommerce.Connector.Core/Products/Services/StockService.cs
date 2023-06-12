@@ -11,6 +11,8 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
         private readonly PimApiHelper _pimApiHelper;
         private readonly PimAttributeHelper _pimAttributeHelper;
         private readonly SettingsFacade _settingsFacade;
+        private readonly AsyncLocal<Dictionary<int, decimal?>> _productStock = new AsyncLocal<Dictionary<int, decimal?>>();
+        private readonly AsyncLocal<Dictionary<int, decimal?>> _variantStock = new AsyncLocal<Dictionary<int, decimal?>>();
 
         public StockService(SettingsFacade settingsFacade)
         {
@@ -169,61 +171,108 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
 
         private bool GetStock(Guid storeId, int? productId, int? variantId, out decimal? stock)
         {
+            if(_variantStock.Value != null && variantId.HasValue && _variantStock.Value.TryGetValue(variantId.Value, out var variantStock))
+            {
+                stock = variantStock;
+                return variantStock.HasValue;
+            }
+            else if (_productStock.Value != null && productId.HasValue && _productStock.Value.TryGetValue(productId.Value, out var productStock))
+            {
+                stock = productStock;
+                return productStock.HasValue;
+            }
             var integrationSettings = _settingsFacade.GetIntegrationSettings();
 
             stock = null;
             var language = _pimApiHelper.GetLanguage(null);
             var storeSetting = integrationSettings?.GeneralSettings?.ShopSettings?.Where(s => s.Uid == storeId).FirstOrDefault();
-
             var dimensionSegmentData = _pimApiHelper.GetDimensionSegmentData(storeSetting);
 
-            var attributeValueUids = new List<Guid>();
+            Guid? stockAttributeUid = null;
+            Api.Models.Attribute.Attribute? stockAttribute = null;
 
             if (!string.IsNullOrEmpty(storeSetting?.StockAttributeUid))
             {
                 var attributeUids = storeSetting?.StockAttributeUid.Split(".");
-                attributeValueUids.Add(Guid.Parse(attributeUids[0]));
+                stockAttributeUid = Guid.Parse(attributeUids[0]);
+                stockAttribute = _pimApiHelper.GetAttribute(stockAttributeUid.Value);
             }
 
-            if (variantId.HasValue)
+            if (stockAttribute != null)
             {
-                var variantValues = _pimApiHelper.GetVariantsAttributeValues(new List<int> { variantId.Value }, attributeValueUids, null).ToDictionary(x => x.VariantId);
-
-                if (variantValues.TryGetValue(variantId.Value, out var variantValue))
+                if (variantId.HasValue)
                 {
-                    if (!string.IsNullOrEmpty(storeSetting?.StockAttributeUid))
+                    if (_variantStock.Value == null)
+                        _variantStock.Value = new Dictionary<int, decimal?>();
+
+                    var variant = _pimApiHelper.GetVariant(variantId.Value);
+                    var variantValues = _pimApiHelper.GetVariantsAttributeValuesByProductId(variant.ProductId, new List<Guid> { stockAttributeUid.Value }, null).ToDictionary(x => x.VariantId);
+                    
+                    foreach (var v in variantValues)
                     {
-                        var value = _pimAttributeHelper.GetDecimalValue(storeSetting.StockAttributeUid, variantValue, language, dimensionSegmentData);
-                        if (value.HasValue)
+                        if (variantValues.TryGetValue(v.Key, out var variantValue))
                         {
-                            stock = value.Value;
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
+                            var value = _pimAttributeHelper.GetDecimalValue(storeSetting.StockAttributeUid, variantValue, language, dimensionSegmentData);
+
+                            if(!_variantStock.Value.ContainsKey(v.Key))
+                                _variantStock.Value.TryAdd(v.Key, value);
                         }
                     }
-                }
-            }
-            else
-            {
-                var productValues = _pimApiHelper.GetProductsAttributeValues(new List<int> { productId.Value }, attributeValueUids, null).ToDictionary(x => x.ProductId);
 
-                if (productValues.TryGetValue(productId.Value, out var productValue))
-                {
-                    if (!string.IsNullOrEmpty(storeSetting?.StockAttributeUid))
+                    if (_variantStock.Value.TryGetValue(variantId.Value, out var vStock))
                     {
-                        var value = _pimAttributeHelper.GetDecimalValue(storeSetting.StockAttributeUid, productValue, language, dimensionSegmentData);
-                        if (value.HasValue)
+                        stock = vStock;
+                        return vStock.HasValue;
+                    }
+                }
+                else
+                {
+                    if (_productStock.Value == null)
+                        _productStock.Value = new Dictionary<int, decimal?>();
+
+                    var product = _pimApiHelper.GetProduct(productId.Value);
+                    
+                    if (!product.VariationDefinitionUid.HasValue)
+                    {
+                        var productValues = _pimApiHelper.GetProductsAttributeValues(new List<int> { productId.Value }, new List<Guid> { stockAttribute.Uid }, null).ToDictionary(x => x.ProductId);
+
+                        if (productValues.TryGetValue(productId.Value, out var productValue))
                         {
-                            stock = value.Value;
-                            return true;
+                            var value = _pimAttributeHelper.GetDecimalValue(storeSetting.StockAttributeUid, productValue, language, dimensionSegmentData);
+
+                            _productStock.Value.Add(productId.Value, value);
+
+                            stock = value;
+                            return stock.HasValue;
                         }
-                        else
+                    }
+                    else
+                    {
+                        if (_variantStock.Value == null)
+                            _variantStock.Value = new Dictionary<int, decimal?>();
+
+                        var variantValues = _pimApiHelper.GetVariantsAttributeValuesByProductId(productId.Value, new List<Guid> { stockAttributeUid.Value }, null).ToDictionary(x => x.VariantId);
+                        decimal? totalStock = null;
+                        
+                        foreach(var v in variantValues)
                         {
-                            return false;
+                            if (variantValues.TryGetValue(v.Key, out var variantValue))
+                            {
+                                var value = _pimAttributeHelper.GetDecimalValue(storeSetting.StockAttributeUid, variantValue, language, dimensionSegmentData);
+
+                                if (!_variantStock.Value.ContainsKey(v.Key))
+                                    _variantStock.Value.Add(v.Key, value);
+
+                                if (value.HasValue)
+                                    totalStock = totalStock.HasValue ? totalStock.Value + value.Value : value.Value;
+                                
+                            }
                         }
+
+                        _productStock.Value.Add(productId.Value, totalStock);
+
+                        stock = totalStock;
+                        return totalStock.HasValue;
                     }
                 }
             }
