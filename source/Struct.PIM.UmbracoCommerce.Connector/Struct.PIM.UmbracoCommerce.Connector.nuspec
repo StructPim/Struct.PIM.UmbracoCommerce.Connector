@@ -2,7 +2,7 @@
 <package  xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>Struct.PIM.UmbracoCommerce.Connector</id>
-    <version>1.0.11</version>
+    <version>1.0.12</version>
     <title>Struct.PIM.UmbracoCommerce.Connector</title>
     <authors>Struct A/S</authors>
     <owners>Struct A/S</owners>
@@ -16,7 +16,7 @@
     <tags>Umbraco Umbraco-Marketplace</tags>
     <dependencies>
       <group targetFramework="net7.0">
-        <dependency id="Struct.PIM.UmbracoCommerce.Connector.Core" version="[1.0.11]" exclude="Build,Analyzers" />
+        <dependency id="Struct.PIM.UmbracoCommerce.Connector.Core" version="[1.0.12]" exclude="Build,Analyzers" />
         <dependency id="Newtonsoft.Json" version="[13.0.0, 14.0.0)" exclude="Build,Analyzers" />
         <dependency id="Struct.PIM.Api.Client" version="[3.12.4, 4.0.0)" exclude="Build,Analyzers" />
         <dependency id="Umbraco.Commerce.Core" version="[12.0.0--rc.preview.44.gc91dbb8, 13.0.0)" exclude="Build,Analyzers" />
