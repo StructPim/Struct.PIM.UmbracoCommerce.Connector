@@ -35,9 +35,9 @@ app.controller("umbracocommerce.shopedit.controller",
         $scope.filterAttributeConfig.valueField = "Uid";
 
         $scope.filterAttributeValueConfig = structPimUmbracoHelper.getDefaultSelectizeConfig();
-        $scope.filterAttributeValueConfig.labelField = "RenderedValue";
-        $scope.filterAttributeValueConfig.searchField = "RenderedValue";
-        $scope.filterAttributeValueConfig.valueField = "GlobalListValueUid";
+        $scope.filterAttributeValueConfig.labelField = "Value";
+        $scope.filterAttributeValueConfig.searchField = "Value";
+        $scope.filterAttributeValueConfig.valueField = "Uid";
         $scope.filterAttributeValueConfig.maxItems = 1000;
 
         $scope.catalogueSelectizeConfig = structPimUmbracoHelper.getDefaultSelectizeConfig();
@@ -84,6 +84,13 @@ app.controller("umbracocommerce.shopedit.controller",
                     umbracoCommerceService.getAttributes('Product', 'FixedListAttribute')
                         .then(function (response) {
                             $scope.filterAttributes = response.data;
+
+                            $scope.$watch(function () { return $scope.settings.FilterAttributeUid; },
+                                function (newValue, oldValue) {
+                                    $scope.attributechange();
+                                },
+                                true
+                            );
                         },
                         function (response) {
                             structPimUmbracoHelper.handleError(response);
@@ -114,11 +121,11 @@ app.controller("umbracocommerce.shopedit.controller",
 
         $scope.attributechange = function () {
             //If values are already loaded, this is not first load. In that case clear any selections
-            if ($scope.filterAttributeValueOptions) {
+            if ($scope.filterAttributeValueOptions.length > 0) {
                 $scope.settings.FilterAttributeGlobalListValueKeys = [];
             }
             if ($scope.settings.FilterAttributeUid) {
-                umbracoCommerceService.GetFilterAttributeValues($scope.settings.FilterAttributeUid)
+                umbracoCommerceService.getFilterAttributeValues($scope.settings.FilterAttributeUid, $scope.settings.Uid)
                     .then(function (response) {
                         $scope.filterAttributeValueOptions = response.data;
                     },

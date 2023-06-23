@@ -1,24 +1,55 @@
-﻿using Umbraco.Commerce.Core.Models;
+﻿using Examine;
+using Newtonsoft.Json;
+using Umbraco.Cms.Infrastructure.Examine;
+using Umbraco.Commerce.Core.Models;
+using Umbraco.Extensions;
 
 namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
 {
     public class Product
     {
-        public Guid StoreId { get; set; }
+        public Product() { }
 
-        public string ProductReference { get; set; }
+        public Product(ISearchResult searchResult)
+        {
+            Id = int.Parse(searchResult["id"]);
+            CultureCode = searchResult["language"];
+            ConfigurationAlias = searchResult[UmbracoExamineFieldNames.ItemTypeFieldName];
+            ProductReference = searchResult["id"];
+            Sku = searchResult["sku"];
+            Name = searchResult["name"];
+            Slug = searchResult["slug"];
+            PrimaryImage = searchResult["primaryImage"];
+            StoreId = Guid.Parse(searchResult["store"]);
+            HasVariants = bool.Parse(searchResult["hasVariants"]);
+            IsGiftCard = bool.Parse(searchResult["isGiftCard"]);
+            Prices = JsonConvert.DeserializeObject<List<ProductPrice>>(searchResult["prices"]) ?? new List<ProductPrice>();
+            Properties = JsonConvert.DeserializeObject<Dictionary<string, string>>(searchResult["properties"]) ?? new Dictionary<string, string>();
+        }
+
+        public int Id { get; set; }
+        public string ConfigurationAlias { get; set; } = string.Empty;
+        public Guid StoreId { get; set; }
+        public string CultureCode { get; set; } = string.Empty;
+        public string Slug { get; set; } = string.Empty;
+
+        public string ProductReference { get; set; } = string.Empty;
 
         public Guid? TaxClassId { get; set; }
 
-        public IDictionary<string, string> Properties { get; set; }
 
         public bool IsGiftCard { get; set; }
 
-        public string Sku { get; set; }
+        public string Sku { get; set; } = string.Empty;
 
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
-        public IEnumerable<ProductPrice> Prices { get; set; }
+        public string PrimaryImage { get; set; } = string.Empty;
+        public int Stock { get; set; }
+
+        public IEnumerable<ProductPrice> Prices { get; set; } = new List<ProductPrice>();
+        public Dictionary<string, string> Properties { get; set; } = new Dictionary<string, string>();
+        public Dictionary<string, string> SearchableProperties { get; set; } = new Dictionary<string, string>();
 
         public bool HasVariants { get; set; }
 
@@ -34,7 +65,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
             };
         }
 
-        public IProductSnapshot AsSnapShot()
+        public IProductSnapshot AsSnapshot()
         {
             return new ProductSnapshot
             {

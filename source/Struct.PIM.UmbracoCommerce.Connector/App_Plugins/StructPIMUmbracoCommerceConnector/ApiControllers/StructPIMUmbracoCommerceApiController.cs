@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Struct.PIM.UmbracoCommerce.Connector.App_Plugins.Models;
+using Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Settings;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Settings.Entity;
 using Umbraco.Cms.Web.BackOffice.Controllers;
@@ -12,15 +13,19 @@ namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins.ApiControllers
     {
         private readonly SettingsFacade _settingsFacade;
         private readonly Core.Products.Services.ProductService _productService;
-        private readonly Core.Products.Services.ConfigurationService _configurationService;
-        private readonly Core.Products.Services.AttributeService _attributeService;
+        private readonly ConfigurationService _configurationService;
+        private readonly AttributeService _attributeService;
+        private readonly CategoryService _categoryService;
+        private readonly GlobalListService _globalListService;
 
-        public StructPIMUmbracoCommerceApiController(SettingsFacade settingsFacade, Core.Products.Services.ProductService productService, Core.Products.Services.ConfigurationService configurationService, Core.Products.Services.AttributeService attributeService)
+        public StructPIMUmbracoCommerceApiController(SettingsFacade settingsFacade, Core.Products.Services.ProductService productService, CategoryService categoryService, ConfigurationService configurationService, AttributeService attributeService, GlobalListService globalListService)
         {
             _settingsFacade = settingsFacade;
             _productService = productService;
+            _categoryService = categoryService;
             _configurationService = configurationService;
             _attributeService = attributeService;
+            _globalListService = globalListService;
         }
 
         [HttpGet("GetAttributes")]
@@ -45,9 +50,18 @@ namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins.ApiControllers
 
                 return Ok(pimAttributes.OrderBy(a => a.Alias));
             }
+            else if (type == "Category")
+            {
+                var pimAttributes = _attributeService.GetAttributeWithCategoryReference();
+
+                if (!string.IsNullOrEmpty(attributeType))
+                    pimAttributes = pimAttributes.Where(x => x.Type == attributeType).ToList();
+
+                return Ok(pimAttributes.OrderBy(a => a.Alias));
+            }
             else
             {
-                return BadRequest("StructureRef must be product or variant");
+                return BadRequest("StructureRef must be product or variant or category");
             }
         }
 
@@ -76,7 +90,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins.ApiControllers
         [HttpGet("GetCatalogues")]
         public IActionResult GetCatalogues()
         {
-            var catalogues = _productService.GetCatalogues();
+            var catalogues = _categoryService.GetCatalogues();
             return Ok(catalogues);
         }
 
@@ -98,6 +112,13 @@ namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins.ApiControllers
         public IActionResult SaveVariantMapping(VariantMapping model)
         {
             _settingsFacade.SaveVariantMapping(model);
+            return Ok();
+        }
+
+        [HttpPost("SaveCategoryMapping")]
+        public IActionResult SaveCategoryMapping(VariantMapping model)
+        {
+            _settingsFacade.SaveCategoryMapping(model);
             return Ok();
         }
 
@@ -123,9 +144,9 @@ namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins.ApiControllers
         }
 
         [HttpGet("GetFilterAttributeValues")]
-        public IActionResult GetFilterAttributeValues(string filter)
+        public IActionResult GetFilterAttributeValues(string filter, Guid storeId)
         {
-            var attributeValues = _productService.GetGlobalListAttributeValues(Guid.Parse(filter));
+            var attributeValues = _globalListService.GetGlobalListAttributeValues(Guid.Parse(filter), storeId);
             return Ok(attributeValues);
         }
 

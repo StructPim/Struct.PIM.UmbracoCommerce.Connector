@@ -33,5 +33,10 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
         {
             return _pimApiHelper.GetAttributeWithVariantReference();
         }
+
+        public List<Entity.Attribute> GetAttributeWithCategoryReference()
+        {
+            return _pimApiHelper.GetAttributeWithCategoryReference();
+        }
     }
 }

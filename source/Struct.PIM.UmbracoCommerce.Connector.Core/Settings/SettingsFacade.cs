@@ -148,6 +148,14 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Settings
                     {
                         integrationSettings.VariantMapping = new VariantMapping();
                     }
+                    if (result.TryGetValue("CategoryMapping", out string categoryMapping))
+                    {
+                        integrationSettings.CategoryMapping = JsonConvert.DeserializeObject<CategoryMapping>(categoryMapping);
+                    }
+                    else
+                    {
+                        integrationSettings.CategoryMapping = new CategoryMapping();
+                    }
                     if (result.TryGetValue("Setup", out string setup))
                     {
                         integrationSettings.Setup = JsonConvert.DeserializeObject<Setup>(setup);
@@ -182,6 +190,11 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Settings
         public void SaveVariantMapping(VariantMapping editorModel)
         {
             SaveSetting("VariantMapping", editorModel);
+        }
+
+        public void SaveCategoryMapping(VariantMapping editorModel)
+        {
+            SaveSetting("CategoryMapping", editorModel);
         }
 
         public void SaveProductMapping(ProductMapping editorModel)

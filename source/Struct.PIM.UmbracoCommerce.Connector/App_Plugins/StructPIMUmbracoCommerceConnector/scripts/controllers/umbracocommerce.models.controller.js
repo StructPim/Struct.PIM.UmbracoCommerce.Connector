@@ -7,6 +7,7 @@ app.controller("umbracocommerce.models.controller",
         $scope.commerceSettings;
         $scope.pimVariantAttributes = [];
         $scope.pimProductAttributes = [];
+        $scope.pimCategoryAttributes = [];
         $scope.pimScopes = [];
         $scope.isValid = true;
         
@@ -48,31 +49,37 @@ app.controller("umbracocommerce.models.controller",
         };
 
         $scope.loadData = function () {
+            umbracoCommerceService.getIntegrationSettings()
+                .then(function (response) {
+                    $scope.commerceSettings = response.data;
+                },
+                function (response) {
+                    structPimUmbracoHelper.handleError(response);
+                });
+
             umbracoCommerceService.getAttributes('Product', '')
                 .then(function (response) {
                     $scope.pimProductAttributes = response.data;
-
-                    umbracoCommerceService.getAttributes('Variant', '')
-                        .then(function (response) {
-                            $scope.pimVariantAttributes = response.data;
-
-                            umbracoCommerceService.getIntegrationSettings()
-                                .then(function (response) {
-                                    $scope.commerceSettings = response.data;
-                                    $scope.loaded = true;
-                                },
-                                function (response) {
-                                    $scope.loaded = true;
-                                    structPimUmbracoHelper.handleError(response);
-                                });
-                        },
-                        function (response) {
-                            $scope.loaded = true;
-                            structPimUmbracoHelper.handleError(response);
-                        });
+                    $scope.loaded = true;
                 },
                 function (response) {
                     $scope.loaded = true;
+                    structPimUmbracoHelper.handleError(response);
+                });
+
+            umbracoCommerceService.getAttributes('Variant', '')
+                .then(function (response) {
+                    $scope.pimVariantAttributes = response.data;
+                },
+                function (response) {
+                    structPimUmbracoHelper.handleError(response);
+                });
+
+            umbracoCommerceService.getAttributes('Category', '')
+                .then(function (response) {
+                    $scope.pimCategoryAttributes = response.data;
+                },
+                function (response) {
                     structPimUmbracoHelper.handleError(response);
                 });
 
@@ -102,6 +109,16 @@ app.controller("umbracocommerce.models.controller",
                 function (response) {
                     structPimUmbracoHelper.handleError(response);
                 });
+        }
+
+        $scope.saveCategoryMapping = function () {
+            umbracoCommerceService.saveCategoryMapping($scope.commerceSettings.CategoryMapping)
+                .then(function (response) {
+                    structPimUmbracoHelper.setSuccessNotification("Category mapping has been updated");
+                },
+                    function (response) {
+                        structPimUmbracoHelper.handleError(response);
+                    });
         }
 
         $scope.init();

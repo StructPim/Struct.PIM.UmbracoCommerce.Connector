@@ -10,6 +10,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Settings.Entity
         public GeneralSettings GeneralSettings { get; set; }
         public ProductMapping ProductMapping { get; set; }
         public VariantMapping VariantMapping { get; set; }
+        public CategoryMapping CategoryMapping { get; set; }
         public Setup Setup { get; set; }
 
         public string CurrentUmbracoCommerceVersion { get; set; }
@@ -25,6 +26,8 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Settings.Entity
         public string IsGiftcardAttributeUid { get; set; } = string.Empty;
 
         public string SkuAttributeUid { get; set; } = string.Empty;
+
+        public string ImageAttributeUid { get; set; } = string.Empty;
 
         public List<string> PropertyAttributeUids { get; set; } = new List<string>();
         public List<string> PropertyScopes { get; set; } = new List<string>();
@@ -48,6 +51,11 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Settings.Entity
 
         //Attributes to search in
         public List<string> SearchableAttributeUids { get; set; } = new List<string>();
+    }
+
+    public class CategoryMapping
+    {
+        public string TitleAttributeUid { get; set; } = string.Empty;
     }
 
     public class GeneralSettings

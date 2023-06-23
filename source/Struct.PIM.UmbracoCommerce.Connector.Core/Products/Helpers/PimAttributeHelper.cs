@@ -16,7 +16,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             _pimApiHelper = pimApiHelper;
         }
 
-        internal decimal? GetDecimalValue(string attributeUid, HasAttributeValues entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Api.Models.Attribute.Attribute rootAttribute = null)
+        internal decimal? GetDecimalValue(string attributeUid, Dictionary<string, dynamic> entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Api.Models.Attribute.Attribute rootAttribute = null)
         {
             var value = GetValue(attributeUid, entityValue, language, dimensionSegmentData);
             if (decimal.TryParse(value.Value, out decimal decimalValue))
@@ -25,7 +25,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             return null;
         }
 
-        internal bool? GetBoolValue(string attributeUid, HasAttributeValues entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Api.Models.Attribute.Attribute rootAttribute = null)
+        internal bool? GetBoolValue(string attributeUid, Dictionary<string, dynamic> entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Api.Models.Attribute.Attribute rootAttribute = null)
         {
             var value = GetValue(attributeUid, entityValue, language, dimensionSegmentData);
             if (bool.TryParse(value.Value, out bool booleanValue))
@@ -34,13 +34,20 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             return null;
         }
 
-        internal string GetStringValue(string attributeUid, HasAttributeValues entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Api.Models.Attribute.Attribute rootAttribute = null)
+        internal string GetImageValue(string attributeUid, Dictionary<string, dynamic> entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Api.Models.Attribute.Attribute rootAttribute = null)
+        {
+            var value = GetValue(attributeUid, entityValue, language, dimensionSegmentData);
+            
+            return null;
+        }
+
+        internal string GetStringValue(string attributeUid, Dictionary<string, dynamic> entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Api.Models.Attribute.Attribute rootAttribute = null)
         {
             var value = GetValue(attributeUid, entityValue, language, dimensionSegmentData);
             return value?.Value;
         }
 
-        internal AttributeValue GetValue(string attributeUid, HasAttributeValues entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Api.Models.Attribute.Attribute rootAttribute = null)
+        internal AttributeValue GetValue(string attributeUid, Dictionary<string, dynamic> entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Api.Models.Attribute.Attribute rootAttribute = null)
         {
             var attributeUids = attributeUid.Split(".");
             var attributes = _pimApiHelper.GetAttributes();
@@ -56,7 +63,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             var fieldUid = GetAliasPath(rootAttribute, string.Empty, Guid.Parse(targetAttributeUid), language.CultureCode, true, rootAttribute is FixedListAttribute, true);
             var fieldAlias = fieldUid.Split(".").ToList();
             var alias = fieldAlias.First().Split("_").First();
-            if (entityValue.Values.TryGetValue(alias, out dynamic values))
+            if (entityValue.TryGetValue(alias, out dynamic values))
             {
                 AttributeValue value = new AttributeValue();
                 if (values != null)
@@ -84,43 +91,57 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             }
         }
 
-        internal string RenderAttribute(Api.Models.Attribute.Attribute rootAttribute, Api.Models.Attribute.Attribute attribute, HasAttributeValues variantValue, IEnumerable<Attribute> paths, LanguageModel language, string rootPath, Dictionary<string, Tuple<string, string>> dimensionSegmentData)
+        internal string RenderRootAttribute(Api.Models.Attribute.Attribute rootAttribute, Dictionary<string, dynamic> variantValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData)
+        {
+            return RenderAttribute(rootAttribute, rootAttribute, variantValue, _pimApiHelper.Map(new List<Api.Models.Attribute.Attribute> { rootAttribute }), language, rootAttribute.Uid.ToString(), dimensionSegmentData);
+        }
+
+        internal string RenderAttribute(Api.Models.Attribute.Attribute rootAttribute, Api.Models.Attribute.Attribute attribute, Dictionary<string, dynamic> variantValue, IEnumerable<Attribute> paths, LanguageModel language, string rootPath, Dictionary<string, Tuple<string, string>> dimensionSegmentData)
         {
             string renderValue = string.Empty;
             if (attribute is ComplexAttribute complexAttribute)
             {
+                var renderForAttributeFieldUids = new List<Guid>();
+
                 if (complexAttribute.RenderValuesForAttributeFieldUids != null && complexAttribute.RenderValuesForAttributeFieldUids.Any())
                 {
-                    foreach (var renderAttributeUid in complexAttribute.RenderValuesForAttributeFieldUids)
-                    {
-                        var renderAttribute = complexAttribute.SubAttributes.Where(sa => sa.Uid == renderAttributeUid).FirstOrDefault();
-                        //var filteredPaths = paths.Where(p => paths.Any(pa => pa.Uid.EndsWith()));
-                        if (renderAttribute != null && (renderAttribute is ComplexAttribute || renderAttribute is FixedListAttribute))
-                        {
-                            var newRootPath = !string.IsNullOrEmpty(rootPath) ? rootPath + "." + renderAttribute.Uid : renderAttribute.Uid.ToString();
-                            renderValue += RenderAttribute(rootAttribute, renderAttribute, variantValue, paths.Where(p => p.Uid.StartsWith(newRootPath)), language, newRootPath, dimensionSegmentData);
-                        }
-                        else
-                        {
-                            var foundUid = paths.Where(t => t.Uid.Contains(complexAttribute.Uid + "." + renderAttributeUid.ToString())).FirstOrDefault();
-                            if (foundUid != null)
-                            {
-
-                                var value = GetValue(foundUid.Uid, variantValue, language, dimensionSegmentData, rootAttribute);
-                                renderValue += value?.Value + " ";
-                            }
-                        }
-                    }
+                    renderForAttributeFieldUids = complexAttribute.RenderValuesForAttributeFieldUids;
                 }
                 else
                 {
-                    foreach (var path in paths)
+                    renderForAttributeFieldUids = complexAttribute.SubAttributes.Select(x => x.Uid).ToList();
+                }
+
+                foreach (var renderAttributeUid in renderForAttributeFieldUids)
+                {
+                    var renderAttribute = complexAttribute.SubAttributes.Where(sa => sa.Uid == renderAttributeUid).FirstOrDefault();
+                    //var filteredPaths = paths.Where(p => paths.Any(pa => pa.Uid.EndsWith()));
+                    if (renderAttribute != null && (renderAttribute is ComplexAttribute || renderAttribute is FixedListAttribute))
                     {
-                        //Todo need some more
-                        var value = GetValue(path.Uid, variantValue, language, dimensionSegmentData, rootAttribute);
-                        renderValue += value?.Value + " ";
+                        var newRootPath = !string.IsNullOrEmpty(rootPath) ? rootPath + "." + renderAttribute.Uid : renderAttribute.Uid.ToString();
+                        renderValue += RenderAttribute(rootAttribute, renderAttribute, variantValue, paths.Where(p => p.Uid.StartsWith(newRootPath)), language, newRootPath, dimensionSegmentData);
+                    }
+                    else
+                    {
+                        var foundUid = paths.Where(t => t.Uid.Contains(complexAttribute.Uid + "." + renderAttributeUid.ToString())).FirstOrDefault();
+                        if (foundUid != null)
+                        {
+
+                            var value = GetValue(foundUid.Uid, variantValue, language, dimensionSegmentData, rootAttribute);
+                            renderValue += value?.Value + " ";
+                        }
                     }
                 }
+                //}
+                //else
+                //{
+                //    foreach (var path in paths)
+                //    {
+                //        //Todo need some more
+                //        var value = GetValue(path.Uid, variantValue, language, dimensionSegmentData, rootAttribute);
+                //        renderValue += value?.Value + " ";
+                //    }
+                //}
 
             }
             else if (attribute is FixedListAttribute fixedListAttribute)
@@ -295,7 +316,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                     {
                         return new AttributeValue
                         {
-                            Value = value?.ToString() ?? throw new Exception($"Error in data. value not found for alias {alias}"),
+                            Value = value?.ToString(),
                             Alias = Guid.NewGuid().ToString(),
                         };
                     }
@@ -310,7 +331,18 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             throw new Exception("Mapping not found for product");
         }
 
-        public string GetAliasPath(Api.Models.Attribute.Attribute attribute, string pathUserFriendly, Guid targetAttributeUid, string? language, bool allLevels, bool previousIsFixedList, bool showLanguageAndSegmentAllLevels)
+        public string GetAliasPath(string attributeUidPath, string cultureCode, bool byGlobalListValueUid = false)
+        {
+            var attributeUids = attributeUidPath.Split(".");
+            var rootAttribute = _pimApiHelper.GetAttribute(Guid.Parse(attributeUids[0]));
+            var path = GetAliasPath(rootAttribute, string.Empty, Guid.Parse(attributeUids.Last()), cultureCode, true, false, false);
+
+            if (byGlobalListValueUid) path += "_GlobalListUids";
+
+            return path;
+        }
+
+        private string GetAliasPath(Api.Models.Attribute.Attribute attribute, string pathUserFriendly, Guid targetAttributeUid, string? language, bool allLevels, bool previousIsFixedList, bool showLanguageAndSegmentAllLevels)
         {
             var delimiter = string.IsNullOrEmpty(pathUserFriendly) ? string.Empty : ".";
             var attributeLanguage = language;
@@ -333,36 +365,47 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                 var path = GetAliasPath(fixedListAttribute.ReferencedAttribute, pathUserFriendly + delimiter + fixedListAttribute.Alias + (showLanguageAndSegmentAllLevels ? languageSegment : string.Empty), targetAttributeUid, language, allLevels, true, showLanguageAndSegmentAllLevels);
 
                 if (!string.IsNullOrEmpty(path))
-                {
                     return path;
-                }
             }
             else if (attribute is ComplexAttribute complexAttribute)
             {
                 if (attribute.Uid == targetAttributeUid)
+                {
+                    if (previousIsFixedList)
+                        return pathUserFriendly;
+
                     return pathUserFriendly + delimiter + attribute.Alias;
+                }
 
                 foreach (var subAttribute in complexAttribute.SubAttributes)
                 {
                     var path = GetAliasPath(subAttribute, allLevels && !previousIsFixedList ? pathUserFriendly + delimiter + complexAttribute.Alias + (showLanguageAndSegmentAllLevels ? languageSegment : string.Empty) : pathUserFriendly, targetAttributeUid, language, allLevels, false, showLanguageAndSegmentAllLevels);
 
                     if (!string.IsNullOrEmpty(path))
-                    {
                         return path;
-                    }
-
                 }
             }
             else
             {
                 if (attribute.Uid == targetAttributeUid)
                 {
+                    if(previousIsFixedList)
+                        return pathUserFriendly;
+                    
                     return pathUserFriendly + delimiter + attribute.Alias + languageSegment;
                 }
                 return string.Empty;
             }
 
             return string.Empty;
+        }
+
+        private string AppendUidPath(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return path;
+
+            return path + "_uids";
         }
     }
 }

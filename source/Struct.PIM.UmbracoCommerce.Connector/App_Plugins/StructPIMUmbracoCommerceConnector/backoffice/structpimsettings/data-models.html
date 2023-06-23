@@ -27,6 +27,7 @@
             <ul class="nav nav-tabs pim-nav-tabs" role="tablist">
                 <li role="presentation" ng-class="{'active': controlModel.activeTab === 'productModel'}"><a ng-click="controlModel.activeTab = 'productModel'">Product model</a></li>
                 <li role="presentation" ng-class="{'active': controlModel.activeTab === 'variantModel'}"><a ng-click="controlModel.activeTab = 'variantModel'">Variant model</a></li>
+                <li role="presentation" ng-class="{'active': controlModel.activeTab === 'categoryModel'}"><a ng-click="controlModel.activeTab = 'categoryModel'">Category model</a></li>
             </ul>
         </div>
         <div class="pim-editor-container pim-panel-body pim-scrollable row-fluid" auto-scale="1">
@@ -105,6 +106,20 @@
                                                     </label>
                                                     <div class="controls controls-row">
                                                         <selectize config="attributeConfig" ng-model="commerceSettings.ProductMapping.SkuAttributeUid" options="pimProductAttributes" ng-required="true"></selectize>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="pim-form-layout__column is-empty"></div>
+                                        </div>
+                                        <div class="pim-form-layout__row">
+                                            <div class="pim-form-layout__column">
+                                                <div class="pim-el-wrap">
+                                                    <label class="control-label">
+                                                        Image
+                                                        <small class="pim-detail">The primary image of the product.</small>
+                                                    </label>
+                                                    <div class="controls controls-row">
+                                                        <selectize config="attributeConfig" ng-model="commerceSettings.ProductMapping.ImageAttributeUid" options="pimProductAttributes" ng-required="true"></selectize>
                                                     </div>
                                                 </div>
                                             </div>
@@ -307,6 +322,37 @@
                         </div>
                     </ng-form>
                 </div>
+                <div id="categoryModel" class="pim-tab-pane tab-pane" ng-class="{'active': controlModel.activeTab === 'categoryModel'}">
+                    <ng-form name="categoryModelForm">
+                        <div class="pim-pane">
+                            <div class="card" style="margin-bottom:20px" ng-if="loaded">
+                                <div class="card-header">
+                                    <h4 class="card-title">
+                                        General
+                                    </h4>
+                                </div>
+                                <div class="card-body pim-form-layout">
+                                    <div class="pim-form-layout__wrapper">
+                                        <div class="pim-form-layout__row">
+                                            <div class="pim-form-layout__column">
+                                                <div class="pim-el-wrap">
+                                                    <label class="control-label">
+                                                        Title <span class="red">*</span>
+                                                        <small class="pim-detail">The name of the variant.</small>
+                                                    </label>
+                                                    <div class="controls controls-row">
+                                                        <selectize config="attributeConfig" ng-model="commerceSettings.CategoryMapping.TitleAttributeUid" options="pimCategoryAttributes" ng-required="true"></selectize>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="pim-form-layout__column is-empty"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-form>
+                </div>
             </div>
 
         </div>
@@ -315,6 +361,7 @@
                 <div class="pim-editor-drawer-content__right-side">
                     <button ng-show="controlModel.activeTab == 'productModel'" class="btn btn-success" ng-disabled="productModelForm.$invalid" ng-click="saveProductMapping()">Save product model</button>
                     <button ng-show="controlModel.activeTab == 'variantModel'" class="btn btn-success" ng-disabled="variantModelForm.$invalid" ng-click="saveVariantMapping()">Save variant model</button>
+                    <button ng-show="controlModel.activeTab == 'categoryModel'" class="btn btn-success" ng-disabled="categoryModelForm.$invalid" ng-click="saveCategoryMapping()">Save category model</button>
                 </div>
             </div>
         </div>

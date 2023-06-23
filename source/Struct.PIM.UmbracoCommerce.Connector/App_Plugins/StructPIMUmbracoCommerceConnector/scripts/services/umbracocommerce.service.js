@@ -7,8 +7,8 @@
             getAttributes: function (type, attributeType) {
                 return $http.get("backoffice/structpimumbracocommerce/GetAttributes?type=" + type + "&attributetype=" + attributeType);
             },
-            getFilterAttributeValues: function (filter) {
-                return $http.get("backoffice/structpimumbracocommerce/GetFilterAttributeValues?filter=" + filter);
+            getFilterAttributeValues: function (filter, storeId) {
+                return $http.get("backoffice/structpimumbracocommerce/GetFilterAttributeValues?filter=" + filter + "&storeid=" + storeId);
             },
             getAttributeScopes: function () {
                 return $http.get("backoffice/structpimumbracocommerce/GetAttributeScopes");
@@ -30,6 +30,9 @@
             },
             saveVariantMapping: function (model) {
                 return $http.post("backoffice/structpimumbracocommerce/SaveVariantMapping", angular.toJson(model));
+            },
+            saveCategoryMapping: function (model) {
+                return $http.post("backoffice/structpimumbracocommerce/SaveCategoryMapping", angular.toJson(model));
             },
             deleteShopSetting: function (shopSettingUid) {
                 return $http.get("backoffice/structpimumbracocommerce/DeleteShopSetting?settingUid=" + shopSettingUid);
