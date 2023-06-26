@@ -21,13 +21,14 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Indexing.ProductInd
                     ["store"] = product.StoreId,
                     ["slug"] = product.Slug,
                     ["sku"] = product.Sku,
-                    ["primaryImage"] = product.PrimaryImage,
+                    ["primaryImageUrl"] = product.PrimaryImageUrl,
                     ["hasVariants"] = product.HasVariants,
                     ["isGiftCard"] = product.IsGiftCard,
                     ["searchableText"] = string.Join(" ", product.SearchableProperties.Values),
                     ["prices"] = JsonConvert.SerializeObject(product.Prices),
                     ["properties"] = JsonConvert.SerializeObject(product.Properties),
-                    ["categories"] = JsonConvert.SerializeObject(product.Categories)
+                    ["categories"] = JsonConvert.SerializeObject(product.Categories),
+                    ["stock"] = product.Stock
                 };
 
                 yield return new ValueSet($"product_{product.Id}_{product.StoreId}_{product.CultureCode}", IndexTypes.Product, product.ConfigurationAlias, indexValues);

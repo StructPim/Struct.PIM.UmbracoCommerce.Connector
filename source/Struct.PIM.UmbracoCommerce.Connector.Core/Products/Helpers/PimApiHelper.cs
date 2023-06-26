@@ -1,4 +1,5 @@
-﻿using Struct.PIM.Api.Models.Attribute;
+﻿using Struct.PIM.Api.Models.Asset;
+using Struct.PIM.Api.Models.Attribute;
 using Struct.PIM.Api.Models.Catalogue;
 using Struct.PIM.Api.Models.DataConfiguration;
 using Struct.PIM.Api.Models.GlobalList;
@@ -528,6 +529,15 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
 
             return _globalLists.Value;
         }
+        #endregion
+
+        #region Assets
+        internal List<AssetModel> GetAssets(List<string> assetIds)
+        {
+            var assets = PIMClient().Assets.GetAssets(assetIds);
+            return assets;
+        }
+
         #endregion
     }
 }

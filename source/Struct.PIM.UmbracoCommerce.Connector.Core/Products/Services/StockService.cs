@@ -212,10 +212,10 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                     {
                         if (variantValues.TryGetValue(v.Key, out var variantValue))
                         {
-                            var value = _pimAttributeHelper.GetDecimalValue(storeSetting.StockAttributeUid, variantValue.Values, language, dimensionSegmentData);
+                            var value = _pimAttributeHelper.GetValue<decimal?>(storeSetting.StockAttributeUid, variantValue.Values, language, dimensionSegmentData);
 
                             if(!_variantStock.Value.ContainsKey(v.Key))
-                                _variantStock.Value.TryAdd(v.Key, value);
+                                _variantStock.Value.TryAdd(v.Key, value?.Value);
                         }
                     }
 
@@ -238,11 +238,11 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
 
                         if (productValues.TryGetValue(productId.Value, out var productValue))
                         {
-                            var value = _pimAttributeHelper.GetDecimalValue(storeSetting.StockAttributeUid, productValue.Values, language, dimensionSegmentData);
+                            var value = _pimAttributeHelper.GetValue<decimal?>(storeSetting.StockAttributeUid, productValue.Values, language, dimensionSegmentData);
 
-                            _productStock.Value.Add(productId.Value, value);
+                            _productStock.Value.Add(productId.Value, value?.Value);
 
-                            stock = value;
+                            stock = value?.Value;
                             return stock.HasValue;
                         }
                     }
@@ -258,10 +258,10 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                         {
                             if (variantValues.TryGetValue(v.Key, out var variantValue))
                             {
-                                var value = _pimAttributeHelper.GetDecimalValue(storeSetting.StockAttributeUid, variantValue.Values, language, dimensionSegmentData);
+                                var value = _pimAttributeHelper.GetValue<decimal?>(storeSetting.StockAttributeUid, variantValue.Values, language, dimensionSegmentData);
 
                                 if (!_variantStock.Value.ContainsKey(v.Key))
-                                    _variantStock.Value.Add(v.Key, value);
+                                    _variantStock.Value.Add(v.Key, value?.Value);
 
                                 if (value.HasValue)
                                     totalStock = totalStock.HasValue ? totalStock.Value + value.Value : value.Value;

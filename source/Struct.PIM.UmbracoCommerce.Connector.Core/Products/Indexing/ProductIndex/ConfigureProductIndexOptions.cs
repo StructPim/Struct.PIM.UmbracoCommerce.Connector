@@ -32,6 +32,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Indexing.ProductInd
                 new("store", FieldDefinitionTypes.Raw),
                 new("sku", FieldDefinitionTypes.Raw),
                 new("slug", FieldDefinitionTypes.Raw),
+                new("primaryImageUrl", FieldDefinitionTypes.Raw),
                 new("hasVariants", FieldDefinitionTypes.Raw),
                 new("isGiftCard", FieldDefinitionTypes.Raw),
                 new("searchableText", FieldDefinitionTypes.FullText), 

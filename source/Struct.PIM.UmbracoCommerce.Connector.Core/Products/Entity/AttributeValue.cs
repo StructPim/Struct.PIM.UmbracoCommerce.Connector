@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
 {
-    public class AttributeValue
+    public class AttributeValue<T>
     {
         public string Alias { get; set; } = string.Empty;
-        public string Value { get; set; } = string.Empty;
+        public T? Value { get; set; }
 
         public bool HasValue
         {
             get 
             { 
-                return !string.IsNullOrEmpty(Alias) && !string.IsNullOrEmpty(Value);
+                return !string.IsNullOrEmpty(Alias) && Value != null;
             }
         }
     }

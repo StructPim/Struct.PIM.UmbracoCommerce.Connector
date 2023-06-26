@@ -19,13 +19,14 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
             Sku = searchResult["sku"];
             Name = searchResult["name"];
             Slug = searchResult["slug"];
-            PrimaryImage = searchResult["primaryImage"];
+            PrimaryImage = searchResult["primaryImageUrl"];
             StoreId = Guid.Parse(searchResult["store"]);
             HasVariants = bool.Parse(searchResult["hasVariants"]);
             IsGiftCard = bool.Parse(searchResult["isGiftCard"]);
             Prices = !string.IsNullOrEmpty(searchResult["prices"]) ? JsonConvert.DeserializeObject<List<ProductPrice>>(searchResult["prices"]) ?? new List<ProductPrice>() : new List<ProductPrice>();
             Properties = !string.IsNullOrEmpty(searchResult["properties"]) ? JsonConvert.DeserializeObject<Dictionary<string, string>>(searchResult["properties"]) ?? new Dictionary<string, string>() : new Dictionary<string, string>();
             Categories = !string.IsNullOrEmpty(searchResult["categories"]) ? JsonConvert.DeserializeObject<List<int>>(searchResult["categories"]) ?? new List<int>() : new List<int>();
+            Stock = int.Parse(searchResult["stock"]);
         }
 
         public int Id { get; set; }
@@ -46,6 +47,8 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
         public string Name { get; set; } = string.Empty;
 
         public string PrimaryImage { get; set; } = string.Empty;
+        public string PrimaryImageUrl { get; set; } = string.Empty;
+        
         public int Stock { get; set; }
 
         public IEnumerable<ProductPrice> Prices { get; set; } = new List<ProductPrice>();

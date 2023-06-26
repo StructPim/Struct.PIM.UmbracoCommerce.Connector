@@ -24,7 +24,8 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Indexing.ProductInd
                     ["searchableText"] = string.Join(" ", variant.SearchableProperties.Values),
                     ["prices"] = JsonConvert.SerializeObject(variant.Prices),
                     ["properties"] = JsonConvert.SerializeObject(variant.Properties),
-                    ["attributes"] = JsonConvert.SerializeObject(variant.Attributes)
+                    ["attributes"] = JsonConvert.SerializeObject(variant.Attributes),
+                    ["stock"] = variant.Stock
                 };
 
                 yield return new ValueSet($"variant_{variant.Id}_{variant.StoreId}_{variant.CultureCode}", IndexTypes.Variant, variant.ConfigurationAlias, indexValues);

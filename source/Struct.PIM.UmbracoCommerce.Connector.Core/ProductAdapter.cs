@@ -84,7 +84,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Base
 
                 // search on term
                 if (!string.IsNullOrEmpty(searchTerm))
-                    query = query.And().GroupedOr(new string[] { "searchableText" }, searchTerm.Split(' ').Select(x => x.SingleCharacterWildcard()).ToArray());
+                    query = query.And().GroupedOr(new string[] { "searchableText" }, searchTerm.Split(' ').Select(x => x.MultipleCharacterWildcard()).ToArray());
 
                 query.OrderByDescending(new SortableField[] { new SortableField("name") });
 

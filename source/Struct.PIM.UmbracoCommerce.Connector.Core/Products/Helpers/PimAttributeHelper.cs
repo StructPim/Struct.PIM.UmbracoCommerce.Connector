@@ -3,6 +3,7 @@ using Struct.PIM.Api.Models.Attribute;
 using Struct.PIM.Api.Models.Language;
 using Struct.PIM.Api.Models.Shared;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity;
+using Umbraco.Commerce.Common.Logging;
 using Attribute = Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity.Attribute;
 
 namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
@@ -16,43 +17,12 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             _pimApiHelper = pimApiHelper;
         }
 
-        internal decimal? GetDecimalValue(string attributeUid, Dictionary<string, dynamic> entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Api.Models.Attribute.Attribute rootAttribute = null)
-        {
-            var value = GetValue(attributeUid, entityValue, language, dimensionSegmentData);
-            if (decimal.TryParse(value.Value, out decimal decimalValue))
-                return decimalValue;
-
-            return null;
-        }
-
-        internal bool? GetBoolValue(string attributeUid, Dictionary<string, dynamic> entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Api.Models.Attribute.Attribute rootAttribute = null)
-        {
-            var value = GetValue(attributeUid, entityValue, language, dimensionSegmentData);
-            if (bool.TryParse(value.Value, out bool booleanValue))
-                return booleanValue;
-            
-            return null;
-        }
-
-        internal string GetImageValue(string attributeUid, Dictionary<string, dynamic> entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Api.Models.Attribute.Attribute rootAttribute = null)
-        {
-            var value = GetValue(attributeUid, entityValue, language, dimensionSegmentData);
-            
-            return null;
-        }
-
-        internal string GetStringValue(string attributeUid, Dictionary<string, dynamic> entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Api.Models.Attribute.Attribute rootAttribute = null)
-        {
-            var value = GetValue(attributeUid, entityValue, language, dimensionSegmentData);
-            return value?.Value;
-        }
-
-        internal AttributeValue GetValue(string attributeUid, Dictionary<string, dynamic> entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Api.Models.Attribute.Attribute rootAttribute = null)
+        internal AttributeValue<T> GetValue<T>(string attributeUid, Dictionary<string, dynamic> entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Api.Models.Attribute.Attribute rootAttribute = null)
         {
             var attributeUids = attributeUid.Split(".");
             var attributes = _pimApiHelper.GetAttributes();
             if (!attributes.TryGetValue(Guid.Parse(attributeUids[0]), out var thisAttribute))
-                return new AttributeValue();
+                return new AttributeValue<T>();
 
             if (rootAttribute == null)
             {
@@ -65,30 +35,28 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             var alias = fieldAlias.First().Split("_").First();
             if (entityValue.TryGetValue(alias, out dynamic values))
             {
-                AttributeValue value = new AttributeValue();
+                AttributeValue<T> value = new AttributeValue<T>();
                 if (values != null)
                 {
                     if (fieldAlias.Count > 1)
                     {
                         fieldAlias.RemoveAt(0);
                         var valuesDictionary = ((JObject)values).ToObject<Dictionary<string, object>>();
-                        value = FindValue(fieldAlias.First(), valuesDictionary, fieldAlias, language.CultureCode, dimensionSegmentData);
+                        value = FindValue<T>(fieldAlias.First(), valuesDictionary, fieldAlias, language.CultureCode, dimensionSegmentData);
                     }
                     else
                     {
                         var valuesDictionary = new Dictionary<string, object>();
                         var data = fieldAlias.First().Split("_");
                         valuesDictionary.Add(alias, values);
-                        value = FindValue(fieldAlias.First(), valuesDictionary, fieldAlias, language.CultureCode, dimensionSegmentData);
+                        value = FindValue<T>(fieldAlias.First(), valuesDictionary, fieldAlias, language.CultureCode, dimensionSegmentData);
 
                     }
                 }
                 return value;
             }
             else
-            {
-                throw new Exception("Mapping error. Could not find Attribute in PIM");
-            }
+                return new AttributeValue<T>();
         }
 
         internal string RenderRootAttribute(Api.Models.Attribute.Attribute rootAttribute, Dictionary<string, dynamic> variantValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData)
@@ -127,7 +95,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                         if (foundUid != null)
                         {
 
-                            var value = GetValue(foundUid.Uid, variantValue, language, dimensionSegmentData, rootAttribute);
+                            var value = GetValue<string>(foundUid.Uid, variantValue, language, dimensionSegmentData, rootAttribute);
                             renderValue += value?.Value + " ";
                         }
                     }
@@ -156,21 +124,21 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                     foreach (var path in paths)
                     {
                         //Todo need some more
-                        var value = GetValue(path.Uid, variantValue, language, dimensionSegmentData, rootAttribute);
+                        var value = GetValue<string>(path.Uid, variantValue, language, dimensionSegmentData, rootAttribute);
                         renderValue += value?.Value + " ";
                     }
                 }
             }
             else
             {
-                var value = GetValue(attribute.Uid.ToString(), variantValue, language, dimensionSegmentData, rootAttribute);
+                var value = GetValue<string>(attribute.Uid.ToString(), variantValue, language, dimensionSegmentData, rootAttribute);
                 renderValue = value?.Value;
             }
 
             return renderValue;
         }
 
-        private AttributeValue FindValue(string alias, Dictionary<string, object> values, List<string> fieldAlias, string cultureCode, Dictionary<string, Tuple<string, string>> dimensionSegmentData)
+        private AttributeValue<T?> FindValue<T>(string alias, Dictionary<string, object> values, List<string> fieldAlias, string cultureCode, Dictionary<string, Tuple<string, string>> dimensionSegmentData)
         {
             if (fieldAlias.Count > 1)
             {
@@ -181,7 +149,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                     {
                         if (value == null)
                         {
-                            return new AttributeValue();
+                            return new AttributeValue<T?>();
                         }
                         // valueIsLocalized and valueIsSegmentedBydimensionUid
                         if (data[1] != "NA" && data[2] != "NA")
@@ -191,7 +159,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                                 var valueSegmentedBydimensionUid = ((JArray)value).Children<JObject>().FirstOrDefault(o => o["CultureCode"]?.ToString() == cultureCode && o["Dimension"]?.ToString() == datas.Item1 && o["Segment"]?.ToString() == datas.Item2)?.GetValue("Data");
                                 fieldAlias.RemoveAt(0);
                                 var valuesDictionary2 = ((JObject)valueSegmentedBydimensionUid).ToObject<Dictionary<string, object>>();
-                                return FindValue(fieldAlias.First(), valuesDictionary2, fieldAlias, cultureCode, dimensionSegmentData);
+                                return FindValue<T>(fieldAlias.First(), valuesDictionary2, fieldAlias, cultureCode, dimensionSegmentData);
                             }
                             else
                             {
@@ -205,7 +173,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                                 var valueSegmentedBydimensionUid = ((JArray)value).Children<JObject>().FirstOrDefault(o => o["CultureCode"]?.ToString() == cultureCode)?.GetValue("Data");
                                 fieldAlias.RemoveAt(0);
                                 var valuesDictionary2 = ((JObject)valueSegmentedBydimensionUid).ToObject<Dictionary<string, object>>();
-                                return FindValue(fieldAlias.First(), valuesDictionary2, fieldAlias, cultureCode, dimensionSegmentData);
+                                return FindValue<T>(fieldAlias.First(), valuesDictionary2, fieldAlias, cultureCode, dimensionSegmentData);
                             }
                             else
                             {
@@ -219,7 +187,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                                 var valueSegmentedBydimensionUid = ((JArray)value).Children<JObject>().FirstOrDefault(o => o["Dimension"]?.ToString() == datas.Item1 && o["Segment"]?.ToString() == datas.Item2)?.GetValue("Data");
                                 fieldAlias.RemoveAt(0);
                                 var valuesDictionary2 = ((JObject)valueSegmentedBydimensionUid).ToObject<Dictionary<string, object>>();
-                                return FindValue(fieldAlias.First(), valuesDictionary2, fieldAlias, cultureCode, dimensionSegmentData);
+                                return FindValue<T?>(fieldAlias.First(), valuesDictionary2, fieldAlias, cultureCode, dimensionSegmentData);
                             }
                             else
                             {
@@ -231,7 +199,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                         {
                             fieldAlias.RemoveAt(0);
                             var valuesDictionary = ((JObject)value).ToObject<Dictionary<string, object>>();
-                            return FindValue(fieldAlias.First(), valuesDictionary, fieldAlias, cultureCode, dimensionSegmentData);
+                            return FindValue<T?>(fieldAlias.First(), valuesDictionary, fieldAlias, cultureCode, dimensionSegmentData);
                         }
                     }
                 }
@@ -241,11 +209,11 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                     {
                         if (value == null)
                         {
-                            return new AttributeValue();
+                            return new AttributeValue<T?>();
                         }
                         fieldAlias.RemoveAt(0);
                         var valuesDictionary = ((JObject)value).ToObject<Dictionary<string, object>>();
-                        return FindValue(fieldAlias.First(), valuesDictionary, fieldAlias, cultureCode, dimensionSegmentData);
+                        return FindValue<T>(fieldAlias.First(), valuesDictionary, fieldAlias, cultureCode, dimensionSegmentData);
                     }
                 }
             }
@@ -263,18 +231,18 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                     {
                         if (dimensionSegmentData.TryGetValue(data[2].ToLower(), out var datas))
                         {
-                            var valueSegmentedBydimensionUid = ((JArray)value).Children<JObject>().FirstOrDefault(o => o["CultureCode"]?.ToString() == cultureCode && o["Dimension"]?.ToString() == datas.Item1 && o["Segment"]?.ToString() == datas.Item2)?.GetValue("Data")?.ToString();
-                            return new AttributeValue
+                            var valueSegmentedBydimensionUid = ((JArray)value).Children<JObject>().FirstOrDefault(o => o["CultureCode"]?.ToString() == cultureCode && o["Dimension"]?.ToString() == datas.Item1 && o["Segment"]?.ToString() == datas.Item2)?.GetValue("Data");
+                            return new AttributeValue<T?>
                             {
-                                Value = valueSegmentedBydimensionUid,
+                                Value = valueSegmentedBydimensionUid != null ? valueSegmentedBydimensionUid.ToObject<T>() : default,
                                 Alias = Guid.NewGuid().ToString(),
                             };
                         }
                         else
                         {
-                            return new AttributeValue
+                            return new AttributeValue<T?>
                             {
-                                Value = null,
+                                Value = default,
                                 Alias = Guid.NewGuid().ToString(),
                             };
                         }
@@ -282,10 +250,10 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                     // valueIsLocalized
                     else if (data[1] != "NA")
                     {
-                        var valueLocalized = ((JArray)value).Children<JObject>().FirstOrDefault(o => o["CultureCode"]?.ToString() == cultureCode)?.GetValue("Data")?.ToString();
-                        return new AttributeValue
+                        var valueLocalized = ((JArray)value).Children<JObject>().FirstOrDefault(o => o["CultureCode"]?.ToString() == cultureCode)?.GetValue("Data");
+                        return new AttributeValue<T?>
                         {
-                            Value = valueLocalized,
+                            Value = valueLocalized != null ? valueLocalized.ToObject<T>() : default,
                             Alias = Guid.NewGuid().ToString(),
                         };
                     }
@@ -294,18 +262,18 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                     {
                         if (dimensionSegmentData.TryGetValue(data[2].ToLower(), out var datas))
                         {
-                            var valueSegmentedBydimensionUid = ((JArray)value).Children<JObject>().FirstOrDefault(o => o["Dimension"]?.ToString() == datas.Item1 && o["Segment"]?.ToString() == datas.Item2)?.GetValue("Data")?.ToString();
-                            return new AttributeValue
+                            var valueSegmentedBydimensionUid = ((JArray)value).Children<JObject>().FirstOrDefault(o => o["Dimension"]?.ToString() == datas.Item1 && o["Segment"]?.ToString() == datas.Item2)?.GetValue("Data");
+                            return new AttributeValue<T?>
                             {
-                                Value = valueSegmentedBydimensionUid,
+                                Value = valueSegmentedBydimensionUid != null ? valueSegmentedBydimensionUid.ToObject<T>() : default,
                                 Alias = Guid.NewGuid().ToString(),
                             };
                         }
                         else
                         {
-                            return new AttributeValue
+                            return new AttributeValue<T?>
                             {
-                                Value = null,
+                                Value = default,
                                 Alias = Guid.NewGuid().ToString(),
                             };
                         }
@@ -314,9 +282,9 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                     //standard value
                     else
                     {
-                        return new AttributeValue
+                        return new AttributeValue<T?>
                         {
-                            Value = value?.ToString(),
+                            Value = value != null && value is T ? value.SafeCast<T>() : default,
                             Alias = Guid.NewGuid().ToString(),
                         };
                     }

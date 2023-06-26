@@ -1,4 +1,5 @@
-﻿using StackExchange.Profiling.Internal;
+﻿using Org.BouncyCastle.Asn1;
+using StackExchange.Profiling.Internal;
 using Struct.PIM.Api.Models.Language;
 using Struct.PIM.Api.Models.Shared;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity;
@@ -287,13 +288,16 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
 
                             // map primary properties of product
                             if (!string.IsNullOrEmpty(integrationSettings.ProductMapping?.TitleAttributeUid))
-                                product.Name = _pimAttributeHelper.GetStringValue(integrationSettings.ProductMapping.TitleAttributeUid, productValue.Values, language, dimensionSegmentData);
+                                product.Name = _pimAttributeHelper.GetValue<string>(integrationSettings.ProductMapping.TitleAttributeUid, productValue.Values, language, dimensionSegmentData).Value;
                             if (!string.IsNullOrEmpty(integrationSettings.ProductMapping?.SkuAttributeUid))
-                                product.Sku = _pimAttributeHelper.GetStringValue(integrationSettings.ProductMapping.SkuAttributeUid, productValue.Values, language, dimensionSegmentData);
+                                product.Sku = _pimAttributeHelper.GetValue<string>(integrationSettings.ProductMapping.SkuAttributeUid, productValue.Values, language, dimensionSegmentData).Value;
                             if (!string.IsNullOrEmpty(integrationSettings.ProductMapping?.IsGiftcardAttributeUid))
-                                product.IsGiftCard = _pimAttributeHelper.GetBoolValue(integrationSettings.ProductMapping.IsGiftcardAttributeUid, productValue.Values, language, dimensionSegmentData).GetValueOrDefault();
+                                product.IsGiftCard = _pimAttributeHelper.GetValue<bool?>(integrationSettings.ProductMapping.IsGiftcardAttributeUid, productValue.Values, language, dimensionSegmentData).Value.GetValueOrDefault();
                             if (!string.IsNullOrEmpty(integrationSettings.ProductMapping?.ImageAttributeUid))
-                                product.PrimaryImage = _pimAttributeHelper.GetImageValue(integrationSettings.ProductMapping.ImageAttributeUid, productValue.Values, language, dimensionSegmentData);
+                                product.PrimaryImage = _pimAttributeHelper.GetValue<string>(integrationSettings.ProductMapping.ImageAttributeUid, productValue.Values, language, dimensionSegmentData).Value;
+
+                            if(!string.IsNullOrEmpty(storeSetting.StockAttributeUid))
+                                product.Stock = _pimAttributeHelper.GetValue<int?>(storeSetting.StockAttributeUid, productValue.Values, language, dimensionSegmentData).Value.GetValueOrDefault();
 
                             // map classifications
                             if (classifications.TryGetValue(product.Id, out var productClassifications))
@@ -313,7 +317,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                             {
                                 if (!string.IsNullOrEmpty(attribute))
                                 {
-                                    var value = _pimAttributeHelper.GetValue(attribute, productValue.Values, language, dimensionSegmentData);
+                                    var value = _pimAttributeHelper.GetValue<string>(attribute, productValue.Values, language, dimensionSegmentData);
                                     if (value.HasValue)
                                         product.Properties.Add(value.Alias, value.Value);
                                 }
@@ -323,7 +327,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                             var searchableProperties = new Dictionary<string, string>();
                             foreach (var attribute in attributeInfo.SearchableAttributeUids)
                             {
-                                var value = _pimAttributeHelper.GetValue(attribute, productValue.Values, language, dimensionSegmentData);
+                                var value = _pimAttributeHelper.GetValue<string>(attribute, productValue.Values, language, dimensionSegmentData);
                                 if (value.HasValue)
                                     searchableProperties.Add(value.Alias, value.Value);
                             }
@@ -338,9 +342,9 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                                 {
                                     if (priceMapping.PriceAttributeUid.HasValue)
                                     {
-                                        var value = _pimAttributeHelper.GetDecimalValue(priceMapping.PriceAttributeUid.Value.ToString(), productValue.Values, language, dimensionSegmentData);
+                                        var value = _pimAttributeHelper.GetValue<decimal?>(priceMapping.PriceAttributeUid.Value.ToString(), productValue.Values, language, dimensionSegmentData);
                                         if (value.HasValue)
-                                            prices.Add(new ProductPrice(value.Value, priceMapping.Uid));
+                                            prices.Add(new ProductPrice(value.Value.Value, priceMapping.Uid));
                                     }
                                 }
                             }
@@ -351,7 +355,19 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                 }
             }
 
-            
+            // fetch images to set actual url for image
+            var primaryImages = items.Where(x => !string.IsNullOrEmpty(x.PrimaryImage)).Select(x => x.PrimaryImage).Distinct().ToList();
+            if (primaryImages.Any())
+            {
+                var assets = _pimApiHelper.GetAssets(primaryImages).ToDictionary(x => x.Id);
+
+                foreach (var item in items.Where(x => !string.IsNullOrEmpty(x.PrimaryImage)))
+                {
+                    if (assets.TryGetValue(item.PrimaryImage, out var asset) && !string.IsNullOrEmpty(asset.Url))
+                        item.PrimaryImageUrl = asset.Url;
+                }
+            }
+
             return items;
         }
 
@@ -390,9 +406,11 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
 
                             // primary properties of variant
                             if (!string.IsNullOrEmpty(integrationSettings.VariantMapping?.TitleAttributeUid))
-                                variant.Name = _pimAttributeHelper.GetStringValue(integrationSettings.VariantMapping.TitleAttributeUid, variantValue.Values, language, dimensionSegmentData);
+                                variant.Name = _pimAttributeHelper.GetValue<string>(integrationSettings.VariantMapping.TitleAttributeUid, variantValue.Values, language, dimensionSegmentData).Value;
                             if (!string.IsNullOrEmpty(integrationSettings.VariantMapping?.SkuAttributeUid))
-                                variant.Sku = _pimAttributeHelper.GetStringValue(integrationSettings.VariantMapping.SkuAttributeUid, variantValue.Values, language, dimensionSegmentData);
+                                variant.Sku = _pimAttributeHelper.GetValue<string>(integrationSettings.VariantMapping.SkuAttributeUid, variantValue.Values, language, dimensionSegmentData).Value;
+                            if (!string.IsNullOrEmpty(storeSetting.StockAttributeUid))
+                                variant.Stock = _pimAttributeHelper.GetValue<int?>(storeSetting.StockAttributeUid, variantValue.Values, language, dimensionSegmentData).Value.GetValueOrDefault();
 
                             // defining attributes
                             var attributeCombinations = new List<AttributeCombination>();
@@ -431,7 +449,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                             var properties = new Dictionary<string, string>();
                             foreach (var attribute in variantAttributes.PropertyAttributeUids)
                             {
-                                var value = _pimAttributeHelper.GetValue(attribute, variantValue.Values, language, dimensionSegmentData);
+                                var value = _pimAttributeHelper.GetValue<string>(attribute, variantValue.Values, language, dimensionSegmentData);
                                 if (value.HasValue)
                                     properties.Add(value.Alias, value.Value);
                             }
@@ -442,7 +460,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                             var searchableProperties = new Dictionary<string, string>();
                             foreach (var attribute in variantAttributes.SearchableAttributeUids)
                             {
-                                var value = _pimAttributeHelper.GetValue(attribute, variantValue.Values, language, dimensionSegmentData);
+                                var value = _pimAttributeHelper.GetValue<string>(attribute, variantValue.Values, language, dimensionSegmentData);
                                 if (value.HasValue)
                                     searchableProperties.Add(value.Alias, value.Value);
                             }
@@ -458,9 +476,9 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                                 {
                                     if (priceMapping.PriceAttributeUid.HasValue)
                                     {
-                                        var value = _pimAttributeHelper.GetDecimalValue(priceMapping.PriceAttributeUid.Value.ToString(), variantValue.Values, language, dimensionSegmentData);
+                                        var value = _pimAttributeHelper.GetValue<decimal?>(priceMapping.PriceAttributeUid.Value.ToString(), variantValue.Values, language, dimensionSegmentData);
                                         if (value.HasValue)
-                                            prices.Add(new ProductPrice(value.Value, priceMapping.Uid));
+                                            prices.Add(new ProductPrice(value.Value.Value, priceMapping.Uid));
                                     }
                                 }
                             }

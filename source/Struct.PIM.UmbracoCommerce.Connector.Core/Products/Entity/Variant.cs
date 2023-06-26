@@ -22,6 +22,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
             Prices = JsonConvert.DeserializeObject<List<ProductPrice>>(searchResult["prices"]) ?? new List<ProductPrice>();
             Attributes = JsonConvert.DeserializeObject<List<AttributeCombination>>(searchResult["attributes"]) ?? new List<AttributeCombination>();
             Properties = JsonConvert.DeserializeObject<Dictionary<string, string>>(searchResult["properties"]) ?? new Dictionary<string, string>();
+            Stock = int.Parse(searchResult["stock"]);
         }
 
         public int Id { get; set; }

@@ -3,6 +3,7 @@ using Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Settings;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Settings.Entity;
 using Umbraco.Cms.Core.Strings;
+using Umbraco.Commerce.Common.Logging;
 
 namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
 {
@@ -74,7 +75,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
 
                             // primary properties of category
                             if (!string.IsNullOrEmpty(integrationSettings.CategoryMapping?.TitleAttributeUid))
-                                category.Name = _pimAttributeHelper.GetStringValue(integrationSettings.CategoryMapping.TitleAttributeUid, categoryValue.Values, language, dimensionSegmentData);
+                                category.Name = _pimAttributeHelper.GetValue<string>(integrationSettings.CategoryMapping.TitleAttributeUid, categoryValue.Values, language, dimensionSegmentData).Value;
 
                             // map slug
                             if (!string.IsNullOrEmpty(category.Name))
