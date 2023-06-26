@@ -38,7 +38,8 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Indexing.ProductInd
                 new("stock", FieldDefinitionTypes.Integer),
                 new("prices", FieldDefinitionTypes.Raw),
                 new("properties", FieldDefinitionTypes.Raw),
-                new("attributes", FieldDefinitionTypes.Raw)
+                new("attributes", FieldDefinitionTypes.Raw),
+                new("categories", FieldDefinitionTypes.Raw)
             );
 
             options.UnlockIndex = true;
