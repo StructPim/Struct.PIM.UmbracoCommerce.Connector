@@ -23,8 +23,9 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
             StoreId = Guid.Parse(searchResult["store"]);
             HasVariants = bool.Parse(searchResult["hasVariants"]);
             IsGiftCard = bool.Parse(searchResult["isGiftCard"]);
-            Prices = JsonConvert.DeserializeObject<List<ProductPrice>>(searchResult["prices"]) ?? new List<ProductPrice>();
-            Properties = JsonConvert.DeserializeObject<Dictionary<string, string>>(searchResult["properties"]) ?? new Dictionary<string, string>();
+            Prices = !string.IsNullOrEmpty(searchResult["prices"]) ? JsonConvert.DeserializeObject<List<ProductPrice>>(searchResult["prices"]) ?? new List<ProductPrice>() : new List<ProductPrice>();
+            Properties = !string.IsNullOrEmpty(searchResult["properties"]) ? JsonConvert.DeserializeObject<Dictionary<string, string>>(searchResult["properties"]) ?? new Dictionary<string, string>() : new Dictionary<string, string>();
+            Categories = !string.IsNullOrEmpty(searchResult["categories"]) ? JsonConvert.DeserializeObject<List<int>>(searchResult["categories"]) ?? new List<int>() : new List<int>();
         }
 
         public int Id { get; set; }
@@ -50,6 +51,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
         public IEnumerable<ProductPrice> Prices { get; set; } = new List<ProductPrice>();
         public Dictionary<string, string> Properties { get; set; } = new Dictionary<string, string>();
         public Dictionary<string, string> SearchableProperties { get; set; } = new Dictionary<string, string>();
+        public List<int> Categories { get; set; } = new List<int>();
 
         public bool HasVariants { get; set; }
 

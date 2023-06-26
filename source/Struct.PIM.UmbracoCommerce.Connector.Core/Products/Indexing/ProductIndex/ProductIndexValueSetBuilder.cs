@@ -26,7 +26,8 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Indexing.ProductInd
                     ["isGiftCard"] = product.IsGiftCard,
                     ["searchableText"] = string.Join(" ", product.SearchableProperties.Values),
                     ["prices"] = JsonConvert.SerializeObject(product.Prices),
-                    ["properties"] = JsonConvert.SerializeObject(product.Properties)
+                    ["properties"] = JsonConvert.SerializeObject(product.Properties),
+                    ["categories"] = JsonConvert.SerializeObject(product.Categories)
                 };
 
                 yield return new ValueSet($"product_{product.Id}_{product.StoreId}_{product.CultureCode}", IndexTypes.Product, product.ConfigurationAlias, indexValues);

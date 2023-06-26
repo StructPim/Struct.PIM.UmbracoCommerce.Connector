@@ -1,4 +1,5 @@
-﻿using Struct.PIM.Api.Models.Language;
+﻿using StackExchange.Profiling.Internal;
+using Struct.PIM.Api.Models.Language;
 using Struct.PIM.Api.Models.Shared;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers;
@@ -54,11 +55,12 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
             var dimensionSegmentData = _pimApiHelper.GetDimensionSegmentData(storeSetting);
 
             var variantAttributes = GetVariantAttributes(new List<int> { productId }, integrationSettings, storeSetting);
+            var product = _pimApiHelper.GetProduct(productId);
 
-            if (variantAttributes.VariationDefinitionAttributes?.Any() ?? false)
+            if (variantAttributes.VariationDefinitionAttributes?.Any() ?? false && product.VariationDefinitionUid.HasValue)
             {
-                var definingAttributes = _pimApiHelper.GetAttributes(variantAttributes.VariationDefinitionAttributes);
-                var variantValues = _pimApiHelper.GetVariantsAttributeValuesByProductId(productId, variantAttributes.VariationDefinitionAttributes, new List<string> { language.CultureCode });
+                var definingAttributes = _pimApiHelper.GetAttributes(variantAttributes.VariationDefinitionAttributes[product.VariationDefinitionUid.Value]);
+                var variantValues = _pimApiHelper.GetVariantsAttributeValuesByProductId(productId, variantAttributes.VariationDefinitionAttributes[product.VariationDefinitionUid.Value], new List<string> { language.CultureCode });
                 foreach (var definingAttribute in definingAttributes)
                 {
                     var values = new Dictionary<string, AttributeValue>();
@@ -182,7 +184,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
 
             if (variantAttributes.VariationDefinitionAttributes.Any())
             {
-                variantAttributes.AttributeUids.AddRange(variantAttributes.VariationDefinitionAttributes);
+                variantAttributes.AttributeUids.AddRange(variantAttributes.VariationDefinitionAttributes.Values.SelectMany(x => x).Distinct());
             }
             if (integrationSettings.VariantMapping?.PropertyAttributeUids != null)
             {
@@ -257,6 +259,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
             var products = _pimApiHelper.GetProducts(productIds).ToDictionary(x => x.Id);
             var productValues = _pimApiHelper.GetProductAttributeValues(productIds, attributeInfo.AttributeUids).ToDictionary(x => x.ProductId);
             var productStructures = _pimApiHelper.GetProductStructures();
+            var classifications = _pimApiHelper.GetProductClassifications(productIds);
 
             var items = new List<Product>();
 
@@ -291,6 +294,10 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                                 product.IsGiftCard = _pimAttributeHelper.GetBoolValue(integrationSettings.ProductMapping.IsGiftcardAttributeUid, productValue.Values, language, dimensionSegmentData).GetValueOrDefault();
                             if (!string.IsNullOrEmpty(integrationSettings.ProductMapping?.ImageAttributeUid))
                                 product.PrimaryImage = _pimAttributeHelper.GetImageValue(integrationSettings.ProductMapping.ImageAttributeUid, productValue.Values, language, dimensionSegmentData);
+
+                            // map classifications
+                            if (classifications.TryGetValue(product.Id, out var productClassifications))
+                                product.Categories = productClassifications.OrderBy(x => x.IsPrimary).Select(x => x.CategoryId).ToList();
 
                             // map slug
                             if (!string.IsNullOrEmpty(product.Name))
@@ -389,15 +396,15 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
 
                             // defining attributes
                             var attributeCombinations = new List<AttributeCombination>();
-                            if (variantAttributes.VariationDefinitionAttributes?.Any() ?? false)
+                            if (v.DefiningAttributes?.Any() ?? false)
                             {
-                                foreach (var attributeUid in variantAttributes.VariationDefinitionAttributes)
+                                foreach (var attributeUid in v.DefiningAttributes)
                                 {
                                     var attribute = attributes[attributeUid];
                                     var attributeName = attribute.Name.ContainsKey(language.CultureCode) && !string.IsNullOrEmpty(attribute.Name[language.CultureCode]) ? attribute.Name[language.CultureCode] : attribute.BackofficeName;
 
                                     var value = _pimAttributeHelper.RenderRootAttribute(attribute, variantValue.Values, language, dimensionSegmentData);
-                                    if (!string.IsNullOrEmpty(attribute.Alias))
+                                    if (!string.IsNullOrWhiteSpace(value))
                                     {
                                         attributeCombinations.Add(
                                             new AttributeCombination

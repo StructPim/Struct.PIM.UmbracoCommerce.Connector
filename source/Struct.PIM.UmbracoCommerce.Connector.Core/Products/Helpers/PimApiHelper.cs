@@ -390,6 +390,12 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             return products;
         }
 
+        internal Dictionary<int, List<ProductClassificationModel>> GetProductClassifications(List<int> productIds)
+        {
+            var classifications = PIMClient().Products.GetProductClassifications(productIds);
+            return classifications;
+        }
+
         #endregion
 
         #region Variants
@@ -439,7 +445,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             return new List<Guid> { };
         }
 
-        internal List<Guid> GetVariationDefinitionAttributes(List<int> productIds)
+        internal Dictionary<Guid, List<Guid>> GetVariationDefinitionAttributes(List<int> productIds)
         {
             var products = PIMClient().Products.GetProducts(productIds);
             var allowedProductStructures = products.Select(x => x.ProductStructureUid).Distinct().ToHashSet();
@@ -448,10 +454,10 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             var productStructures = PIMClient().ProductStructures.GetProductStructures().Where(x => allowedProductStructures.Contains(x.Uid)).ToList();
             var variationDefinitions = productStructures.Where(x => x.VariationDefinitions != null).SelectMany(x => x.VariationDefinitions.Where(y => allowedVariationDefinitons.Contains(y.Uid))).ToList();
 
-            if (variationDefinitions.Any())
-                return variationDefinitions.SelectMany(x => x.DefiningAttributes).Distinct().ToList();
+            if (variationDefinitions.Any(x => x.DefiningAttributes?.Any() ?? false))
+                return variationDefinitions.Where(x => x.DefiningAttributes != null).ToDictionary(x => x.Uid, x => x.DefiningAttributes);
 
-            return new List<Guid> { };
+            return new Dictionary<Guid, List<Guid>>();
         }
 
         internal List<VariantAttributeValuesModel> GetVariantsAttributeValuesByProductId(int productId, List<Guid> attributeUids, List<string> cultureCodes = null, List<string> segments = null)
