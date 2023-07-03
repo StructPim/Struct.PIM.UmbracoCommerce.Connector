@@ -48,5 +48,17 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
 
             return result.OrderBy(x => x.Value).ToList();
         }
+
+        public GlobalListValueReferences GetGlobalListReferences(List<Guid> globalListValues)
+        {
+            var references = _pimApiHelper.GetGlobalListValueReferences(globalListValues);
+
+            return new GlobalListValueReferences
+            {
+                ProductIds = references.Where(x => x.ReferencingProducts?.Any() ?? false).SelectMany(x => x.ReferencingProducts.Select(y => y.EntityId)).ToList(),
+                VariantIds = references.Where(x => x.ReferencingVariants?.Any() ?? false).SelectMany(x => x.ReferencingVariants.Select(y => y.EntityId)).ToList(),
+                CategoryIds = references.Where(x => x.ReferencingCategories?.Any() ?? false).SelectMany(x => x.ReferencingCategories.Select(y => y.EntityId)).ToList()
+            };
+        }
     }
 }

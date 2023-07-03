@@ -24,18 +24,16 @@ namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins
             builder.Services.AddUnique<GlobalListService, GlobalListService>();
             builder.Services.AddUnique<ConfigurationService, ConfigurationService>();
             builder.Services.AddUnique<AttributeService, AttributeService>();
+            builder.Services.AddUnique<IndexService, IndexService>();
             builder.Services.AddUnique<IStockService, StockService>();
             builder.Services.AddUnique<IProductAdapter, ProductAdapter>();
 
             builder.Services.AddExamineLuceneIndex<ProductIndex, ConfigurationEnabledDirectoryFactory>(IndexReferences.Product);
             builder.Services.ConfigureOptions<ConfigureProductIndexOptions>();
-            builder.Services.AddSingleton<ProductIndexValueSetBuilder>();
-            builder.Services.AddSingleton<VariantIndexValueSetBuilder>();
             builder.Services.AddSingleton<IIndexPopulator, ProductIndexPopulator>();
 
             builder.Services.AddExamineLuceneIndex<CategoryIndex, ConfigurationEnabledDirectoryFactory>(IndexReferences.Category);
             builder.Services.ConfigureOptions<ConfigureCategoryIndexOptions>();
-            builder.Services.AddSingleton<CategoryIndexValueSetBuilder>();
             builder.Services.AddSingleton<IIndexPopulator, CategoryIndexPopulator>();
         }
     }

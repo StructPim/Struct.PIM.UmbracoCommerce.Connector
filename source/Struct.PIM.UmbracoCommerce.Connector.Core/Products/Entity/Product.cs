@@ -1,7 +1,7 @@
 ﻿using Examine;
 using Newtonsoft.Json;
-using Umbraco.Cms.Infrastructure.Examine;
 using Umbraco.Commerce.Core.Models;
+using Umbraco.Cms.Infrastructure.Examine;
 using Umbraco.Extensions;
 
 namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
@@ -83,6 +83,30 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
                 StoreId = StoreId,
                 TaxClassId = TaxClassId
             };
+        }
+
+        public ValueSet AsValueSet()
+        {
+            var indexValues = new Dictionary<string, object>
+            {
+                [UmbracoExamineFieldNames.NodeNameFieldName] = Name,
+                ["name"] = Name,
+                ["id"] = Id,
+                ["language"] = CultureCode,
+                ["store"] = StoreId,
+                ["slug"] = Slug,
+                ["sku"] = Sku,
+                ["primaryImageUrl"] = PrimaryImageUrl,
+                ["hasVariants"] = HasVariants,
+                ["isGiftCard"] = IsGiftCard,
+                ["searchableText"] = string.Join(" ", SearchableProperties.Values),
+                ["prices"] = JsonConvert.SerializeObject(Prices),
+                ["properties"] = JsonConvert.SerializeObject(Properties),
+                ["categories"] = JsonConvert.SerializeObject(Categories),
+                ["stock"] = Stock
+            };
+
+            return new ValueSet($"product_{Id}_{StoreId}_{CultureCode}", Indexing.IndexTypes.Product, ConfigurationAlias, indexValues);
         }
     }
 }

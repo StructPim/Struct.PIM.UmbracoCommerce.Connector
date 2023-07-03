@@ -39,6 +39,11 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
             return _pimApiHelper.GetVariantIds();
         }
 
+        public List<int> GetProductsInCategories(List<int> categoryIds)
+        {
+            return _pimApiHelper.GetProductsInCategories(categoryIds).Values.SelectMany(x => x).Distinct().ToList();
+        }
+
         public LanguageModel GetLanguage(string cultureCode)
         {
             return _pimApiHelper.GetLanguage(cultureCode);
@@ -496,16 +501,27 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
         {
             var integrationSettings = _settingsFacade.GetIntegrationSettings();
             var storeSetting = integrationSettings.GeneralSettings?.ShopSettings?.Where(s => s.Uid == storeId).FirstOrDefault();
-
+            
             var queryModel = new BooleanQueryModel
             {
                 BooleanOperator = BooleanOperator.And,
-                SubQueries = new List<QueryModel>()
+                SubQueries = new List<QueryModel>
+                {
+                    new SimpleQueryModel
+                    {
+                        Filters = productIds.Select(x => new FieldFilterModel
+                        {
+                            FieldUid = "Id",
+                            FilterValue = x.ToString()
+                        }).ToList(),
+                        BooleanOperator = BooleanOperator.Or
+                    }
+                }
             };
 
             if (!string.IsNullOrEmpty(integrationSettings.ProductMapping?.PublishingAttributeUid))
             {
-                var fieldUid = _pimAttributeHelper.GetAliasPath(integrationSettings.ProductMapping.PublishingAttributeUid, cultureCode);
+                var fieldUid = _pimAttributeHelper.GetAliasPath(integrationSettings.ProductMapping.PublishingAttributeUid, integrationSettings.Setup.DefaultLanguage);
 
                 queryModel.SubQueries.Add(
                     new SimpleQueryModel()
@@ -559,12 +575,23 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
             var queryModel = new BooleanQueryModel
             {
                 BooleanOperator = BooleanOperator.And,
-                SubQueries = new List<QueryModel>()
+                SubQueries = new List<QueryModel>
+                {
+                    new SimpleQueryModel
+                    {
+                        Filters = variantIds.Select(x => new FieldFilterModel
+                        {
+                            FieldUid = "Id",
+                            FilterValue = x.ToString()
+                        }).ToList(),
+                        BooleanOperator = BooleanOperator.Or
+                    }
+                }
             };
 
             if (!string.IsNullOrEmpty(integrationSettings.VariantMapping?.PublishingAttributeUid))
             {
-                var fieldUid = _pimAttributeHelper.GetAliasPath(integrationSettings.VariantMapping.PublishingAttributeUid, cultureCode);
+                var fieldUid = _pimAttributeHelper.GetAliasPath(integrationSettings.VariantMapping.PublishingAttributeUid, integrationSettings.Setup.DefaultLanguage);
 
                 queryModel.SubQueries.Add(
                     new SimpleQueryModel()

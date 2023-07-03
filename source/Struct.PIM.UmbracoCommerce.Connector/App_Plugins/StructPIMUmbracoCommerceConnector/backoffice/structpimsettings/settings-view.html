@@ -38,6 +38,15 @@
                             <li>Setup connection to StructPIM through <a class="underline" href="#/settings/structpimsettings/setup">Setup</a></li>
                             <li>Configure how PIM data should map to Umbraco Commerce entities in <a class="underline" href="#/settings/structpimsettings/data-models">Data models</a></li>
                             <li>Localize each individual <a class="underline" href="#/settings/structpimsettings/stores-index">Stores</a> and make prices and inventory available</li>
+                            <li>Go to settings > Examine Management <a class="underline" href="#/settings?dashboard=settingsExamine">Examine Management</a> and rebuild the CategoryIndex and ProductIndex</li>
+                        </ul>
+                        <h5>Important!</h5>
+                        <p>To keep CategoryIndex and ProductIndex in sync with PIM you can setup below webhooks:</p>
+                        <ul>
+                            <li>ProductUpdate > [YourUmbracoCommerceDomain]/umbraco/api/pimwebhooks/HandleProductUpdate (default data mode)</li>
+                            <li>VariantUpdate > [YourUmbracoCommerceDomain]/umbraco/api/pimwebhooks/HandleVariantUpdate (default data mode)</li>
+                            <li>CategoryUpdate > [YourUmbracoCommerceDomain]/umbraco/api/pimwebhooks/HandleCategoryUpdate (default data mode)</li>
+                            <li>GlobalListValueUpdate > [YourUmbracoCommerceDomain]/umbraco/api/pimwebhooks/HandleGlobalListUpdate</li>
                         </ul>
                     </div>
                 </div>

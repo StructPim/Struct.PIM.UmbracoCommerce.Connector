@@ -73,5 +73,26 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
                 Attributes = Attributes
             };
         }
+
+        public ValueSet AsValueSet()
+        {
+            var indexValues = new Dictionary<string, object>
+            {
+                [UmbracoExamineFieldNames.NodeNameFieldName] = Name,
+                ["name"] = Name,
+                ["id"] = Id,
+                ["productReference"] = ProductReference,
+                ["language"] = CultureCode,
+                ["store"] = StoreId,
+                ["sku"] = Sku,
+                ["searchableText"] = string.Join(" ", SearchableProperties.Values),
+                ["prices"] = JsonConvert.SerializeObject(Prices),
+                ["properties"] = JsonConvert.SerializeObject(Properties),
+                ["attributes"] = JsonConvert.SerializeObject(Attributes),
+                ["stock"] = Stock
+            };
+
+            return new ValueSet($"variant_{Id}_{StoreId}_{CultureCode}", Indexing.IndexTypes.Variant, ConfigurationAlias, indexValues);
+        }
     }
 }

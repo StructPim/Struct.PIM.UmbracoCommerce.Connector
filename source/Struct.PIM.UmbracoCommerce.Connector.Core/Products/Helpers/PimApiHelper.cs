@@ -396,7 +396,6 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             var classifications = PIMClient().Products.GetProductClassifications(productIds);
             return classifications;
         }
-
         #endregion
 
         #region Variants
@@ -505,6 +504,11 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             };
             return PIMClient().Catalogues.GetCategoryAttributeValues(categoryValueRequestModel);
         }
+
+        internal Dictionary<int, List<int>> GetProductsInCategories(List<int> categoryIds)
+        {
+            return PIMClient().Catalogues.GetProductsInCategories(categoryIds);
+        }
         #endregion
 
         #region Global lists
@@ -528,6 +532,12 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                 _globalLists.Value = PIMClient().GlobalLists.GetGlobalLists().ToDictionary(x => x.Id);
 
             return _globalLists.Value;
+        }
+
+        public List<Api.Models.GlobalList.GlobalListValueReferences> GetGlobalListValueReferences(List<Guid> uids)
+        {
+            var client = PIMClient();
+            return client.GlobalLists.GetGlobalListValueReferences(uids);
         }
         #endregion
 
