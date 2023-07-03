@@ -1,0 +1,22 @@
+{
+  "AuthorDetails": {
+    "Description": "Struct PIM",
+    "Url": "https://struct.com/",    
+  },
+  "Category": "Commerce",
+  "LicenseType": "Free",
+  "PackageType": "Integration",
+  "PackagesByAuthor": [
+    "Struct.Umbraco.StructPimPicker",
+  ],
+  "RelatedPackages": [
+    {
+      "PackageId": "Struct.Umbraco.StructPimPicker",
+      "Description": "A product and category picker for Umbraco, that picks directly from Struct PIM."
+    }
+  ],
+  "Screenshots": [  
+  ],
+  "Tags": [],
+  "Title": "Struct PIM Connector for Umbraco Commerce"
+}
