@@ -64,6 +64,26 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             return RenderAttribute(rootAttribute, rootAttribute, variantValue, _pimApiHelper.Map(new List<Api.Models.Attribute.Attribute> { rootAttribute }), language, rootAttribute.Uid.ToString(), dimensionSegmentData);
         }
 
+        internal AttributeValue<string> RenderAttribute(string uid, Dictionary<string, dynamic> variantValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData)
+        {
+            var attributeUids = uid.Split(".");
+            var attributes = _pimApiHelper.GetAttributes();
+            Api.Models.Attribute.Attribute attributeFromPath = null;
+            var renderedValue = "";
+
+            if (attributes.TryGetValue(Guid.Parse(attributeUids[0]), out var rootAttribute))
+            {
+                attributeFromPath = GetAttributeFromPath(uid);
+                renderedValue = RenderAttribute(rootAttribute, attributeFromPath, variantValue, _pimApiHelper.Map(new List<Api.Models.Attribute.Attribute> { attributeFromPath }), language, rootAttribute.Uid.ToString(), dimensionSegmentData);
+            }
+
+            return new AttributeValue<string>
+            {
+                Alias = attributeFromPath?.Alias ?? string.Empty,
+                Value = renderedValue
+            };
+        }
+
         internal string RenderAttribute(Api.Models.Attribute.Attribute rootAttribute, Api.Models.Attribute.Attribute attribute, Dictionary<string, dynamic> variantValue, IEnumerable<Attribute> paths, LanguageModel language, string rootPath, Dictionary<string, Tuple<string, string>> dimensionSegmentData)
         {
             string renderValue = string.Empty;
@@ -284,7 +304,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                     {
                         return new AttributeValue<T?>
                         {
-                            Value = value != null && value is T ? value.SafeCast<T>() : default,
+                            Value = AttributeValue<T>.TryParse(value),
                             Alias = Guid.NewGuid().ToString(),
                         };
                     }
@@ -366,6 +386,53 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             }
 
             return string.Empty;
+        }
+
+        public Api.Models.Attribute.Attribute GetAttributeFromPath(string attributeUidPath)
+        {
+            var attributeUids = attributeUidPath.Split(".");
+            var rootAttribute = _pimApiHelper.GetAttribute(Guid.Parse(attributeUids[0]));
+            var path = GetAttributeFromPath(rootAttribute, Guid.Parse(attributeUids.Last()));
+
+            return path;
+        }
+
+        private Api.Models.Attribute.Attribute GetAttributeFromPath(Api.Models.Attribute.Attribute attribute, Guid targetAttributeUid)
+        {
+            if (attribute is FixedListAttribute fixedListAttribute)
+            {
+                if (attribute.Uid == targetAttributeUid)
+                    return attribute;
+
+                var attributeFromPath = GetAttributeFromPath(fixedListAttribute.ReferencedAttribute, targetAttributeUid);
+
+                if (attributeFromPath != null)
+                    return attributeFromPath;
+            }
+            else if (attribute is ComplexAttribute complexAttribute)
+            {
+                if (attribute.Uid == targetAttributeUid)
+                {
+                    return attribute;
+                }
+
+                foreach (var subAttribute in complexAttribute.SubAttributes)
+                {
+                    var attributeFromPath = GetAttributeFromPath(subAttribute, targetAttributeUid);
+
+                    if (attributeFromPath != null)
+                        return attributeFromPath;
+                }
+            }
+            else
+            {
+                if (attribute.Uid == targetAttributeUid)
+                    return attribute;
+                
+                return null;
+            }
+
+            return null;
         }
 
         private string AppendUidPath(string path)

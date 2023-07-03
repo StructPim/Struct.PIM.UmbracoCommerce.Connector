@@ -9,7 +9,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
     public class AttributeValue<T>
     {
         public string Alias { get; set; } = string.Empty;
-        public T? Value { get; set; }
+        public T Value { get; set; }
 
         public bool HasValue
         {
@@ -17,6 +17,12 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
             { 
                 return !string.IsNullOrEmpty(Alias) && Value != null;
             }
+        }
+
+        public static T? TryParse(object? value)
+        {
+            var result = value.TryConvertTo(typeof(T));
+            return (T?)result.Result;
         }
     }
 }

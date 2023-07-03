@@ -75,7 +75,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
 
                             // primary properties of category
                             if (!string.IsNullOrEmpty(integrationSettings.CategoryMapping?.TitleAttributeUid))
-                                category.Name = _pimAttributeHelper.GetValue<string>(integrationSettings.CategoryMapping.TitleAttributeUid, categoryValue.Values, language, dimensionSegmentData).Value;
+                                category.Name = _pimAttributeHelper.RenderAttribute(integrationSettings.CategoryMapping.TitleAttributeUid, categoryValue.Values, language, dimensionSegmentData).Value;
 
                             // map slug
                             if (!string.IsNullOrEmpty(category.Name))

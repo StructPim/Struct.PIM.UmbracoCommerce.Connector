@@ -8,6 +8,7 @@ app.controller("umbracocommerce.shopedit.controller",
         $scope.languages = [];
         $scope.dimensions = [];
         $scope.pimVariantAttributes = [];
+        $scope.pimVariantNumberAttributes = [];
         $scope.pimProductAttributes = [];
         $scope.filterAttributes = [];
         $scope.filterAttributeValueOptions = [];
@@ -107,6 +108,14 @@ app.controller("umbracocommerce.shopedit.controller",
                     umbracoCommerceService.getAttributes('Variant', '')
                         .then(function (response) {
                             $scope.pimVariantAttributes = response.data;
+                            $scope.pimVariantNumberAttributes = [];
+
+                            for (var i = 0; i < $scope.pimVariantAttributes.length; i++) {
+                                if ($scope.pimVariantAttributes[i].Type == "NumberAttribute") {
+                                    $scope.pimVariantNumberAttributes.push($scope.pimVariantAttributes[i]);
+                                }
+                            }
+
                             $scope.loaded = true;                                                      
                         },
                         function (response) {
