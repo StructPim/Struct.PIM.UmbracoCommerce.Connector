@@ -291,6 +291,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                 {
                     Alias = pathUserFriendly + delimiter + attribute.Alias,
                     Uid = path + delimiter + attribute.Uid,
+                    Type = attribute.AttributeType
                 });
 
                 foreach (var subAttribute in complexAttribute.SubAttributes)
@@ -304,6 +305,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                 {
                     Alias = pathUserFriendly + delimiter + attribute.Alias,
                     Uid = path + delimiter + attribute.Uid,
+                    Type = attribute.AttributeType
                 });
             }
 

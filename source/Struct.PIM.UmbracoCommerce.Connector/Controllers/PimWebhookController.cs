@@ -1,4 +1,5 @@
 ﻿using Examine;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Products.Indexing;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Products.Indexing.CategoryIndex;
@@ -10,6 +11,7 @@ using Umbraco.Cms.Web.Common.Controllers;
 
 namespace Struct.PIM.UmbracoCommerce.Connector.Controllers
 {
+    [AllowAnonymous]
     public class PimWebhookController : UmbracoApiController
     {
         private IndexService _indexService;

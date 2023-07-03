@@ -315,9 +315,6 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                                 HasVariants = products[productId].VariationDefinitionUid.HasValue
                             };
 
-                            var test = _pimAttributeHelper.GetValue<string>(integrationSettings.ProductMapping.TitleAttributeUid, productValue.Values, language, dimensionSegmentData).Value;
-
-
                             // map primary properties of product
                             if (!string.IsNullOrEmpty(integrationSettings.ProductMapping?.TitleAttributeUid))
                                 product.Name = _pimAttributeHelper.RenderAttribute(integrationSettings.ProductMapping.TitleAttributeUid, productValue.Values, language, dimensionSegmentData).Value;
