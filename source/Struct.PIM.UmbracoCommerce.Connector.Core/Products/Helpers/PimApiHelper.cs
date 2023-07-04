@@ -398,6 +398,11 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             var classifications = PIMClient().Products.GetProductClassifications(productIds);
             return classifications;
         }
+
+        public Dictionary<int, List<int>> GetVariantIds(List<int> productIds)
+        {
+            return PIMClient().Products.GetVariantIds(productIds);
+        }
         #endregion
 
         #region Variants

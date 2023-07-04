@@ -27,7 +27,15 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
         public void UpdateProducts(List<int> productIds)
         {
             if (_examineManager.TryGetIndex(IndexReferences.Product, out var productIndex))
-                UpdateIndexesByProduct(new List<IIndex> { productIndex }, productIds);
+            {
+                var indexes = new List<IIndex> { productIndex };
+
+                UpdateIndexesByProduct(indexes, productIds);
+
+                var variantIds = _productService.GetVariantIds(productIds).Values.SelectMany(x => x).ToList();
+
+                UpdateIndexesByVariant(indexes, variantIds);
+            }
         }
 
         public void PopulateVariants(IReadOnlyList<IIndex> indexes)

@@ -39,6 +39,11 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
             return _pimApiHelper.GetVariantIds();
         }
 
+        public Dictionary<int, List<int>> GetVariantIds(List<int> productIds)
+        {
+            return _pimApiHelper.GetVariantIds(productIds);
+        }
+
         public List<int> GetProductsInCategories(List<int> categoryIds)
         {
             return _pimApiHelper.GetProductsInCategories(categoryIds).Values.SelectMany(x => x).Distinct().ToList();
