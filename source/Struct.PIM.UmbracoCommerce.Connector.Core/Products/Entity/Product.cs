@@ -27,6 +27,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
             Properties = !string.IsNullOrEmpty(searchResult["properties"]) ? JsonConvert.DeserializeObject<Dictionary<string, string>>(searchResult["properties"]) ?? new Dictionary<string, string>() : new Dictionary<string, string>();
             Categories = !string.IsNullOrEmpty(searchResult["categories"]) ? JsonConvert.DeserializeObject<List<int>>(searchResult["categories"]) ?? new List<int>() : new List<int>();
             Stock = int.Parse(searchResult["stock"]);
+            TaxClassId = !string.IsNullOrEmpty(searchResult["taxClassId"]) ? Guid.Parse(searchResult["taxClassId"]) : null;
         }
 
         public int Id { get; set; }
@@ -103,7 +104,8 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
                 ["prices"] = JsonConvert.SerializeObject(Prices),
                 ["properties"] = JsonConvert.SerializeObject(Properties),
                 ["categories"] = JsonConvert.SerializeObject(Categories),
-                ["stock"] = Stock
+                ["stock"] = Stock,
+                ["taxClassId"] = TaxClassId
             };
 
             return new ValueSet($"product_{Id}_{StoreId}_{CultureCode}", Indexing.IndexTypes.Product, ConfigurationAlias, indexValues);

@@ -23,6 +23,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
             Attributes = JsonConvert.DeserializeObject<List<AttributeCombination>>(searchResult["attributes"]) ?? new List<AttributeCombination>();
             Properties = JsonConvert.DeserializeObject<Dictionary<string, string>>(searchResult["properties"]) ?? new Dictionary<string, string>();
             Stock = int.Parse(searchResult["stock"]);
+            TaxClassId = !string.IsNullOrEmpty(searchResult["taxClassId"]) ? Guid.Parse(searchResult["taxClassId"]) : null;
         }
 
         public int Id { get; set; }
@@ -89,7 +90,8 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
                 ["prices"] = JsonConvert.SerializeObject(Prices),
                 ["properties"] = JsonConvert.SerializeObject(Properties),
                 ["attributes"] = JsonConvert.SerializeObject(Attributes),
-                ["stock"] = Stock
+                ["stock"] = Stock,
+                ["taxClassId"] = TaxClassId
             };
 
             return new ValueSet($"variant_{Id}_{StoreId}_{CultureCode}", Indexing.IndexTypes.Variant, ConfigurationAlias, indexValues);

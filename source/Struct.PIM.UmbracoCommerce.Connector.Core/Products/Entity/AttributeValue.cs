@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,12 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
 
         public static T? TryParse(object? value)
         {
+            if (value is JArray)
+            {
+                var arrayValues = (value as JArray).ToObject<T>();
+                return arrayValues;
+            }
+            
             var result = value.TryConvertTo(typeof(T));
             return (T?)result.Result;
         }

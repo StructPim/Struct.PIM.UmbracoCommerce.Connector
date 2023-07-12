@@ -16,8 +16,8 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Struct.PIM.Api.Client" Version="3.12.3" />
     <PackageReference Include="Struct.PIM.Api.Models" Version="3.12.3" />
-    <PackageReference Include="Umbraco.Cms" Version="11.3.1" />
-    <PackageReference Include="Umbraco.Commerce.Core" Version="12.0.0--rc.preview.44.gc91dbb8" />
+    <PackageReference Include="Umbraco.Cms" Version="12.0.0" />
+    <PackageReference Include="Umbraco.Commerce.Core" Version="12.0.0" />
   </ItemGroup>
 
 </Project>

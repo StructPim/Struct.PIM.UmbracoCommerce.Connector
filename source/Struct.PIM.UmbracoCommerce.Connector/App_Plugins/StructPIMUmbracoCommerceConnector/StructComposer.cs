@@ -9,7 +9,9 @@ using Struct.PIM.UmbracoCommerce.Connector.Core.Settings;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Infrastructure.Examine;
 using Umbraco.Commerce.Core.Adapters;
+using Umbraco.Commerce.Core.Cache;
 using Umbraco.Commerce.Core.Services;
+using Umbraco.Commerce.Extensions;
 
 namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins
 {
@@ -35,6 +37,10 @@ namespace Struct.PIM.UmbracoCommerce.Connector.App_Plugins
             builder.Services.AddExamineLuceneIndex<CategoryIndex, ConfigurationEnabledDirectoryFactory>(IndexReferences.Category);
             builder.Services.ConfigureOptions<ConfigureCategoryIndexOptions>();
             builder.Services.AddSingleton<IIndexPopulator, CategoryIndexPopulator>();
+
+            builder.AddUmbracoCommerce(umbracoCommerceBuilder => {
+                umbracoCommerceBuilder.AddConnectorEventHandlers();
+            });
         }
     }
 }

@@ -166,6 +166,22 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             return null;
         }
 
+        internal Api.Models.Attribute.Attribute? GetAttribute(string alias)
+        {
+            var attributes = GetAttributes();
+            return attributes.Values.FirstOrDefault(x => x.Alias == alias);            
+        }
+
+        internal void CreateAttribute(Api.Models.Attribute.Attribute attribute)
+        {
+            PIMClient().Attributes.CreateAttribute(attribute);
+        }
+
+        internal void CreateAttributeScope(Api.Models.Attribute.AttributeScope scope)
+        {
+            PIMClient().Attributes.CreateAttributeScope(scope);
+        }
+
         public List<Api.Models.Attribute.AttributeScope> GetAttributeScopes()
         {
             if (_attributeScopes.Value == null)
@@ -519,6 +535,12 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
         #endregion
 
         #region Global lists
+        public List<Api.Models.GlobalList.GlobalListValue<T>> GetGlobalListAttributeValues<T>(Guid uid)
+        {
+            var client = PIMClient();
+            return client.GlobalLists.GetGlobalListValues<T>(uid).GlobalListValues.ToList();
+        }
+
         public List<Api.Models.GlobalList.GlobalListValue> GetGlobalListAttributeValues(Guid uid)
         {
             var client = PIMClient();
@@ -533,6 +555,12 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             return null;
         }
 
+        public GlobalList GetGlobalList(string alias)
+        {
+            var client = PIMClient();
+            return client.GlobalLists.GetGlobalList(alias);
+        }
+
         public Dictionary<int, GlobalList> GetGlobalLists()
         {
             if (_globalLists.Value == null)
@@ -541,10 +569,58 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             return _globalLists.Value;
         }
 
+        public int CreateGlobalList(string alias, Guid folderUid, Api.Models.Attribute.Attribute attribute, List<string> keys)
+        {
+            var client = PIMClient();
+            var globalListId = client.GlobalLists.CreateGlobalList(new GlobalList
+            {
+                Uid = Guid.NewGuid(),
+                FolderUid = folderUid,
+                Attribute = attribute,
+                GlobalListKeys = keys
+            });
+
+            _globalLists = new AsyncLocal<Dictionary<int, Api.Models.GlobalList.GlobalList>>();
+            _attributes = new AsyncLocal<Dictionary<Guid, Api.Models.Attribute.Attribute>>();
+
+            return globalListId;
+        }
+
         public List<Api.Models.GlobalList.GlobalListValueReferences> GetGlobalListValueReferences(List<Guid> uids)
         {
             var client = PIMClient();
             return client.GlobalLists.GetGlobalListValueReferences(uids);
+        }
+
+        public void CreateGlobalListValues<T>(Guid globalListUid, List<Api.Models.GlobalList.GlobalListValue<T>> values)
+        {
+            var client = PIMClient();
+            client.GlobalLists.CreateGlobalListValues<T>(globalListUid, values);
+        }
+
+        public void UpdateGlobalListValues<T>(Guid globalListUid, List<GlobalListValue<T>> values)
+        {
+            PIMClient().GlobalLists.UpdateGlobalListValues<T>(globalListUid, values);
+        }
+
+        public List<GlobalListFolder> GetGlobalListFolders()
+        {
+            var client = PIMClient();
+            return client.GlobalLists.GetGlobalListFolders();
+        }
+
+        public Guid CreateGlobalListFolder(string name)
+        {
+            var client = PIMClient();
+            var uid = Guid.NewGuid();
+
+            client.GlobalLists.CreateGlobalListFolder(new GlobalListFolder
+            {
+                Name = name,
+                Uid = uid
+            });
+
+            return uid;
         }
         #endregion
 

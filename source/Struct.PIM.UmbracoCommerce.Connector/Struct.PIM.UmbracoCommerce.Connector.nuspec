@@ -19,7 +19,7 @@
         <dependency id="Struct.PIM.UmbracoCommerce.Connector.Core" version="[1.0.19]" exclude="Build,Analyzers" />
         <dependency id="Newtonsoft.Json" version="[13.0.0, 14.0.0)" exclude="Build,Analyzers" />
         <dependency id="Struct.PIM.Api.Client" version="[3.12.4, 4.0.0)" exclude="Build,Analyzers" />
-        <dependency id="Umbraco.Commerce.Core" version="[12.0.0--rc.preview.44.gc91dbb8, 13.0.0)" exclude="Build,Analyzers" />
+        <dependency id="Umbraco.Commerce.Core" version="[12.0.0, 13.0.0)" exclude="Build,Analyzers" />
         <dependency id="Umbraco.Cms" version="[11.0.0, 13.0.0)" exclude="Build,Analyzers" />
       </group>
     </dependencies>

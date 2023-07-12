@@ -8,7 +8,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity
 {
     public class EntityAttributes
     {
-        public EntityAttributes() 
+        public EntityAttributes()
         {
             AttributeUids = new List<Guid>();
             PropertyAttributeUids = new List<string>();

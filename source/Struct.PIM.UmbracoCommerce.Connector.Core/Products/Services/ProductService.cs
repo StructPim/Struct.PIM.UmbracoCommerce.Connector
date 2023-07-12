@@ -1,5 +1,7 @@
-﻿using Org.BouncyCastle.Asn1;
+﻿using Newtonsoft.Json.Linq;
+using Org.BouncyCastle.Asn1;
 using StackExchange.Profiling.Internal;
+using Struct.PIM.Api.Models.Attribute;
 using Struct.PIM.Api.Models.Language;
 using Struct.PIM.Api.Models.Shared;
 using Struct.PIM.UmbracoCommerce.Connector.Core.Products.Entity;
@@ -27,6 +29,8 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
 
             _pimApiHelper = new PimApiHelper(settingsFacade);
             _pimAttributeHelper = new PimAttributeHelper(_pimApiHelper);
+
+            
         }
 
         public List<int> GetProductIds()
@@ -94,6 +98,12 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
         public EntityAttributes GetProductAttributes(IntegrationSettings integrationSettings, StoreSettings? storeSetting = null)
         {
             var productAttributes = new EntityAttributes();
+            
+            var taxClassAttribute = _pimApiHelper.GetAttribute(Constants.TAX_CLASS_ATTRIBUTE_ALIAS);
+            if (taxClassAttribute != null)
+            {
+                productAttributes.AttributeUids.Add(taxClassAttribute.Uid);                
+            }
 
             if (!string.IsNullOrEmpty(integrationSettings.ProductMapping?.TitleAttributeUid))
             {
@@ -192,6 +202,13 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
         public EntityAttributes GetVariantAttributes(List<int> productIds, IntegrationSettings integrationSettings, StoreSettings? storeSetting = null)
         {
             var variantAttributes = new EntityAttributes();
+
+            var taxClassAttribute = _pimApiHelper.GetAttribute(Constants.TAX_CLASS_ATTRIBUTE_ALIAS);
+            if (taxClassAttribute != null)
+            {
+                variantAttributes.AttributeUids.Add(taxClassAttribute.Uid);
+            }
+
             if (!string.IsNullOrEmpty(integrationSettings.VariantMapping?.TitleAttributeUid))
             {
                 var attributeUids = integrationSettings.VariantMapping.TitleAttributeUid.Split(".");
@@ -328,8 +345,20 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                             if (!string.IsNullOrEmpty(integrationSettings.ProductMapping?.IsGiftcardAttributeUid))
                                 product.IsGiftCard = _pimAttributeHelper.GetValue<bool?>(integrationSettings.ProductMapping.IsGiftcardAttributeUid, productValue.Values, language, dimensionSegmentData).Value.GetValueOrDefault();
                             if (!string.IsNullOrEmpty(integrationSettings.ProductMapping?.ImageAttributeUid))
-                                product.PrimaryImage = _pimAttributeHelper.RenderAttribute(integrationSettings.ProductMapping.ImageAttributeUid, productValue.Values, language, dimensionSegmentData).Value;
-
+                            {
+                                var images = _pimAttributeHelper.GetValue<string[]>(integrationSettings.ProductMapping.ImageAttributeUid, productValue.Values, language, dimensionSegmentData).Value;
+                                if (images != null)
+                                {
+                                    if(images.Any())
+                                        product.PrimaryImage = images.First();
+                                }
+                                else
+                                {
+                                    var image = _pimAttributeHelper.GetValue<string>(integrationSettings.ProductMapping.ImageAttributeUid, productValue.Values, language, dimensionSegmentData).Value;
+                                    if (!string.IsNullOrEmpty(image))
+                                        product.PrimaryImage = image;
+                                }
+                            }
                             if(!string.IsNullOrEmpty(storeSetting.StockAttributeUid))
                                 product.Stock = _pimAttributeHelper.GetValue<int?>(storeSetting.StockAttributeUid, productValue.Values, language, dimensionSegmentData).Value.GetValueOrDefault();
 
@@ -344,6 +373,16 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                                 product.Slug = product.Name.ToUrlSegment(_shortStringHelper);
                             if (string.IsNullOrEmpty(product.Slug))
                                 product.Slug = product.Id.ToString().ToUrlSegment(_shortStringHelper);
+
+                            if(productValue.Values.TryGetValue(Constants.TAX_CLASS_ATTRIBUTE_ALIAS, out var taxClassValue))
+                            {
+                                var taxClassValues = (taxClassValue as JArray)?.ToObject<TaxClassValue[]>();
+                                if(taxClassValues != null)
+                                {
+                                    var taxClassId = taxClassValues.FirstOrDefault(x => x.StoreId == storeSetting.Uid.ToString())?.Key;
+                                    product.TaxClassId = !string.IsNullOrEmpty(taxClassId) ? Guid.Parse(taxClassId) : null;
+                                }
+                            }
 
                             // map properties
                             product.Properties = new Dictionary<string, string>();
@@ -423,10 +462,11 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                 foreach (var language in _pimApiHelper.GetLanguages().Where(x => languageId == null || x.Id == languageId))
                 {
                     var filteredVariantIds = FilterVariants(variantIds, storeSetting.Uid, language.CultureCode);
+                    var filteredProductIds = FilterProducts(productIds, storeSetting.Uid, language.CultureCode);
 
                     foreach (var variantId in filteredVariantIds)
                     {
-                        if (variantValues.TryGetValue(variantId, out var variantValue) && variants.TryGetValue(variantId, out var v))
+                        if (variantValues.TryGetValue(variantId, out var variantValue) && variants.TryGetValue(variantId, out var v) && filteredProductIds.Contains(v.ProductId))
                         {
                             var variant = new Entity.Variant()
                             {
@@ -445,6 +485,16 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                                 variant.Sku = _pimAttributeHelper.RenderAttribute(integrationSettings.VariantMapping.SkuAttributeUid, variantValue.Values, language, dimensionSegmentData).Value;
                             if (!string.IsNullOrEmpty(storeSetting.StockAttributeUid))
                                 variant.Stock = _pimAttributeHelper.GetValue<int?>(storeSetting.StockAttributeUid, variantValue.Values, language, dimensionSegmentData).Value.GetValueOrDefault();
+
+                            if (variantValue.Values.TryGetValue(Constants.TAX_CLASS_ATTRIBUTE_ALIAS, out var taxClassValue))
+                            {
+                                var taxClassValues = (taxClassValue as JArray)?.ToObject<TaxClassValue[]>();
+                                if (taxClassValues != null)
+                                {
+                                    var taxClassId = taxClassValues.FirstOrDefault(x => x.StoreId == storeSetting.Uid.ToString())?.Key;
+                                    variant.TaxClassId = !string.IsNullOrEmpty(taxClassId) ? Guid.Parse(taxClassId) : null;
+                                }
+                            }
 
                             // defining attributes
                             var attributeCombinations = new List<AttributeCombination>();
@@ -526,7 +576,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
             return items;
         }
 
-        public List<int> FilterProducts(List<int> productIds, Guid storeId, string cultureCode)
+        public HashSet<int> FilterProducts(List<int> productIds, Guid storeId, string cultureCode)
         {
             var integrationSettings = _settingsFacade.GetIntegrationSettings();
             var storeSetting = integrationSettings.GeneralSettings?.ShopSettings?.Where(s => s.Uid == storeId).FirstOrDefault();
@@ -593,7 +643,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                 QueryModel = queryModel,
             };
 
-            return _pimApiHelper.SearchProductPaged(searchModel).ListItems.Select(x => x.Id).ToList();
+            return _pimApiHelper.SearchProductPaged(searchModel).ListItems.Select(x => x.Id).ToHashSet();
         }
 
         public List<int> FilterVariants(List<int> variantIds, Guid storeId, string cultureCode)

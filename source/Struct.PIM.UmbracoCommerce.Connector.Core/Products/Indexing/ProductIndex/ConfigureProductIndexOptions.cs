@@ -37,6 +37,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Indexing.ProductInd
                 new("isGiftCard", FieldDefinitionTypes.Raw),
                 new("searchableText", FieldDefinitionTypes.FullText), 
                 new("stock", FieldDefinitionTypes.Integer),
+                new("taxClassId", FieldDefinitionTypes.Raw),
                 new("prices", FieldDefinitionTypes.Raw),
                 new("properties", FieldDefinitionTypes.Raw),
                 new("attributes", FieldDefinitionTypes.Raw),
