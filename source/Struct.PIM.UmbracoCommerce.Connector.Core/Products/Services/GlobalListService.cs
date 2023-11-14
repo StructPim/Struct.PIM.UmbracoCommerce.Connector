@@ -23,9 +23,12 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
             _pimApiHelper = new PimApiHelper(settingsFacade);
             _pimAttributeHelper = new PimAttributeHelper(_pimApiHelper);
 
-            foreach(var store in storeService.GetStores())
+            if (!string.IsNullOrEmpty(_settingsFacade.GetIntegrationSettings()?.Setup.PimApiUrl))
             {
-                CreateOrUpdateTaxClasses(taxService.GetTaxClasses(store.Id));
+                foreach (var store in storeService.GetStores())
+                {
+                    CreateOrUpdateTaxClasses(taxService.GetTaxClasses(store.Id));
+                }
             }
         }
 
