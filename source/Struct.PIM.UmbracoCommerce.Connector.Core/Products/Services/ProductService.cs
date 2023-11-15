@@ -370,7 +370,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Services
                             if (!string.IsNullOrEmpty(product.Name))
                                 product.Slug = product.Name.ToUrlSegment(_shortStringHelper);
                             if (string.IsNullOrEmpty(product.Slug) && !string.IsNullOrEmpty(product.Sku))
-                                product.Slug = product.Name.ToUrlSegment(_shortStringHelper);
+                                product.Slug = product.Sku.ToUrlSegment(_shortStringHelper);
                             if (string.IsNullOrEmpty(product.Slug))
                                 product.Slug = product.Id.ToString().ToUrlSegment(_shortStringHelper);
 
