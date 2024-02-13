@@ -59,6 +59,44 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                 return new AttributeValue<T>();
         }
 
+        internal AttributeValue<T> GetValue<T>(Struct.PIM.Api.Models.Attribute.Attribute attribute, Dictionary<string, dynamic> entityValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData, Struct.PIM.Api.Models.Attribute.Attribute rootAttribute = null)
+        {
+
+            if (rootAttribute == null)
+            {
+                rootAttribute = attribute;
+            }
+            var targetAttributeUid = attribute.Uid;
+
+            var fieldUid = GetAliasPath(rootAttribute, string.Empty, targetAttributeUid, language.CultureCode, true, rootAttribute is FixedListAttribute, true);
+            var fieldAlias = fieldUid.Split('.').ToList();
+            var alias = fieldAlias.First().Split('_').First();
+            if (entityValue.TryGetValue(alias, out dynamic values))
+            {
+                AttributeValue<T> value = new AttributeValue<T>();
+                if (values != null)
+                {
+                    if (fieldAlias.Count > 1)
+                    {
+                        fieldAlias.RemoveAt(0);
+                        var valuesDictionary = ((JObject)values).ToObject<Dictionary<string, object>>();
+                        value = FindValue<T>(fieldAlias.First(), valuesDictionary, fieldAlias, language.CultureCode, dimensionSegmentData);
+                    }
+                    else
+                    {
+                        var valuesDictionary = new Dictionary<string, object>();
+                        var data = fieldAlias.First().Split('_');
+                        valuesDictionary.Add(alias, values);
+                        value = FindValue<T>(fieldAlias.First(), valuesDictionary, fieldAlias, language.CultureCode, dimensionSegmentData);
+
+                    }
+                }
+                return value;
+            }
+            else
+                return new AttributeValue<T>();
+        }
+
         internal string RenderRootAttribute(Api.Models.Attribute.Attribute rootAttribute, Dictionary<string, dynamic> variantValue, LanguageModel language, Dictionary<string, Tuple<string, string>> dimensionSegmentData)
         {
             return RenderAttribute(rootAttribute, rootAttribute, variantValue, _pimApiHelper.Map(new List<Api.Models.Attribute.Attribute> { rootAttribute }), language, rootAttribute.Uid.ToString(), dimensionSegmentData);
@@ -116,9 +154,15 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
                         {
 
                             var value = GetValue<string>(foundUid.Uid, variantValue, language, dimensionSegmentData, rootAttribute);
-                            renderValue += value?.Value + " ";
+                            renderValue += value?.Value + complexAttribute.RenderedValueSeparator + " ";
                         }
                     }
+                }
+
+                renderValue = renderValue.TrimEnd();
+                if (renderValue.EndsWith(complexAttribute.RenderedValueSeparator))
+                {
+                    renderValue = renderValue.Substring(0, renderValue.LastIndexOf(complexAttribute.RenderedValueSeparator));
                 }
                 //}
                 //else
@@ -151,7 +195,7 @@ namespace Struct.PIM.UmbracoCommerce.Connector.Core.Products.Helpers
             }
             else
             {
-                var value = GetValue<string>(attribute.Uid.ToString(), variantValue, language, dimensionSegmentData, rootAttribute);
+                var value = GetValue<string>(attribute, variantValue, language, dimensionSegmentData, rootAttribute);
                 renderValue = value?.Value;
             }
 
